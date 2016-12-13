@@ -1,6 +1,3 @@
-// import PagesController from '../../../app/http/controllers/PagesController';
-// import ProductController from '../../../app/http/controllers/ProductController';
-
 module.exports = class Router
 {
 	constructor()
