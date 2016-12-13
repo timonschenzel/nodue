@@ -1,12 +1,7 @@
-import PagesController from '../../../app/http/controllers/PagesController';
-import ProductController from '../../../app/http/controllers/ProductController';
+// import PagesController from '../../../app/http/controllers/PagesController';
+// import ProductController from '../../../app/http/controllers/ProductController';
 
-let controllers = {
-	PagesController,
-	ProductController,
-}
-
-export default class Router
+module.exports = class Router
 {
 	constructor()
 	{
@@ -57,7 +52,7 @@ export default class Router
 
 	loadController(name)
 	{
-		return new controllers[name];
+		return new App.appFiles.http.controllers[name]; // Cleanup: remove .appFiles part
 	}
 
 	parse(expression)

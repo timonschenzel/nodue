@@ -1,4 +1,4 @@
-export default class PagesController
+module.exports = class PagesController
 {
 	show()
 	{

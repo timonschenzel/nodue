@@ -5,6 +5,7 @@
     "dev": "gulp watch"
   },
   "devDependencies": {
+    "auto-loader": "^0.2.0",
     "bulma": "^0.2.1",
     "gulp": "^3.9.1",
     "laravel-elixir": "^6.0.0-9",
