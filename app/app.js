@@ -4,14 +4,61 @@ module.exports = class App
 	{
 		this.nodueFiles = nodueFiles;
 		this.appFiles = appFiles;
+		this.proxyParts = [];
 	}
 
-	__noSuchMethod__()
+	get(target, key)
 	{
-		console.log('hit!');
+
 	}
 
-	bootstrap()
+	set(target, key, value)
+	{
+
+	}
+
+	make(expression)
+	{
+		var object = this.resolve(expression);
+
+		return new object;
+	}
+
+	resolve(expression)
+	{
+		let parts = expression.split('.');
+
+		// Search in app folder
+		var object = this.appFiles;
+
+		for(var part of parts) {
+			object = object[part];
+		}
+
+		if(object != undefined) {
+			return object;
+		}
+
+		// Search in Nodue folder
+		var object = this.nodueFiles;
+
+		for(var part of parts) {
+			object = object[part];
+		}
+
+		if(object != undefined) {
+			return object;
+		}
+
+		return 'not found!';
+	}
+
+	addProxyPart(property)
+	{
+		this.proxyParts.push(property);
+	}
+
+	bootstrap(model)
 	{
 		global.Route = new Nodue.Router.Router;
 

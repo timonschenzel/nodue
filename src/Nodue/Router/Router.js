@@ -49,7 +49,7 @@ module.exports = class Router
 
 	loadController(name)
 	{
-		return new App.appFiles.http.controllers[name]; // Cleanup: remove .appFiles part
+		return new App.Http.controllers[name];
 	}
 
 	parse(expression)

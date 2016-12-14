@@ -1,4 +1,4 @@
-export default class Controller
+module.exports = class Controller
 {
 	testing()
 	{

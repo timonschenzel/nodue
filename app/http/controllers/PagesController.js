@@ -1,4 +1,4 @@
-module.exports = class PagesController
+module.exports = class PagesController extends Controller
 {
 	home()
 	{
