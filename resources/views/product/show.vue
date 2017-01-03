@@ -1,5 +1,4 @@
-<template>
-	<ul>
-		<li v-for="product in products">{{ product.name }}</li>
-	</ul>
-</template>
+<ul>
+	<li v-for="product in products">{{ product.name }}</li>
+	Seconds: {{ counter }}
+</ul>

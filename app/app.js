@@ -32,7 +32,11 @@ module.exports = class App
 		var object = this.appFiles;
 
 		for(var part of parts) {
-			object = object[part];
+			if(object != undefined && object.hasOwnProperty(part)) {
+				object = object[part];
+			} else {
+				object = undefined;
+			}
 		}
 
 		if(object != undefined) {
@@ -43,7 +47,11 @@ module.exports = class App
 		var object = this.nodueFiles;
 
 		for(var part of parts) {
-			object = object[part];
+			if(object != undefined && object.hasOwnProperty(part)) {
+				object = object[part];
+			} else {
+				object = undefined;
+			}
 		}
 
 		if(object != undefined) {
