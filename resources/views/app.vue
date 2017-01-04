@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>My Vue App</title>
-		<script src="/assets/vue.js"></script>
+		<title>Nodue</title>
 	</head>
 	<body>
 		<div id="app"></div>

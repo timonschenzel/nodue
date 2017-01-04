@@ -26,7 +26,7 @@ module.exports = class Router
 		return this.postRoutes;
 	}
 
-	route(url)
+	direct(url)
 	{
 		let expression = this.getRoutes[url];
 
@@ -35,11 +35,11 @@ module.exports = class Router
 		}
 
 		if(typeof expression == 'string') {
-			return this.direct(expression);
+			return this.handler(expression);
 		}
 	}
 
-	direct(expression)
+	handler(expression)
 	{
 		let parts = this.parse(expression);
 
@@ -49,7 +49,8 @@ module.exports = class Router
 
 	loadController(name)
 	{
-		return new App.http.controllers[name];
+		return app.make(`http.controllers.${name}`);
+		// new app.http.controllers[name];
 	}
 
 	parse(expression)

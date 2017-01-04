@@ -2,7 +2,7 @@ module.exports = {
 	view(pathExpression, data)
 	{
 		var viewPath = pathExpression.split('.').join('/') + '.vue';
-		var template = fs.readFileSync(basePath + 'resources/views/' + viewPath, 'utf8');
+		var template = fs.readFileSync(app.basePath + 'resources/views/' + viewPath, 'utf8');
 
 		VueRenderer.renderToString(
 			new Vue({
