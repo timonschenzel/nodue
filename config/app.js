@@ -19,7 +19,8 @@ module.exports = {
 	 * Class aliasses.
 	 */
 	aliases: {
-		Route: 'Router.Router',
+		route: 'Router.Router',
+		request: 'Http.Request',
 	},
 
 	/**

@@ -42,16 +42,25 @@ module.exports = class App
 
 	}
 
-	direct(request)
+	handle(request)
 	{
-		Route.direct(request);
+		let requestExpression = route.direct(request.url);
+
+		let response = request.capture(requestExpression);
+
+		return response;
+		// return this.make('Http.Response', response);
 	}
 
-	make(expression)
+	make(expression, ...parameters)
 	{
-		var object = this.resolve(expression);
+		let object = this.resolve(expression);
 
-		return new object;
+		if (parameters.length == 0) {
+			return new object;
+		} else {
+			return new object(...parameters);
+		}
 	}
 
 	resolve(expression)
@@ -128,5 +137,10 @@ module.exports = class App
 	{
 		let object = require(path);
 		return new object;
+	}
+
+	loadController(name)
+	{
+		return this.make(`http.controllers.${name}`);
 	}
 }

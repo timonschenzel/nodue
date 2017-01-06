@@ -4,4 +4,6 @@ app.basePath = __dirname;
 
 app.bootstrap();
 
-app.direct('/products/show');
+// let response = app.handle(request);
+
+// response.send();

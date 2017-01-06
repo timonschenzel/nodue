@@ -30,31 +30,16 @@ module.exports = class Router
 	{
 		let expression = this.getRoutes[url];
 
-		if(typeof expression == 'function') {
-			return expression();
+		if (! expression) {
+			if (url.startsWith('/')) {
+				url = url.slice(1);
+			} else {
+				url = '/' + url;
+			}
+
+			return this.getRoutes[url];
 		}
 
-		if(typeof expression == 'string') {
-			return this.handler(expression);
-		}
-	}
-
-	handler(expression)
-	{
-		let parts = this.parse(expression);
-
-		let controller = this.loadController(parts[0]);
-		controller[parts[1]]();
-	}
-
-	loadController(name)
-	{
-		return app.make(`http.controllers.${name}`);
-		// new app.http.controllers[name];
-	}
-
-	parse(expression)
-	{
-		return expression.split('@');
+		return expression;
 	}
 }
