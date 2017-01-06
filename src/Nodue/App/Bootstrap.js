@@ -15,7 +15,6 @@ module.exports = class Bootstrap
 			'loadRoutes',
 			'loadVue',
 			'loadVueServerRenderer',
-			'startServer',
 		];
 	}
 
@@ -76,31 +75,6 @@ module.exports = class Bootstrap
 	loadVueServerRenderer()
 	{
 		global.VueRenderer = require('vue-server-renderer').createRenderer();
-	}
-
-	startServer()
-	{
-		var express = require('express');
-		global.server = express();
-
-		server.get('*', (incommingRequest, response) => {
-			request.track(incommingRequest);
-			let content = app.handle(request);
-
-			response.send(content);
-		});
-		
-		server.post('*', (incommingRequest, response) => {
-			request.track(incommingRequest);
-			let content = app.handle(request);
-
-			response.send(content);
-		});
-
-		server.listen(5000, function (error) {
-			if (error) throw error
-		  	console.log('Server is running at localhost:5000')
-		});
 	}
 
 	loadNodueFiles()

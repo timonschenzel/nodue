@@ -21,6 +21,7 @@ module.exports = {
 	aliases: {
 		route: 'Router.Router',
 		request: 'Http.Request',
+		server: 'App.Server',
 	},
 
 	/**
@@ -28,5 +29,12 @@ module.exports = {
 	 */
 	references: {
 		Controller: 'Http.Controller',
-	}
+	},
+
+	/**
+	 * Server port.
+	 *
+	 * @type {Number}
+	 */
+	port: 5000,
 }

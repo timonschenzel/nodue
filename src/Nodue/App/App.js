@@ -32,6 +32,26 @@ module.exports = class App
 		this._config = config;
 	}
 
+	fetchConfig(expression)
+	{
+		return this.retrieveObjectProperyWithExpression(this.config, expression);
+	}
+
+	retrieveObjectProperyWithExpression(object, expression)
+	{
+		let parts = expression.split('.');
+
+		for(var part of parts) {
+			if(object != undefined && object.hasOwnProperty(part)) {
+				object = object[part];
+			} else {
+				object = undefined;
+			}
+		}
+
+		return object;
+	}
+
 	get(target, key)
 	{
 
@@ -40,6 +60,11 @@ module.exports = class App
 	set(target, key, value)
 	{
 
+	}
+
+	run()
+	{
+		server.start();
 	}
 
 	handle(request)
