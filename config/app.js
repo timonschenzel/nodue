@@ -25,9 +25,9 @@ module.exports = {
 	},
 
 	/**
-	 * Class references.
+	 * Class instances.
 	 */
-	references: {
+	instances: {
 		Controller: 'Http.Controller',
 	},
 
@@ -36,5 +36,5 @@ module.exports = {
 	 *
 	 * @type {Number}
 	 */
-	port: 5000,
+	port: 80,
 }

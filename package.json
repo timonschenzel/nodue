@@ -1,20 +1,22 @@
 {
   "private": true,
   "scripts": {
-    "prod": "gulp --production",
-    "dev": "gulp watch"
+    "webpack": "cross-env NODE_ENV=development webpack --progress --hide-modules",
+    "dev": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules",
+    "hmr": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
+    "production": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "nodue": "node index.js"
   },
   "devDependencies": {
     "auto-loader": "^0.2.0",
+    "axios": "^0.15.3",
     "bulma": "^0.2.1",
     "express": "^4.14.0",
-    "gulp": "^3.9.1",
-    "laravel-elixir": "^6.0.0-9",
-    "laravel-elixir-vue-2": "^0.2.0",
-    "laravel-elixir-webpack-official": "^1.0.2",
+    "laravel-mix": "^0.3.0",
     "lodash": "^4.16.2",
+    "socket.io": "^1.7.2",
+    "socket.io-client": "^1.7.2",
     "vue": "^2.0.1",
-    "vue-resource": "^1.0.3",
     "vue-server-renderer": "^2.1.7",
     "vue-template-compiler": "^2.0.1",
     "vue-timeago": "^3.0.4"

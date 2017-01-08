@@ -11,7 +11,7 @@ module.exports = class Bootstrap
 			'autoload',
 			'loadHelpers',
 			'setupAliases',
-			'setupReferences',
+			'setupInstances',
 			'loadRoutes',
 			'loadVue',
 			'loadVueServerRenderer',
@@ -55,10 +55,10 @@ module.exports = class Bootstrap
 		}
 	}
 
-	setupReferences()
+	setupInstances()
 	{
-		for (let alias in app.config.references) {
-			global[alias] = app.resolve(app.config.references[alias]);
+		for (let alias in app.config.instances) {
+			global[alias] = app.resolve(app.config.instances[alias]);
 		}
 	}
 
