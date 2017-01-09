@@ -2,29 +2,20 @@ module.exports = class Server
 {
 	constructor()
 	{
-		let express = require('express');
-
-		this.server = express();
 		this.port = app.fetchConfig('port');
 
-		// this.socketServer = express();
-		let http = require('http').Server(this.server);
-		this.io = require('socket.io')(http);
-	}
-
-	handler(req, res) {
-        res.writeHead(200);
-        res.end({ 'test': 123 });
+		this.server = require('express')();
+		this.http = require('http').Server(this.server);
+		this.io = require('socket.io')(this.http);
 	}
 
 	start()
 	{
-		this.server.get('*', (incommingRequest, response) => {
-			if (incommingRequest.url.startsWith('/socket.io')) {
-				response.send('socket.io');
-				return;
-			}
+		this.server.get('/public/js/main.js', (incommingRequest, response) => {
+			response.send(fs.readFileSync(app.basePath + 'public/js/main.js', 'utf8'));
+		});
 
+		this.server.get('*', (incommingRequest, response) => {
 			let content = null;
 			if (incommingRequest.url == '/public/js/main.js') {
 				content = fs.readFileSync(app.basePath + 'public/js/main.js', 'utf8');
@@ -36,7 +27,6 @@ module.exports = class Server
 				let baseContent = fs.readFileSync(app.basePath + 'resources/views/app.html', 'utf8');
 
 				response.send(baseContent);
-				// response.send(content);
 			}
 		});
 		
@@ -48,16 +38,22 @@ module.exports = class Server
 		});
 
 		this.io.on('connection', function(socket) {
+
 			// var user_id = socket.handshake.query.user_id;
 			// var group_id = socket.handshake.query.group_id.toLowerCase();
 			// var type_id = socket.handshake.query.type_id.toLowerCase();
 			// var user_name = socket.handshake.query.user_name;
 			// var session_id = socket.conn.transport.sid;
 
-		  	console.log('a user connected');
+		  	socket.on('pageRequest', (incommingRequest) => {
+		  		request.track(incommingRequest);
+		  		let response = app.handle(request);
+
+		  		socket.volatile.emit('pageRequest', response);
+		  	});
 		});
 
-		this.server.listen(this.port, (error) => {
+		this.http.listen(this.port, (error) => {
 			if (error) {
 				throw error
 			}

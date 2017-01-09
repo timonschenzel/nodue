@@ -2,6 +2,8 @@ module.exports = class PagesController extends Controller
 {
 	home()
 	{
-		return 'homepage';
+		return view('pages.home', {
+			text: 'Welcome',
+		});
 	}
 }

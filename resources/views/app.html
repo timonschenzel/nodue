@@ -5,9 +5,21 @@
     <title>Nodue</title>
   </head>
   <body>
+  	<a href="/">Home</a> | 
+  	<a href="/products/show">Show Products</a>
+
     <div id="app">
-    	<component :is="activeComponent"></component>
+    	<component :is="activeComponent" v-show="activeComponent"></component>
     </div>
     <script src="/public/js/main.js"></script>
+    <script>
+    	$(document).ready(() => {
+    		setTimeout(() => {
+    			socket.emit('pageRequest', {
+    				url: window.location.pathname,
+    			});
+    		}, 100);
+    	});
+    </script>
   </body>
 </html>

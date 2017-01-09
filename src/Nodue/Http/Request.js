@@ -8,6 +8,10 @@ module.exports = class Request
 
 	track(incommingRequest)
 	{
+		if (incommingRequest.url == null) {
+			incommingRequest.url = '/';
+		}
+
 		this.incommingRequest = incommingRequest;
 		this.url = this.incommingRequest.url;
 

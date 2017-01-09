@@ -36,5 +36,5 @@ module.exports = {
 	 *
 	 * @type {Number}
 	 */
-	port: 5000,
+	port: 80,
 }

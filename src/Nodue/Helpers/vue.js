@@ -28,7 +28,7 @@ module.exports = {
 		var template = fs.readFileSync(app.basePath + 'resources/views/' + viewPath, 'utf8');
 
 		return {
-			name: pathExpression,
+			name: pathExpression.split('.').join('-'),
 			template: template,
 			data: data,
 		};
