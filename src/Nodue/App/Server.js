@@ -7,14 +7,24 @@ module.exports = class Server
 		this.server = express();
 		this.port = app.fetchConfig('port');
 
-		this.socketServer = express();
-		let http = require('http').Server(this.socketServer);
+		// this.socketServer = express();
+		let http = require('http').Server(this.server);
 		this.io = require('socket.io')(http);
+	}
+
+	handler(req, res) {
+        res.writeHead(200);
+        res.end({ 'test': 123 });
 	}
 
 	start()
 	{
 		this.server.get('*', (incommingRequest, response) => {
+			if (incommingRequest.url.startsWith('/socket.io')) {
+				response.send('socket.io');
+				return;
+			}
+
 			let content = null;
 			if (incommingRequest.url == '/public/js/main.js') {
 				content = fs.readFileSync(app.basePath + 'public/js/main.js', 'utf8');
@@ -37,24 +47,22 @@ module.exports = class Server
 			response.send(content);
 		});
 
+		this.io.on('connection', function(socket) {
+			// var user_id = socket.handshake.query.user_id;
+			// var group_id = socket.handshake.query.group_id.toLowerCase();
+			// var type_id = socket.handshake.query.type_id.toLowerCase();
+			// var user_name = socket.handshake.query.user_name;
+			// var session_id = socket.conn.transport.sid;
+
+		  	console.log('a user connected');
+		});
+
 		this.server.listen(this.port, (error) => {
 			if (error) {
 				throw error
 			}
 
 		  	console.log(`Server is running at localhost:${this.port}`);
-		});
-
-		this.io.on('connection', function(socket){
-		  console.log('a user connected');
-		});
-
-		this.socketServer.listen(5000, (error) => {
-			if (error) {
-				throw error
-			}
-
-		  	console.log(`Server is running at localhost:5000`);
 		});
 	}
 }
