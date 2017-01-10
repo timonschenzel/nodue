@@ -74,10 +74,15 @@ window.createComponent = function(name, template, data)
 };
 
 socket.on('pageRequest', (response) => {
+	console.log(response);
 	if (typeof response === 'object') {
 		let component = createComponent(response.name, response.template, response.data);
 		vm.$data.activeComponent = response.name;
 	} else {
 		$('#app').html(response);
 	}
+});
+
+socket.on('FileChanged', (response) => {
+	console.log(response);
 });
