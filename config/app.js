@@ -16,18 +16,19 @@ module.exports = {
 	],
 
 	/**
-	 * Class aliasses.
-	 */
-	aliases: {
-		route: 'Router.Router',
-		request: 'Http.Request',
-		server: 'App.Server',
-	},
-
-	/**
 	 * Class instances.
 	 */
 	instances: {
+		route: 'Router.Router',
+		request: 'Http.Request',
+		server: 'App.Server',
+		hotReload: 'App.HotReload',
+	},
+
+	/**
+	 * Class references.
+	 */
+	references: {
 		Controller: 'Http.Controller',
 	},
 

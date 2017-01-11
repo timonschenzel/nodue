@@ -11,11 +11,12 @@ module.exports = class Bootstrap
 			'loadChokidarModule',
 			'autoload',
 			'loadHelpers',
-			'setupAliases',
 			'setupInstances',
+			'setupReferences',
 			'loadRoutes',
 			'loadVue',
 			'loadVueServerRenderer',
+			'startHotReload',
 		];
 	}
 
@@ -54,17 +55,17 @@ module.exports = class Bootstrap
 		});
 	}
 
-	setupAliases()
-	{
-		for (let alias in app.config.aliases) {
-			global[alias] = app.make(app.config.aliases[alias]);
-		}
-	}
-
 	setupInstances()
 	{
 		for (let alias in app.config.instances) {
-			global[alias] = app.resolve(app.config.instances[alias]);
+			global[alias] = app.make(app.config.instances[alias]);
+		}
+	}
+
+	setupReferences()
+	{
+		for (let alias in app.config.references) {
+			global[alias] = app.resolve(app.config.references[alias]);
 		}
 	}
 
@@ -81,6 +82,14 @@ module.exports = class Bootstrap
 	loadVueServerRenderer()
 	{
 		global.VueRenderer = require('vue-server-renderer').createRenderer();
+	}
+
+	startHotReload()
+	{
+		for (let endpoint in route.getEndpoints()) {
+			// Inpect url and check files to watch
+			hotReload.inspectEndpoint(endpoint);
+		};
 	}
 
 	loadNodueFiles()

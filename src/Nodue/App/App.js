@@ -32,6 +32,11 @@ module.exports = class App
 		this._config = config;
 	}
 
+	path(additionalPath)
+	{
+		return this.basePath + additionalPath;
+	}
+
 	fetchConfig(expression)
 	{
 		return this.retrieveObjectProperyWithExpression(this.config, expression);

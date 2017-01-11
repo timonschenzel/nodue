@@ -4,16 +4,18 @@ module.exports = class Server
 	{
 		this.port = app.fetchConfig('port');
 
-		this.server = require('express')();
+		this.express = require('express');
+		this.server = this.express();
+		this.server.use(this.express.static('public'));
 		this.http = require('http').Server(this.server);
 		this.io = require('socket.io')(this.http);
 	}
 
 	start()
 	{
-		this.server.get('/public/js/main.js', (incommingRequest, response) => {
-			response.send(fs.readFileSync(app.basePath + 'public/js/main.js', 'utf8'));
-		});
+		// this.server.get('/public/js/main.js', (incommingRequest, response) => {
+		// 	response.send(fs.readFileSync(app.basePath + 'public/js/main.js', 'utf8'));
+		// });
 
 		this.server.get('*', (incommingRequest, response) => {
 			let content = null;
@@ -46,6 +48,13 @@ module.exports = class Server
 			// var session_id = socket.conn.transport.sid;
 
 		  	socket.on('pageRequest', (incommingRequest) => {
+		  		for (let room in socket.rooms) {
+		  			if (room.startsWith('page.')) {
+		  				socket.leave(room);
+		  			}
+		  		}
+		  		socket.join('page.' + incommingRequest.url);
+
 		  		request.track(incommingRequest);
 		  		let response = app.handle(request);
 
@@ -64,18 +73,32 @@ module.exports = class Server
 		// Hot Reload
 		global.moduleTemplates = {};
 
-		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\../ }).on('all', (event, path) => {
-		 	let page = moduleTemplates[app.basePath + 'resources/views/pages/home.vue'];
-		 	let template = fs.readFileSync(app.basePath + 'resources/views/pages/home.vue', 'utf8');
+		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\..|\/node_modules/ }).on('all', (event, path) => {
+			if (fs.lstatSync(path).isFile()) {
+				if (hotReload.views[path] !== undefined) {
+					console.log('view update!');
+				}
 
-		 	if (page) {
-			 	this.io.sockets.emit('pageRequest', {
-			 		name: page + '-' + this.createHash(template),
-			 		template: template,
-			 		data: {
-						text: 'Welcome',
-					}
-			 	});
+				if (hotReload.controllers[path] !== undefined) {
+					console.log('controller update!');
+				}
+
+				let viewPath = app.basePath + path.split(app.basePath)[1];
+			 	let page = moduleTemplates[path];
+			 	let template = fs.readFileSync(path, 'utf8');
+
+			 	let url = path == app.basePath + 'resources/views/pages/home.vue' ? '/' : '/products/show';
+
+			 	if (page) {
+			 		request.track({ url });
+			 		let response = app.handle(request);
+
+			 		console.log(response);
+
+			 		response.name = page + '-' + this.createHash(template);
+
+				 	this.io.to('page.' + url).emit('pageRequest', response);
+			 	}
 		 	}
 		});
 	}

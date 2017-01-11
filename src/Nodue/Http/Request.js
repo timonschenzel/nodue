@@ -37,11 +37,26 @@ module.exports = class Request
 
 	handle(expression)
 	{
+		let controllerName = this.findControllerName(expression);
+		let controllerFunctionName = this.findControllerFunctionName(expression);
+
+		let controller = app.loadController(controllerName);
+		
+		return controller[controllerFunctionName]();
+	}
+
+	findControllerName(expression)
+	{
 		let parts = this.parse(expression);
 
-		let controller = app.loadController(parts[0]);
-		
-		return controller[parts[1]]();
+		return parts[0];
+	}
+
+	findControllerFunctionName(expression)
+	{
+		let parts = this.parse(expression);
+
+		return parts[1];
 	}
 
 	parse(expression)

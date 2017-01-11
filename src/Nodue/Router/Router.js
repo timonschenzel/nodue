@@ -16,12 +16,12 @@ module.exports = class Router
 		this.postRoutes[url] = action;
 	}
 
-	gets()
+	getEndpoints()
 	{
 		return this.getRoutes;
 	}
 
-	posts()
+	postEndpoints()
 	{
 		return this.postRoutes;
 	}
