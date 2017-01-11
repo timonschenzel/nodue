@@ -6,10 +6,6 @@ module.exports = class App
 		this._config = false;
 		this.bootstrapper = this.getClass('./Bootstrap');
 		this.fileLoader = this.getClass('./FileLoader');
-
-		// this.nodueFiles = nodueFiles;
-		// this.appFiles = appFiles;
-		// this.proxyParts = [];
 	}
 
 	set basePath(basePath)
@@ -34,7 +30,7 @@ module.exports = class App
 
 	path(additionalPath)
 	{
-		return this.basePath + additionalPath;
+		return path.normalize(this.basePath + additionalPath);
 	}
 
 	fetchConfig(expression)
@@ -130,6 +126,37 @@ module.exports = class App
 		}
 
 		return 'not found!';
+	}
+
+	bind(object, expression)
+	{
+		let parts = expression.split('.');
+		let objectName = parts.pop();
+
+		let appfilesClone = AppFiles;
+		let appFileClonePointer = appfilesClone;
+
+		for (let count = 0; count < parts.length; count++) {
+			if (count == parts.length - 1) {
+				// appfilesClone[parts[count]] = object;
+				appfilesClone[parts[count]][objectName] = object;
+			} else {
+				appfilesClone[parts[count]] = AppFiles[parts[count]];
+			}
+
+			appfilesClone = appfilesClone[parts[count]];
+		}
+
+		// for (var part of parts) {
+		// 	target[part] = {};
+		// 	target = target[part];
+		// }
+
+		// target = object;
+
+		// console.log(target);
+
+		// console.log(appFileClonePointer);
 	}
 
 	addProxyPart(property)

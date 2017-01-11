@@ -39,13 +39,18 @@ module.exports = class Server
 			response.send(content);
 		});
 
-		this.io.on('connection', function(socket) {
+		this.io.on('connection', (socket) => {
+			let requestedUrl = socket.handshake.query.url;
+			socket.join('page.' + requestedUrl);
+			request.track({ url: requestedUrl });
+			let response = app.handle(request);
 
-			// var user_id = socket.handshake.query.user_id;
-			// var group_id = socket.handshake.query.group_id.toLowerCase();
-			// var type_id = socket.handshake.query.type_id.toLowerCase();
-			// var user_name = socket.handshake.query.user_name;
-			// var session_id = socket.conn.transport.sid;
+			// if hot reload
+			response.name = response.name + '-' + this.createHash(response.template);
+
+			setTimeout(() => {
+				socket.volatile.emit('pageRequest', response);
+			}, 500);
 
 		  	socket.on('pageRequest', (incommingRequest) => {
 		  		for (let room in socket.rooms) {
@@ -71,29 +76,20 @@ module.exports = class Server
 		});
 
 		// Hot Reload
-		global.moduleTemplates = {};
-
 		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\..|\/node_modules/ }).on('all', (event, path) => {
 			if (fs.lstatSync(path).isFile()) {
+				let url = false;
 				if (hotReload.views[path] !== undefined) {
-					console.log('view update!');
+					url = hotReload.views[path];
 				}
 
-				if (hotReload.controllers[path] !== undefined) {
-					console.log('controller update!');
-				}
-
-				let viewPath = app.basePath + path.split(app.basePath)[1];
-			 	let page = moduleTemplates[path];
+				let viewPath = app.path(path.split(app.basePath)[1]);
+			 	let page = hotReload.pages[url];
 			 	let template = fs.readFileSync(path, 'utf8');
-
-			 	let url = path == app.basePath + 'resources/views/pages/home.vue' ? '/' : '/products/show';
 
 			 	if (page) {
 			 		request.track({ url });
 			 		let response = app.handle(request);
-
-			 		console.log(response);
 
 			 		response.name = page + '-' + this.createHash(template);
 
@@ -106,6 +102,8 @@ module.exports = class Server
 	// Hot Reload
 	createHash(string)
 	{
+		string += new Date().getTime();
+
 	    let hash = 0;
 	    if (string.length == 0) return hash;
 	    for (let i = 0; i < string.length; i++) {

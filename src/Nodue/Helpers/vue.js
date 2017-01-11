@@ -27,8 +27,6 @@ module.exports = {
 		var viewPath = pathExpression.split('.').join('/') + '.vue';
 		var template = fs.readFileSync(app.basePath + 'resources/views/' + viewPath, 'utf8');
 
-		moduleTemplates[app.basePath + 'resources/views/' + viewPath] = pathExpression.split('.').join('-');
-
 		return {
 			name: pathExpression.split('.').join('-'),
 			template: template,

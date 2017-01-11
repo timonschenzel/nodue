@@ -7,6 +7,8 @@ module.exports = class HotReload
 		this.controllers = [];
 
 		this.views = [];
+
+		this.pages = {};
 	}
 
 	inspectEndpoint(endpoint)
@@ -27,6 +29,7 @@ module.exports = class HotReload
 
 			this.controllers[controllerPath] = endpoint;
 			this.views[viewPath] = endpoint;
+			this.pages[endpoint] = viewDir + '_' + controllerFunctionName;
 		}
 	}
 

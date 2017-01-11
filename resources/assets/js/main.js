@@ -1,7 +1,7 @@
 import Vue from 'vue';
 window.$ = require('jquery');
 var io = require('socket.io-client');
-window.socket = io();
+window.socket = io('?url=' + window.location.pathname);
 
 // var app = require('express')();
 // var http = require('http').Server(app);
@@ -74,7 +74,6 @@ window.createComponent = function(name, template, data)
 };
 
 socket.on('pageRequest', (response) => {
-	console.log(response);
 	if (typeof response === 'object') {
 		let component = createComponent(response.name, response.template, response.data);
 		vm.$data.activeComponent = response.name;

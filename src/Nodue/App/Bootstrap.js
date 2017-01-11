@@ -8,6 +8,7 @@ module.exports = class Bootstrap
 		return [
 			'loadAppConfig',
 			'loadFsModule',
+			'loadPathModule',
 			'loadChokidarModule',
 			'autoload',
 			'loadHelpers',
@@ -28,6 +29,11 @@ module.exports = class Bootstrap
 	loadFsModule()
 	{
 		global.fs = require('fs');
+	}
+
+	loadPathModule()
+	{
+		global.path = require('path');
 	}
 
 	loadChokidarModule()

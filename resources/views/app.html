@@ -12,14 +12,5 @@
     	<component :is="activeComponent" v-show="activeComponent"></component>
     </div>
     <script src="/public/js/main.js"></script>
-    <script>
-    	$(document).ready(() => {
-    		setTimeout(() => {
-    			socket.emit('pageRequest', {
-    				url: window.location.pathname,
-    			});
-    		}, 100);
-    	});
-    </script>
   </body>
 </html>
