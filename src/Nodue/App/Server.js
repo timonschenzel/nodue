@@ -83,6 +83,14 @@ module.exports = class Server
 					url = hotReload.views[path];
 				}
 
+				if (hotReload.controllers[path] !== undefined) {
+					url = hotReload.controllers[path];
+					// Delete reference in cache
+					delete require.cache[require.resolve(path)];
+					// Renew the object in cache
+					require(path);
+				}
+
 				let viewPath = app.path(path.split(app.basePath)[1]);
 			 	let page = hotReload.pages[url];
 			 	let template = fs.readFileSync(path, 'utf8');
@@ -92,6 +100,7 @@ module.exports = class Server
 			 		let response = app.handle(request);
 
 			 		response.name = page + '-' + this.createHash(template);
+			 		response.hot = true;
 
 				 	this.io.to('page.' + url).emit('pageRequest', response);
 			 	}

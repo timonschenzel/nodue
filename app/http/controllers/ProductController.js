@@ -11,9 +11,10 @@ module.exports = class PagesController
 			{ name: 'Product 3', },
 			{ name: 'Product 4', },
 			{ name: 'Product 5', },
+			{ name: 'Product 6', },
 		];
 
-		let counter = 0;
+		let counter = null;
 
 		return view('product.show', { products, counter });
 	}

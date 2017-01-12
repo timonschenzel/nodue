@@ -1,5 +1,6 @@
 import Vue from 'vue';
 window.$ = require('jquery');
+window.merge = require('deepmerge');
 var io = require('socket.io-client');
 window.socket = io('?url=' + window.location.pathname);
 
@@ -75,6 +76,14 @@ window.createComponent = function(name, template, data)
 
 socket.on('pageRequest', (response) => {
 	if (typeof response === 'object') {
+		// Hot reload
+		if (response.hot) {
+			let currentComponentData = window.vm.$root.$children[0].$data;
+
+			let mergeData = merge(currentComponentData, response.data);
+			console.log(mergeData);
+		}
+
 		let component = createComponent(response.name, response.template, response.data);
 		vm.$data.activeComponent = response.name;
 	} else {
