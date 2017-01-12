@@ -45,9 +45,6 @@ module.exports = class Server
 			request.track({ url: requestedUrl });
 			let response = app.handle(request);
 
-			// if hot reload
-			response.name = response.name + '-' + this.createHash(response.template);
-
 			setTimeout(() => {
 				socket.volatile.emit('pageRequest', response);
 			}, 500);
