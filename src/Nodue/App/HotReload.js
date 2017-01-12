@@ -11,6 +11,40 @@ module.exports = class HotReload
 		this.pages = {};
 	}
 
+	start()
+	{
+		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\..|\/node_modules/ }).on('all', (event, path) => {
+			if (fs.lstatSync(path).isFile()) {
+				let url = false;
+				if (this.views[path] !== undefined) {
+					url = this.views[path];
+				}
+
+				if (this.controllers[path] !== undefined) {
+					url = this.controllers[path];
+					// Delete reference in cache
+					delete require.cache[require.resolve(path)];
+					// Renew the object in cache
+					require(path);
+				}
+
+				let viewPath = app.path(path.split(app.basePath)[1]);
+			 	let page = this.pages[url];
+			 	let template = fs.readFileSync(path, 'utf8');
+
+			 	if (page) {
+			 		request.track({ url });
+			 		let response = app.handle(request);
+
+			 		response.name = page + '-' + this.createHash(template);
+			 		response.hot = true;
+
+				 	server.io.to('page.' + url).emit('pageRequest', response);
+			 	}
+		 	}
+		});
+	}
+
 	inspectEndpoint(endpoint)
 	{
 		let routeExpression = route.getRoutes[endpoint];
@@ -36,5 +70,20 @@ module.exports = class HotReload
 	findViewPath(controllerName)
 	{
 		return controllerName.replace('Controller', '').toLowerCase();
+	}
+
+	createHash(string)
+	{
+		string += new Date().getTime();
+
+	    let hash = 0;
+	    if (string.length == 0) return hash;
+	    for (let i = 0; i < string.length; i++) {
+	        let char = string.charCodeAt(i);
+	        hash = ((hash<<5)-hash)+char;
+	        hash = hash & hash; // Convert to 32bit integer
+	    }
+
+	    return hash;
 	}
 }

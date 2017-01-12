@@ -5,7 +5,7 @@
     "dev": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules",
     "hmr": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
     "production": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "nodue": "nodemon index.js"
+    "nodue": "nodemon index.js",
   },
   "devDependencies": {
     "auto-loader": "^0.2.0",

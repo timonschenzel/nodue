@@ -92,10 +92,18 @@ module.exports = class Bootstrap
 
 	startHotReload()
 	{
+		if (! process.argv.includes('hot')) {
+			return;
+		}
+
+		app.hot = true;
+
 		for (let endpoint in route.getEndpoints()) {
 			// Inpect url and check files to watch
 			hotReload.inspectEndpoint(endpoint);
 		};
+
+		hotReload.start();
 	}
 
 	loadNodueFiles()

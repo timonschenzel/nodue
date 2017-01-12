@@ -4,6 +4,7 @@ module.exports = class App
 	{
 		this._basePath = false;
 		this._config = false;
+		this._hot = false;
 		this.bootstrapper = this.getClass('./Bootstrap');
 		this.fileLoader = this.getClass('./FileLoader');
 	}
@@ -26,6 +27,16 @@ module.exports = class App
 	set config(config)
 	{
 		this._config = config;
+	}
+
+	get hot()
+	{
+		return this._hot;
+	}
+
+	set hot(hot)
+	{
+		this._hot = hot;
 	}
 
 	path(additionalPath)

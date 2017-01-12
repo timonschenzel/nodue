@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Nodue</title>
-  </head>
-  <body>
-  	<a href="/">Home</a> | 
-  	<a href="/products/show">Show Products</a>
+    <head>
+        <meta charset="utf-8">
+        <title>Nodue</title>
+    </head>
+    <body>
+        <a href="/">Home</a> | 
+        <a href="/products/show">Show Products</a>
 
-    <div id="app">
-    	<component :is="activeComponent" v-show="activeComponent"></component>
-    </div>
-    <script src="/public/js/main.js"></script>
-  </body>
+        <div id="app">
+            <component :is="activeComponent" v-show="activeComponent"></component>
+        </div>
+
+        <script src="/js/main.js"></script>
+    </body>
 </html>

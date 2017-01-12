@@ -13,23 +13,15 @@ module.exports = class Server
 
 	start()
 	{
-		// this.server.get('/public/js/main.js', (incommingRequest, response) => {
-		// 	response.send(fs.readFileSync(app.basePath + 'public/js/main.js', 'utf8'));
-		// });
-
 		this.server.get('*', (incommingRequest, response) => {
 			let content = null;
-			if (incommingRequest.url == '/public/js/main.js') {
-				content = fs.readFileSync(app.basePath + 'public/js/main.js', 'utf8');
-				response.send(content);
-			} else {
-				request.track(incommingRequest);
-				content = app.handle(request);
 
-				let baseContent = fs.readFileSync(app.basePath + 'resources/views/app.html', 'utf8');
+			request.track(incommingRequest);
+			content = app.handle(request);
 
-				response.send(baseContent);
-			}
+			let baseContent = fs.readFileSync(app.basePath + 'resources/views/app.html', 'utf8');
+
+			response.send(baseContent);
 		});
 		
 		this.server.post('*', (incommingRequest, response) => {
@@ -40,6 +32,7 @@ module.exports = class Server
 		});
 
 		this.io.on('connection', (socket) => {
+			// First connection from user
 			let requestedUrl = socket.handshake.query.url;
 			socket.join('page.' + requestedUrl);
 			request.track({ url: requestedUrl });
@@ -49,6 +42,7 @@ module.exports = class Server
 				socket.volatile.emit('pageRequest', response);
 			}, 500);
 
+			// User request a page
 		  	socket.on('pageRequest', (incommingRequest) => {
 		  		for (let room in socket.rooms) {
 		  			if (room.startsWith('page.')) {
@@ -64,60 +58,13 @@ module.exports = class Server
 		  	});
 		});
 
+		// Start server
 		this.http.listen(this.port, (error) => {
 			if (error) {
-				throw error
+				throw error;
 			}
 
 		  	console.log(`Server is running at localhost:${this.port}`);
 		});
-
-		// Hot Reload
-		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\..|\/node_modules/ }).on('all', (event, path) => {
-			if (fs.lstatSync(path).isFile()) {
-				let url = false;
-				if (hotReload.views[path] !== undefined) {
-					url = hotReload.views[path];
-				}
-
-				if (hotReload.controllers[path] !== undefined) {
-					url = hotReload.controllers[path];
-					// Delete reference in cache
-					delete require.cache[require.resolve(path)];
-					// Renew the object in cache
-					require(path);
-				}
-
-				let viewPath = app.path(path.split(app.basePath)[1]);
-			 	let page = hotReload.pages[url];
-			 	let template = fs.readFileSync(path, 'utf8');
-
-			 	if (page) {
-			 		request.track({ url });
-			 		let response = app.handle(request);
-
-			 		response.name = page + '-' + this.createHash(template);
-			 		response.hot = true;
-
-				 	this.io.to('page.' + url).emit('pageRequest', response);
-			 	}
-		 	}
-		});
-	}
-
-	// Hot Reload
-	createHash(string)
-	{
-		string += new Date().getTime();
-
-	    let hash = 0;
-	    if (string.length == 0) return hash;
-	    for (let i = 0; i < string.length; i++) {
-	        let char = string.charCodeAt(i);
-	        hash = ((hash<<5)-hash)+char;
-	        hash = hash & hash; // Convert to 32bit integer
-	    }
-
-	    return hash;
 	}
 }
