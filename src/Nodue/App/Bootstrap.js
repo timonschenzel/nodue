@@ -6,9 +6,11 @@ module.exports = class Bootstrap
 	get tasks()
 	{
 		return [
-			'loadEnvFile',
-			'loadAppConfig',
 			'loadFsModule',
+			'loadEnvFile',
+			'loadNodueFiles',
+			'loadCoreHelpers',
+			'loadAppConfig',
 			'loadPathModule',
 			'loadChokidarModule',
 			'autoload',
@@ -22,19 +24,30 @@ module.exports = class Bootstrap
 		];
 	}
 
+	loadFsModule()
+	{
+		global.fs = require('fs');
+	}
+
 	loadEnvFile()
 	{
 		require('dotenv').config();
 	}
 
+	loadNodueFiles()
+	{
+		global.Nodue = app.fileLoader.loadFrom('src/Nodue');
+	}
+
+	loadCoreHelpers()
+	{
+		let helpers = Nodue.App.Helpers;
+		app.loadHelpersFrom(helpers);
+	}
+
 	loadAppConfig()
 	{
 		app.config = app.getConfig('app');
-	}
-
-	loadFsModule()
-	{
-		global.fs = require('fs');
 	}
 
 	loadPathModule()
@@ -57,13 +70,7 @@ module.exports = class Bootstrap
 	loadHelpers()
 	{
 		app.config.helpers.forEach(helper => {
-			let helperObject = app.resolve(helper);
-
-			for(var file in helperObject) {
-				for(var functionName in helperObject[file]) {
-					global[functionName] = helperObject[file][functionName];
-				}
-			}
+			app.loadHelpersFrom(helper);
 		});
 	}
 
@@ -110,15 +117,5 @@ module.exports = class Bootstrap
 		};
 
 		hotReload.start();
-	}
-
-	loadNodueFiles()
-	{
-		global.Nodue = app.fileLoader.loadFrom('src/Nodue');
-	}
-
-	loadAppFiles()
-	{
-		global.AppFiles = app.fileLoader.loadFrom('app');
 	}
 }

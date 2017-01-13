@@ -211,4 +211,17 @@ module.exports = class App
 	{
 		return this.make(`http.controllers.${name}`);
 	}
+
+	loadHelpersFrom(helper)
+	{
+		if (typeof helper == 'string') {
+			helper = this.resolve(helper);
+		}
+
+		for(var file in helper) {
+			for(var functionName in helper[file]) {
+				global[functionName] = helper[file][functionName];
+			}
+		}
+	}
 }

@@ -3,7 +3,6 @@ module.exports = {
 	 * Specify the autoloading locations.
 	 */
 	autoload: {
-		Nodue: 'src/Nodue',
 		AppFiles: 'app',
 	},
 
