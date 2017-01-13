@@ -37,5 +37,5 @@ module.exports = {
 	 *
 	 * @type {Number}
 	 */
-	port: 5000,
+	port: env('port', 80),
 }

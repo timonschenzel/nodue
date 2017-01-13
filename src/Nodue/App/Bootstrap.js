@@ -6,6 +6,7 @@ module.exports = class Bootstrap
 	get tasks()
 	{
 		return [
+			'loadEnvFile',
 			'loadAppConfig',
 			'loadFsModule',
 			'loadPathModule',
@@ -19,6 +20,11 @@ module.exports = class Bootstrap
 			'loadVueServerRenderer',
 			'startHotReload',
 		];
+	}
+
+	loadEnvFile()
+	{
+		require('dotenv').config();
 	}
 
 	loadAppConfig()
