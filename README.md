@@ -36,7 +36,7 @@ module.exports = class PagesController extends Controller
 }
 ```
 4. Create the view file `home.vue` within `resources/views/pages`:
-```vue.js
+```vue
 <div>
 	<h1>{{ title }}</h1>
 	<p>{{ text }}</p>
