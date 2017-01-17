@@ -7,7 +7,7 @@ Expressive Node.js + Vue.js framework with hot reload
 3. npm update
 
 ## Start working
-You have some options here, if you want to use option 3 or 4 install nodemon (npm install -g nodemon):
+You have some options here, if you want to use option 3 or 4 install nodemon (`npm install -g nodemon`):
 
 1. `npm run nodue` - This will boot Nodue (for production)
 2. `npm run nodue hot` - This will boot Nodue with hot reload feature
@@ -52,3 +52,9 @@ module.exports = class PagesController extends Controller
 	</ul>
 </div>
 ```
+
+## Hot Reload
+The best part.
+
+1. For example: in `PagesController@home`, add `Hot Reloaded` to the `items` array and save it.
+2. Our open `home.vue` and add some styling like `<p style="color: red;">{{ text }}</p>` and hit save.
