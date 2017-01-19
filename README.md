@@ -4,7 +4,7 @@ Expressive Node.js + Vue.js framework with hot reload
 ## Install
 1. git clone https://github.com/timonSchenzel/nodue.git
 2. cd nodue
-3. npm update
+3. npm install
 
 ## Start working
 You have some options here, if you want to use option 3 or 4 install nodemon (`npm install -g nodemon`):
