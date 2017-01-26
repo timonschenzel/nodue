@@ -6,11 +6,18 @@ app.bootstrap();
 
 app.run();
 
-// let Product = new AppFiles.models.Product;
+let Product = new AppFiles.models.Product;
+
+// db.schema.createTable('products', table => {
+//     table.increments();
+//     table.string('name');
+// });
 
 // console.log(Product);
 
-// console.log(Product.where('id', 59).fetch());
+// db('products').insert({name: 'Product 1'});
+
+// console.log(Product.where('id', 1).fetchOne());
 
 // let response = app.handle(request);
 

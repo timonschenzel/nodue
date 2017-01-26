@@ -1,3 +1,7 @@
-module.exports = Model.extend({
-	tableName: 'products',
-});
+module.exports = class Product extends Model
+{
+	get tableName()
+	{
+		return 'products';
+	}
+}
