@@ -29,6 +29,7 @@ module.exports = {
 	 */
 	references: {
 		Controller: 'Http.Controller',
+		Model: 'ORM.Model',
 	},
 
 	/**
@@ -36,5 +37,5 @@ module.exports = {
 	 *
 	 * @type {Number}
 	 */
-	port: env('port', 80),
+	port: env('PORT', 80),
 }

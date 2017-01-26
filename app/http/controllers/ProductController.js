@@ -3,7 +3,7 @@ module.exports = class PagesController
 	show()
 	{
 		// console.log('show product');
-		// let product = Product.find(1);
+		// let product = Product.get(1);
 
 		let products = [
 			{ name: 'Product 1', },

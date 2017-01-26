@@ -1,7 +1,1 @@
-class Model
-{
-	find(id)
-	{
-		return `find by id ${id}`;
-	}
-}
+module.exports = Bookshelf.Model;

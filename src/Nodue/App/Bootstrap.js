@@ -13,6 +13,7 @@ module.exports = class Bootstrap
 			'loadAppConfig',
 			'loadPathModule',
 			'loadChokidarModule',
+			'initDatabaseConnection',
 			'autoload',
 			'loadHelpers',
 			'setupInstances',
@@ -58,6 +59,25 @@ module.exports = class Bootstrap
 	loadChokidarModule()
 	{
 		global.chokidar = require('chokidar');
+	}
+
+	initDatabaseConnection()
+	{
+		let databaseConfig = app.getConfig('database');
+		let defaultConfig = databaseConfig['connections'][databaseConfig['default']];
+
+		global.Knex = require('knex')({
+			client: defaultConfig['driver'],
+			connection: {
+				host: defaultConfig['host'],
+				user: defaultConfig['user'],
+				password: defaultConfig['password'],
+				database: defaultConfig['database'],
+				charset: defaultConfig['charset'],
+			}
+		});
+
+		global.Bookshelf = require('bookshelf')(Knex);
 	}
 
 	autoload()
