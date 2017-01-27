@@ -66,25 +66,26 @@ module.exports = class Bootstrap
 		let databaseConfig = app.getConfig('database');
 		let defaultConfig = databaseConfig['connections'][databaseConfig['default']];
 
+
 		if (defaultConfig['driver'] == 'sqlite') {
 			defaultConfig['filename'] = defaultConfig['database'];
 		}
 
-		global.Knex = require('knex')({
+		console.log(defaultConfig);
+		global.db = require('knex')({
 			client: 'sqlite3', //defaultConfig['driver'],
 			connection: {
-				filename: defaultConfig['filename'],
+				filename: database_path('database.sqlite'),
 				// host: defaultConfig['host'],
 				// user: defaultConfig['user'],
 				// password: defaultConfig['password'],
 				// database: defaultConfig['database'],
 				// charset: defaultConfig['charset'],
-			}
+			},
+			useNullAsDefault: true
 		});
 
-		global.Bookshelf = require('bookshelf')(Knex);
-
-		global.db = Bookshelf.knex;
+		global.Bookshelf = require('bookshelf')(db);
 	}
 
 	autoload()
