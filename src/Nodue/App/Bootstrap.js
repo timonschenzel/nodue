@@ -18,6 +18,7 @@ module.exports = class Bootstrap
 			'loadHelpers',
 			'setupInstances',
 			'setupReferences',
+			'loadModels',
 			'loadRoutes',
 			'loadVue',
 			'loadVueServerRenderer',
@@ -71,7 +72,6 @@ module.exports = class Bootstrap
 			defaultConfig['filename'] = defaultConfig['database'];
 		}
 
-		console.log(defaultConfig);
 		global.db = require('knex')({
 			client: 'sqlite3', //defaultConfig['driver'],
 			connection: {
@@ -113,6 +113,15 @@ module.exports = class Bootstrap
 	{
 		for (let alias in app.config.references) {
 			global[alias] = app.resolve(app.config.references[alias]);
+		}
+	}
+
+	loadModels()
+	{
+		for (let model in AppFiles.models) {
+			let modelInstance = app.make(`models.${model}`);
+			modelInstance.bookshelf.tableName = modelInstance.tableName;
+			global[model] = new Proxy(modelInstance, Nodue.ORM.Proxy);
 		}
 	}
 

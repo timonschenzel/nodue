@@ -5,8 +5,8 @@
     "dev": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules",
     "hmr": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
     "production": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "nodue": "node index.js",
-    "nodue:dev": "nodemon index.js"
+    "nodue": "node --harmony-async-await index.js",
+    "nodue:dev": "nodemon --harmony-async-await index.js"
   },
   "devDependencies": {
     "auto-loader": "^0.2.0",
@@ -30,5 +30,8 @@
     "vue-server-renderer": "^2.1.7",
     "vue-template-compiler": "^2.0.1",
     "vue-timeago": "^3.0.4"
+  },
+  "dependencies": {
+    "sqlite3": "^3.1.8"
   }
 }

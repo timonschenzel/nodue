@@ -1,18 +1,21 @@
 module.exports = class PagesController
 {
-	show()
+	async show()
 	{
-		// console.log('show product');
-		// let product = Product.get(1);
+		// let Product = new AppFiles.models.Product;
 
-		let products = [
-			{ name: 'Product 1', },
-			{ name: 'Product 2', },
-			{ name: 'Product 3', },
-			{ name: 'Product 4', },
-			{ name: 'Product 5', },
-			{ name: 'Product 6', },
-		];
+		let productModels = await Product.all();
+
+		let names = productModels.pluck('name');
+
+		let products = [];
+
+		// for (var i = 0; i < names.length; i++) {
+			// products.push({
+				// name: names[i],
+				// id: 0,
+			// });
+		// }
 
 		let counter = null;
 

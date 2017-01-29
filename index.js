@@ -6,8 +6,6 @@ app.bootstrap();
 
 app.run();
 
-let Product = new AppFiles.models.Product;
-
 // db.select(['name']).from('products').then(result => {
 // 	console.log(result);
 // });
@@ -21,10 +19,11 @@ let Product = new AppFiles.models.Product;
 
 // db('products').insert({name: 'Product 1'});
 
-let product = Product.find(1);
-console.log('hit!');
-
-console.log(product);
+// await Product.find(1);
+// console.log('find product');
+// let product = getProduct(1);
+// console.log('product found');
+// console.log(product);
 
 // Product.where('id', 2).fetch().then(product => {
 // 	console.log(product.attributes.name);

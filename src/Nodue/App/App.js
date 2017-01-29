@@ -79,7 +79,7 @@ module.exports = class App
 		server.start();
 	}
 
-	handle(request)
+	async handle(request)
 	{
 		let requestExpression = route.direct(request.url);
 

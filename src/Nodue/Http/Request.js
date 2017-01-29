@@ -20,29 +20,29 @@ module.exports = class Request
 		}
 	}
 
-	capture(expression)
+	async capture(expression)
 	{
 		if (! expression) {
 			return '404';
 		}
 
 		if(typeof expression == 'function') {
-			return expression();
+			return await expression();
 		}
 
 		if(typeof expression == 'string') {
-			return this.handle(expression);
+			return await this.handle(expression);
 		}
 	}
 
-	handle(expression)
+	async handle(expression)
 	{
 		let controllerName = this.findControllerName(expression);
 		let controllerFunctionName = this.findControllerFunctionName(expression);
 
 		let controller = app.loadController(controllerName);
 		
-		return controller[controllerFunctionName]();
+		return await controller[controllerFunctionName]();
 	}
 
 	findControllerName(expression)

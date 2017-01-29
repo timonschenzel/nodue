@@ -1,5 +1,7 @@
 {
 	"ignore": [
-	 	"app/http/controllers"
+	 	"app/http/controllers",
+	 	"database/database.sqlite-journal",
+	 	"database/database.sqlite"
 	]
 }

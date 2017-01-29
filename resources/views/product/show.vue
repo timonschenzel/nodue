@@ -1,4 +1,8 @@
-<ul>
-	<li v-for="product in products">{{ product.name }}</li>
+<div>
 	Seconds: {{ counter }}
-</ul>
+	<button @click="test">Test</button>
+	<hr>
+	<ul>
+		<li v-for="product in products">{{ product.name }}</li>
+	</ul>
+</div>

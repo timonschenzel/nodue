@@ -13,7 +13,7 @@ module.exports = class HotReload
 
 	start()
 	{
-		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\..|\/node_modules/ }).on('all', (event, path) => {
+		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\..|\/node_modules|\/database/ }).on('all', async (event, path) => {
 			if (fs.lstatSync(path).isFile()) {
 				let url = false;
 				if (this.views[path] !== undefined) {
@@ -34,7 +34,7 @@ module.exports = class HotReload
 
 			 	if (page) {
 			 		request.track({ url });
-			 		let response = app.handle(request);
+			 		let response = await app.handle(request);
 
 			 		response.name = page + '-' + this.createHash(template);
 			 		response.hot = true;

@@ -4,11 +4,6 @@ window.merge = require('deepmerge');
 var io = require('socket.io-client');
 window.socket = io('?url=' + window.location.pathname);
 
-// var app = require('express')();
-// var http = require('http').Server(app);
-// var io = require('socket.io')(http);
-// import App from './App.vue';
-
 $('a').click((e) => {
 	e.preventDefault();
 
@@ -51,27 +46,14 @@ Vue.component('product', {
 
 window.vm = new Vue({
   el: '#app',
-  // render: h => h(App)
   data: {
   	activeComponent: false,
   },
 });
 
-window.createComponent = function(name, template, data)
+window.createComponent = function(name, component)
 {
-	Vue.component(name, {
-		template: template,
-		data() {
-			return data
-		},
-		created: function () {
-		  var vm = this
-		  this.counter++;
-		  setInterval(function () {
-		    vm.counter += 1
-		  }, 1000)
-		}
-	});
+	Vue.component(name, component);
 };
 
 socket.on('pageRequest', (response) => {
@@ -81,10 +63,20 @@ socket.on('pageRequest', (response) => {
 			let currentComponentData = window.vm.$root.$children[0].$data;
 
 			let mergeData = merge(currentComponentData, response.data);
-			console.log(mergeData);
 		}
 
-		let component = createComponent(response.name, response.template, response.data);
+		let component = {};
+		if (response.behavior) {
+			eval('component = ' + response.behavior);
+		}
+
+		component.template = response.template;
+		component.data = function()
+		{
+			return response.data;
+		}
+
+		createComponent(response.name, component);
 		vm.$data.activeComponent = response.name;
 	} else {
 		$('#app').html(response);

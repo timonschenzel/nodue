@@ -11,7 +11,7 @@ module.exports = class Server
 		this.io = require('socket.io')(this.http);
 	}
 
-	start()
+	async start()
 	{
 		this.server.get('*', (incommingRequest, response) => {
 			let content = null;
@@ -31,19 +31,19 @@ module.exports = class Server
 			response.send(content);
 		});
 
-		this.io.on('connection', (socket) => {
+		this.io.on('connection', async (socket) => {
 			// First connection from user
 			let requestedUrl = socket.handshake.query.url;
 			socket.join('page.' + requestedUrl);
 			request.track({ url: requestedUrl });
-			let response = app.handle(request);
+			let response = await app.handle(request);
 
 			setTimeout(() => {
 				socket.volatile.emit('pageRequest', response);
 			}, 500);
 
 			// User request a page
-		  	socket.on('pageRequest', (incommingRequest) => {
+		  	socket.on('pageRequest', async (incommingRequest) => {
 		  		for (let room in socket.rooms) {
 		  			if (room.startsWith('page.')) {
 		  				socket.leave(room);
@@ -52,7 +52,9 @@ module.exports = class Server
 		  		socket.join('page.' + incommingRequest.url);
 
 		  		request.track(incommingRequest);
-		  		let response = app.handle(request);
+		  		let response = await app.handle(request);
+
+		  		response.name = response.name + '-' + new Date().getTime();
 
 		  		socket.volatile.emit('pageRequest', response);
 		  	});
