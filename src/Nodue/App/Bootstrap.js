@@ -120,7 +120,6 @@ module.exports = class Bootstrap
 	{
 		for (let model in AppFiles.models) {
 			let modelInstance = app.make(`models.${model}`);
-			modelInstance.bookshelf.tableName = modelInstance.tableName;
 			global[model] = new Proxy(modelInstance, Nodue.ORM.Proxy);
 		}
 	}

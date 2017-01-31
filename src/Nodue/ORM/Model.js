@@ -2,12 +2,12 @@ module.exports = class Model
 {
 	constructor()
 	{
-		let bookshelf = Bookshelf.Model.extend({
-			tableName: this.tableName,
-		});
-		
+		let bookshelf = Bookshelf.Model;
+
 		bookshelf.model = this;
 		this.bookshelf = new Proxy(bookshelf, Nodue.ORM.ModelProxy);
+		console.log('TEST MODEL');
+		console.log(this.bookshelf.tableName);
 	}
 
 	async find(id)
