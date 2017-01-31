@@ -3,6 +3,6 @@
 	<button @click="test">Test</button>
 	<hr>
 	<ul>
-		<li v-for="product in products">{{ product.name }}</li>
+		<li v-for="(product, index) in products">#{{ index }} &mdash; {{ product.name }}</li>
 	</ul>
 </div>

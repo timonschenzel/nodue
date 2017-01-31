@@ -2,7 +2,10 @@ module.exports = class Model
 {
 	constructor()
 	{
-		let bookshelf = Bookshelf.Model;
+		let bookshelf = Bookshelf.Model.extend({
+			tableName: this.tableName,
+		});
+		
 		bookshelf.model = this;
 		this.bookshelf = new Proxy(bookshelf, Nodue.ORM.ModelProxy);
 	}

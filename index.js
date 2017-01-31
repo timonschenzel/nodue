@@ -6,6 +6,38 @@ app.bootstrap();
 
 app.run();
 
+// class Main
+// {
+
+// }
+
+// let proxy = {
+// 	get(target, property)
+// 	{
+// 		if (this.hasOwnProperty(property)) {
+// 			return this[property];
+// 		}
+
+// 		if (typeof this[property] == 'function') {
+// 			return function(...args) {
+// 			   return this[property](args);
+// 			};
+// 		}
+// 	},
+
+// 	func(value)
+// 	{
+// 		console.log('func call: ' + value);
+// 	},
+
+// 	test: 12345,
+// }
+
+// let main = new Proxy(new Main, proxy);
+
+// console.log(main.test);
+// main.func('test 12345', 'test');
+
 // db.select(['name']).from('products').then(result => {
 // 	console.log(result);
 // });
