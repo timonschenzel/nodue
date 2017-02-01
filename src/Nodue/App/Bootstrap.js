@@ -7,6 +7,7 @@ module.exports = class Bootstrap
 	{
 		return [
 			'loadFsModule',
+			'loadPluralizeModule',
 			'loadEnvFile',
 			'loadNodueFiles',
 			'loadCoreHelpers',
@@ -29,6 +30,11 @@ module.exports = class Bootstrap
 	loadFsModule()
 	{
 		global.fs = require('fs');
+	}
+
+	loadPluralizeModule()
+	{
+		global.pluralize = require('pluralize')
 	}
 
 	loadEnvFile()
@@ -64,26 +70,9 @@ module.exports = class Bootstrap
 
 	initDatabaseConnection()
 	{
-		let databaseConfig = app.getConfig('database');
-		let defaultConfig = databaseConfig['connections'][databaseConfig['default']];
+		let dbLoader = require('../Database/Database').init();
 
-
-		if (defaultConfig['driver'] == 'sqlite') {
-			defaultConfig['filename'] = defaultConfig['database'];
-		}
-
-		global.db = require('knex')({
-			client: 'sqlite3', //defaultConfig['driver'],
-			connection: {
-				filename: database_path('database.sqlite'),
-				// host: defaultConfig['host'],
-				// user: defaultConfig['user'],
-				// password: defaultConfig['password'],
-				// database: defaultConfig['database'],
-				// charset: defaultConfig['charset'],
-			},
-			useNullAsDefault: true
-		});
+		global.db = require('knex')(dbLoader.settings());
 
 		global.Bookshelf = require('bookshelf')(db);
 	}

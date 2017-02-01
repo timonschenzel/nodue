@@ -3,12 +3,12 @@ module.exports = {
 
 	connections: {
 		sqlite: {
-			drive: 'sqlite',
+			driver: 'sqlite',
 			database: env('DB_DATABASE', database_path('database.sqlite')),
 		},
 
 		mysql: {
-			drive: 'mysql',
+			driver: 'mysql',
 			host: env('DB_HOST', '127.0.0.1'),
 			user: env('DB_USER', 'nodue'),
 			password: env('DB_PASSWORD', ''),
@@ -17,7 +17,7 @@ module.exports = {
 		},
 
 		pgsql: {
-			drive: 'pgsql',
+			driver: 'pgsql',
 			host: env('DB_HOST', '127.0.0.1'),
 			user: env('DB_USER', 'nodue'),
 			password: env('DB_PASSWORD', ''),

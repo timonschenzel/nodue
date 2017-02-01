@@ -2,12 +2,24 @@ module.exports = class Model
 {
 	constructor()
 	{
-		let bookshelf = Bookshelf.Model;
+		this.bookshelf = Bookshelf.Model.extend(
+			this.settings()
+		);
+	}
 
-		bookshelf.model = this;
-		this.bookshelf = new Proxy(bookshelf, Nodue.ORM.ModelProxy);
-		console.log('TEST MODEL');
-		console.log(this.bookshelf.tableName);
+	get table()
+	{
+		return pluralize(this.constructor.name);
+	}
+
+	get primaryKey()
+	{
+		return 'id';
+	}
+
+	get timestamps()
+	{
+		return ['created_at', 'updated_at'];
 	}
 
 	async find(id)
@@ -22,5 +34,14 @@ module.exports = class Model
 		return await this.bookshelf.fetchAll().then(result => {
 			return result;
 		})
+	}
+
+	settings()
+	{
+		return {
+			tableName: this.table,
+			idAttribute: this.primaryKey,
+			hasTimestamps: this.timestamps,
+		}
 	}
 }
