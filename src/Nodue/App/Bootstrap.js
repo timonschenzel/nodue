@@ -137,7 +137,6 @@ module.exports = class Bootstrap
 		app.hot = true;
 
 		for (let endpoint in route.getEndpoints()) {
-			// Inpect url and check files to watch
 			hotReload.inspectEndpoint(endpoint);
 		};
 

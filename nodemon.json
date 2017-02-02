@@ -1,5 +1,6 @@
 {
 	"ignore": [
+		"resources/views",
 	 	"app/http/controllers",
 	 	"database/database.sqlite-journal",
 	 	"database/database.sqlite"

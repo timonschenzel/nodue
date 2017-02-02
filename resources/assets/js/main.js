@@ -26,24 +26,6 @@ window.addEventListener('popstate', function(e) {
 	});
 });
 
-Vue.component('home', {
-	template: '<h1>{{ text }}</h1>',
-	data() {
-		return {
-			text: 'Hello World',
-		}
-	}
-});
-
-Vue.component('product', {
-	template: '<h1>{{ text }}</h1>',
-	data() {
-		return {
-			text: 'Product',
-		}
-	}
-});
-
 window.vm = new Vue({
   el: '#app',
   data: {
@@ -62,7 +44,7 @@ socket.on('pageRequest', (response) => {
 		if (response.hot) {
 			let currentComponentData = window.vm.$root.$children[0].$data;
 
-			let mergeData = merge(currentComponentData, response.data);
+			response.data = merge(response.data, currentComponentData);
 		}
 
 		let component = {};
@@ -74,6 +56,10 @@ socket.on('pageRequest', (response) => {
 		component.data = function()
 		{
 			return response.data;
+		}
+
+		if (vm.$children[0]) {
+			vm.$children[0].$destroy();
 		}
 
 		createComponent(response.name, component);

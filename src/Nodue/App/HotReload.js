@@ -8,6 +8,8 @@ module.exports = class HotReload
 
 		this.views = [];
 
+		this.behaviors = [];
+
 		this.pages = {};
 	}
 
@@ -16,8 +18,13 @@ module.exports = class HotReload
 		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\..|\/node_modules|\/database/ }).on('all', async (event, path) => {
 			if (fs.lstatSync(path).isFile()) {
 				let url = false;
+				
 				if (this.views[path] !== undefined) {
 					url = this.views[path];
+				}
+
+				if (this.behaviors[path] !== undefined) {
+					url = this.behaviors[path];
 				}
 
 				if (this.controllers[path] !== undefined) {
@@ -55,14 +62,17 @@ module.exports = class HotReload
 			let viewDir = this.findViewPath(controllerName);
 			let controllerPath = app.path(`app/http/controllers/${controllerName}.js`);
 			let viewPath = app.path(`resources/views/${viewDir}/${controllerFunctionName}.vue`);
+			let behaviorPath = app.path(`resources/views/${viewDir}/${controllerFunctionName}.js`);
 
 			this.endpoints[endpoint] = {
 				view: viewPath,
 				controller: controllerPath,
+				behavior: behaviorPath,
 			};
 
 			this.controllers[controllerPath] = endpoint;
 			this.views[viewPath] = endpoint;
+			this.behaviors[behaviorPath] = endpoint;
 			this.pages[endpoint] = viewDir + '_' + controllerFunctionName;
 		}
 	}
@@ -77,11 +87,15 @@ module.exports = class HotReload
 		string += new Date().getTime();
 
 	    let hash = 0;
-	    if (string.length == 0) return hash;
+
+	    if (string.length == 0) {
+	    	return hash;
+	    }
+
 	    for (let i = 0; i < string.length; i++) {
 	        let char = string.charCodeAt(i);
-	        hash = ((hash<<5)-hash)+char;
-	        hash = hash & hash; // Convert to 32bit integer
+	        hash = ((hash << 5) - hash) + char;
+	        hash = hash & hash;
 	    }
 
 	    return hash;

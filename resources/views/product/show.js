@@ -3,7 +3,7 @@
 	{
 		console.log('created');
 
-		var vm = this
+		var vm = this;
 		this.counter++;
 		setInterval(function () {
 		  vm.counter += 1
