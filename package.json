@@ -7,10 +7,12 @@
     "production": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "nodue": "node --harmony-async-await index.js",
     "nodue:dev": "nodemon --harmony-async-await index.js",
-    "tests": "karma start karma.conf.js --log-level debug --single-run"
+    "testskarma": "karma start karma.conf.js --log-level debug --single-run",
+    "tests": "ava"
   },
   "devDependencies": {
     "auto-loader": "^0.2.0",
+    "ava": "^0.18.1",
     "axios": "^0.15.3",
     "bookshelf": "^0.10.3",
     "bulma": "^0.2.1",
@@ -39,5 +41,21 @@
   },
   "dependencies": {
     "sqlite3": "^3.1.8"
-  }
+  },
+    "ava": {
+        "files": [
+            "src/tests/*.js"
+        ],
+        "source": [
+            "src/tests/*.js"
+        ],
+        "concurrency": 5,
+        "failFast": true,
+        "tap": true,
+        "powerAssert": false,
+        "require": [
+            "babel-register"
+        ],
+        "babel": "inherit"
+    }
 }
