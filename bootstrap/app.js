@@ -1,4 +1,4 @@
-let app = require('../src/Nodue/App/App');
-let proxy = require('../src/Nodue/App/Proxy');
+let app = require('../Nodue/src/App/App');
+let proxy = require('../Nodue/src/App/Proxy');
 
 module.exports = new Proxy(new app(), proxy);

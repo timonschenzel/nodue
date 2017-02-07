@@ -44,7 +44,7 @@ module.exports = class Bootstrap
 
 	loadNodueFiles()
 	{
-		global.Nodue = app.fileLoader.loadFrom('src/Nodue');
+		global.Nodue = app.fileLoader.loadFrom('Nodue/src');
 	}
 
 	loadCoreHelpers()

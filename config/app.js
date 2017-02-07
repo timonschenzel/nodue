@@ -30,6 +30,7 @@ module.exports = {
 	references: {
 		Controller: 'Http.Controller',
 		Model: 'ORM.Model',
+		TestCase: 'Testing.TestCase',
 	},
 
 	/**
