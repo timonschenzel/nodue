@@ -1,6 +1,4 @@
-let test = require('ava');
-
-let exec = require('child_process').exec;
+global.test = require('ava');
 
 // Bootstrap nodue
 global.app = require('./bootstrap/app');
@@ -12,25 +10,15 @@ app.bootstrap();
 // Load test files
 let tests = app.fileLoader.loadFrom('Nodue/tests');
 
-let TestClass = new tests.App.App;
+let TestClass = new tests.App.AppTest;
 
 for (let name of Object.getOwnPropertyNames(Object.getPrototypeOf(TestClass))) {
     let method = TestClass[name];
-    // Supposedly you'd like to skip constructor
-    if ( ! method instanceof Function || method === TestClass || name == 'constructor') {
+
+    if ( ! method instanceof Function || method === TestClass || name == 'constructor' || ! name.startsWith('test')) {
     	continue;
     }
 
-    let testContext = TestClass[name].toString();
-
-    testContext = testContext.replace(name + '()', '');
-    testContext = testContext.trim();
-    testContext = testContext.substring(1, testContext.length - 1);
-    testContext = testContext.trim();
-    testContext = testContext.replace('this', 't');
-
-    test(name, t => {
-    	let func = new Function(testContext);
-    	func();
-    });
+    TestClass.name = TestClass.constructor.name + ' -> ' + name;
+    TestClass[name]();
 }
