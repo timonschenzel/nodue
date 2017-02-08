@@ -2,7 +2,7 @@ module.exports = class Server
 {
 	constructor()
 	{
-		this.port = app.fetchConfig('port');
+		this.port = app.config().port;
 
 		this.express = require('express');
 		this.server = this.express();

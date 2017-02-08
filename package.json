@@ -9,7 +9,7 @@
     "nodue:dev": "nodemon --harmony-async-await index.js",
     "testskarma": "karma start karma.conf.js --log-level debug --single-run",
     "tests_filter": "node --harmony-async-await node_modules/ava/cli.js $@",
-    "tests": "node --harmony-async-await node_modules/ava/cli.js nodue-test-cli.js"
+    "tests": "node --harmony-async-await node_modules/ava/cli.js nodue-test-cli.js $@"
   },
   "devDependencies": {
     "auto-loader": "^0.2.0",

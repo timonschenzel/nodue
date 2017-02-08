@@ -3,7 +3,7 @@ module.exports = class App
 	constructor()
 	{
 		this._basePath = false;
-		this._config = false;
+		this._config = {};
 		this._hot = false;
 		this.bootstrapper = this.getClass('./Bootstrap');
 		this.fileLoader = this.getClass('./FileLoader');
@@ -19,14 +19,23 @@ module.exports = class App
 		return this._basePath;
 	}
 
-	get config()
+	registerConfig(name, config)
 	{
-		return this._config;
+		this._config[name] = config;
 	}
 
-	set config(config)
+	config(path = null)
 	{
-		this._config = config;
+		if (! path) {
+			path = 'app';
+		}
+
+		return this.getConfig(path);
+	}
+
+	resetConfig()
+	{
+		this._config = {};
 	}
 
 	get hot()
@@ -62,16 +71,6 @@ module.exports = class App
 		}
 
 		return object;
-	}
-
-	get(target, key)
-	{
-
-	}
-
-	set(target, key, value)
-	{
-
 	}
 
 	run()
@@ -157,17 +156,6 @@ module.exports = class App
 
 			appfilesClone = appfilesClone[parts[count]];
 		}
-
-		// for (var part of parts) {
-		// 	target[part] = {};
-		// 	target = target[part];
-		// }
-
-		// target = object;
-
-		// console.log(target);
-
-		// console.log(appFileClonePointer);
 	}
 
 	addProxyPart(property)
@@ -198,7 +186,28 @@ module.exports = class App
 
 	getConfig(path)
 	{
-		return this.getFile(`config/${path}`);
+		let fileName = path;
+
+		if (path.includes('.') || path.includes('/')) {
+			path = path.replace('/', '.');
+
+			let parts = path.split('.');
+
+			fileName = parts.shift();
+
+			path = parts.join('.');
+
+			let config = this.getFile(`config/${fileName}`);
+
+			return this.retrieveObjectProperyWithExpression(config, path);
+		}
+
+		return this.getConfigFile(path);
+	}
+
+	getConfigFile(fileName)
+	{
+		return this.getFile(`config/${fileName}`);
 	}
 
 	getClass(path)

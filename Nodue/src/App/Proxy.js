@@ -1,24 +1,22 @@
 module.exports = {
 	get(target, property)
 	{
-		if(property in target) {
+		if(property in target && typeof target[property] != 'function') {
 		    return target[property];
-		} else {
-			try {
-				if(typeof property == 'string') {
-					if(target.hasOwnProperty(property)) {
-						return target.property;
-					}
+		}
 
-					if(App.appFiles.hasOwnProperty(property)) {
-						return App.appFiles[property];
-					} else if(App.nodueFiles.hasOwnProperty(property)) {
-						return App.nodueFiles[property];
-					}
-				}
-			} catch(e) {
-				console.log('error!');
+		if (typeof target[property] == 'function') {
+			return function(...args) {
+				return target[property](args[0]);
 			}
+		}
+
+		if (target[property] !== undefined) {
+			return target[property];
+		}
+
+		if('_' + property in target) {
+		    return target['_' + property];
 		}
 	}
 };

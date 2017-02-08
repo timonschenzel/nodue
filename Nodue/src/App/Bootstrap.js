@@ -11,8 +11,8 @@ module.exports = class Bootstrap
 			'loadEnvFile',
 			'loadNodueFiles',
 			'loadCoreHelpers',
-			'loadAppConfig',
 			'loadPathModule',
+			'loadConfigFiles',
 			'loadChokidarModule',
 			'initDatabaseConnection',
 			'autoload',
@@ -53,14 +53,18 @@ module.exports = class Bootstrap
 		app.loadHelpersFrom(helpers);
 	}
 
-	loadAppConfig()
-	{
-		app.config = app.getConfig('app');
-	}
-
 	loadPathModule()
 	{
 		global.path = require('path');
+	}
+
+	loadConfigFiles()
+	{
+		let configFiles = app.fileLoader.loadFrom('./config');
+
+		for (let configFile in configFiles) {
+			app.registerConfig(configFile, configFiles[configFile]);
+		}
 	}
 
 	loadChokidarModule()
@@ -79,29 +83,29 @@ module.exports = class Bootstrap
 
 	autoload()
 	{
-		for (let alias in app.config.autoload) {
-			global[alias] = app.fileLoader.loadFrom(app.config.autoload[alias]);
+		for (let alias in app.config().autoload) {
+			global[alias] = app.fileLoader.loadFrom(app.config().autoload[alias]);
 		}
 	}
 
 	loadHelpers()
 	{
-		app.config.helpers.forEach(helper => {
+		app.config().helpers.forEach(helper => {
 			app.loadHelpersFrom(helper);
 		});
 	}
 
 	setupInstances()
 	{
-		for (let alias in app.config.instances) {
-			global[alias] = app.make(app.config.instances[alias]);
+		for (let alias in app.config().instances) {
+			global[alias] = app.make(app.config().instances[alias]);
 		}
 	}
 
 	setupReferences()
 	{
-		for (let alias in app.config.references) {
-			global[alias] = app.resolve(app.config.references[alias]);
+		for (let alias in app.config().references) {
+			global[alias] = app.resolve(app.config().references[alias]);
 		}
 	}
 

@@ -5,7 +5,7 @@ module.exports = class TestCase
 		this.name = null;
 	}
 
-	assertEqual(value, expected, message)
+	assertEquals(expected, value, message)
 	{
 		// .is(value, expected, [message])
 		test(this.name, async t => {
@@ -13,7 +13,7 @@ module.exports = class TestCase
 		});
 	}
 
-	assertNotEqual(value, expected, message)
+	assertNotEquals(expected, value, message)
 	{
 		// .not(value, expected, [message])
 		test(this.name, async t => {

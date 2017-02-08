@@ -59,7 +59,7 @@ module.exports = class Database
 
 	getConfig()
 	{
-		let databaseConfig = app.getConfig('database');
+		let databaseConfig = app.config('database');
 		return databaseConfig['connections'][databaseConfig['default']];
 	}
 }
