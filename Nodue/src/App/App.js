@@ -26,16 +26,32 @@ module.exports = class App
 
 	config(path = null)
 	{
+		if (Object.keys(this._config).length === 0) {
+			return this._config;
+		}
+
 		if (! path) {
 			path = 'app';
 		}
 
-		return this.getConfig(path);
+		if (path.includes('.') || path.includes('/')) {
+			path = path.replace('/', '.');
+
+			return this.retrieveObjectProperyWithExpression(this._config, path);
+		}
+
+		return this._config[path];
 	}
 
 	resetConfig()
 	{
 		this._config = {};
+	}
+
+	refreshConfig()
+	{
+		this.resetConfig();
+		this.bootstrapper.loadConfigFiles();
 	}
 
 	get hot()
@@ -60,6 +76,8 @@ module.exports = class App
 
 	retrieveObjectProperyWithExpression(object, expression)
 	{
+		expression = expression.replace('/', '.');
+
 		let parts = expression.split('.');
 
 		for(var part of parts) {
@@ -182,27 +200,6 @@ module.exports = class App
 	getFile(path)
 	{
 		return require(this.basePath + path);
-	}
-
-	getConfig(path)
-	{
-		let fileName = path;
-
-		if (path.includes('.') || path.includes('/')) {
-			path = path.replace('/', '.');
-
-			let parts = path.split('.');
-
-			fileName = parts.shift();
-
-			path = parts.join('.');
-
-			let config = this.getFile(`config/${fileName}`);
-
-			return this.retrieveObjectProperyWithExpression(config, path);
-		}
-
-		return this.getConfigFile(path);
 	}
 
 	getConfigFile(fileName)

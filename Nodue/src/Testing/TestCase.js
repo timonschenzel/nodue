@@ -9,7 +9,7 @@ module.exports = class TestCase
 	{
 		// .is(value, expected, [message])
 		test(this.name, async t => {
-			await t.is(value, expected, message);
+			await t.deepEqual(value, expected, message);
 		});
 	}
 
@@ -37,7 +37,7 @@ module.exports = class TestCase
 		});
 	}
 
-	assertDeepEqual(value, expected, message)
+	assertDeepEqual(expected, value, message)
 	{
 		// .deepEqual(value, expected, [message])
 		test(this.name, async t => {
@@ -45,7 +45,7 @@ module.exports = class TestCase
 		});
 	}
 
-	assertNotDeepEqual(value, expected, message)
+	assertNotDeepEqual(expected, value, message)
 	{
 		// .notDeepEqual(value, expected, [message])
 		test(this.name, async t => {

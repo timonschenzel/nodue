@@ -7,7 +7,8 @@ module.exports = {
 
 		if (typeof target[property] == 'function') {
 			return function(...args) {
-				return target[property](args[0]);
+
+				return target[property](...args);
 			}
 		}
 

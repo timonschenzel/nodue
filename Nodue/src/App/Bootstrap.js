@@ -60,6 +60,8 @@ module.exports = class Bootstrap
 
 	loadConfigFiles()
 	{
+		app.resetConfig();
+
 		let configFiles = app.fileLoader.loadFrom('./config');
 
 		for (let configFile in configFiles) {
