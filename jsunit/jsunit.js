@@ -1,3 +1,5 @@
+let annotations = require('./annotations');
+
 /**
  * Load ava's test framework.
  *

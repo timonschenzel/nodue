@@ -1,6 +1,7 @@
 module.exports = class AppTest extends TestCase
 {
-	test_it_is_able_to_load_a_specific_file()
+	/** test */
+	it_is_able_to_load_a_specific_file()
 	{
 		fs.writeFileSync('./tests/dummy.js', 'module.exports = { foo: "bar" }');
 
@@ -13,7 +14,8 @@ module.exports = class AppTest extends TestCase
 		fs.unlinkSync('./tests/dummy.js');
 	}
 
-	test_it_is_able_to_load_multiple_files_inside_a_directory()
+	/** test */
+	it_is_able_to_load_multiple_files_inside_a_directory()
 	{
 		fs.mkdirSync('./tests/dummy');
 		fs.writeFileSync('./tests/dummy/foo.js', 'module.exports = { foo: "bar" }');
@@ -34,7 +36,8 @@ module.exports = class AppTest extends TestCase
 		fs.rmdirSync('./tests/dummy');
 	}
 
-	test_it_is_able_to_fetch_a_config_file()
+	/** test */
+	it_is_able_to_fetch_a_config_file()
 	{
 		// Create dummy config file
 		fs.writeFileSync('./config/dummy.js', 'module.exports = { foo: "bar" }');
@@ -46,7 +49,8 @@ module.exports = class AppTest extends TestCase
 		fs.unlinkSync('./config/dummy.js');
 	}
 
-	test_it_is_able_to_return_data_from_config_files()
+	/** test */
+	it_is_able_to_return_data_from_config_files()
 	{
 		app.resetConfig();
 

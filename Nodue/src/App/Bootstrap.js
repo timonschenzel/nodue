@@ -9,6 +9,8 @@ module.exports = class Bootstrap
 			'loadFsModule',
 			'loadPluralizeModule',
 			'loadEnvFile',
+			'addObjectFlattenBehaviour',
+			'extendPrototype',
 			'loadNodueFiles',
 			'loadCoreHelpers',
 			'loadPathModule',
@@ -40,6 +42,47 @@ module.exports = class Bootstrap
 	loadEnvFile()
 	{
 		require('dotenv').config();
+	}
+
+	addObjectFlattenBehaviour()
+	{
+		Object.defineProperty(Object.prototype, 'flattern', {
+		  set: function() {},
+		  get: function() {
+		  	return function() {
+			  	let toReturn = {};
+
+			  	for (let i in this) {
+			  		if (! this.hasOwnProperty(i)) continue;
+
+			  		if (typeof this[i] == 'object') {
+			  			let flatObject = this[i].flattern();
+
+			  			if (Object.keys(flatObject).length === 0) {
+			  				console.log(this);
+			  				toReturn[i] = this;
+			  			} else {
+				  			for (let x in flatObject) {
+				  				if (! flatObject.hasOwnProperty(x)) continue;
+
+				  				toReturn[i + '/' + x] = flatObject[x];
+				  			}
+			  			}
+			  		} else {
+			  			toReturn[i] = this[i];
+			  		}
+			  	}
+			  	return toReturn;
+		  	}
+		  },
+		  configurable: true
+		});
+	}
+
+	extendPrototype()
+	{
+		let extend = app.fileLoader.loadFrom('Nodue/src/ExtendPrototype');
+		console.log(extend.flattern());
 	}
 
 	loadNodueFiles()

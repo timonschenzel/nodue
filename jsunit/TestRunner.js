@@ -6,7 +6,11 @@ module.exports = class TestRunner
 		
 		this.fs = require('fs');
 
+		this.pathModule = require('path');
+
 		this.fileLoader = require('auto-loader');
+
+		this.annotations = require('./annotations');
 
 		this.process = processData;
 
@@ -30,7 +34,7 @@ module.exports = class TestRunner
 		}
 	}
 
-	parseFilter(rawFilter)
+	parseFilter(rawFilter = '')
 	{
 		let searchFilter = rawFilter.match(/"((?:\\.|[^"\\])*)"/);
 
@@ -52,20 +56,23 @@ module.exports = class TestRunner
 
 	test()
 	{
-		this.locations.forEach(location => {
+		for (let location in this.locations) {
 			this.runTestsInLocation(location);
-		});
+		}
 	}
 
-	runTestsInClass(testClass, path)
+	runTestsInClass(testClass, path, location)
 	{
+		let annotations = this.annotations.getSync(this.path(`${location}/${path}.js`));
+
 		for (let name of Object.getOwnPropertyNames(Object.getPrototypeOf(testClass))) {
 		    let method = testClass[name];
+		    let hasTestAnnotation = annotations[name].test === true;
 
 		    // Default filters:
 		    // 1. Skip constructor
-		    // 2. Only call methods with a 'test' prefix
-		    if ( ! method instanceof Function || method === testClass || name == 'constructor' || ! name.startsWith('test')) {
+		    // 2. Only call methods with a 'test' prefix or a 'test' annotation
+		    if ( ! method instanceof Function || method === testClass || name == 'constructor' || (! name.startsWith('test') && ! hasTestAnnotation)) {
 		    	continue;
 		    }
 
@@ -81,10 +88,10 @@ module.exports = class TestRunner
 
 	runTestsInLocation(location)
 	{
-        let testFiles = this.getTestFilesInLocation(location);
+        let testFiles = this.getTestFilesInLocation(this.locations[location]);
 
         for (let filePath in testFiles) {
-        	this.runTestsInClass(new testFiles[filePath](), filePath);
+        	this.runTestsInClass(new testFiles[filePath](), filePath, location);
         }
     }
 
@@ -115,11 +122,10 @@ module.exports = class TestRunner
 
 	getTestLocations()
 	{
-		// Load test files
 		let fileLocations = this.config.files;
 
 		fileLocations.forEach(location => {
-			this.locations.push(this.loadFilesFrom(location));
+			this.locations[location] = this.loadFilesFrom(location);
 		});
 
 		return this.locations;
@@ -127,7 +133,7 @@ module.exports = class TestRunner
 
 	path(additionalPath)
 	{
-		return this.pwd + additionalPath;
+		return this.pathModule.normalize(this.pwd + additionalPath);
 	}
 
 	loadFilesFrom(path)

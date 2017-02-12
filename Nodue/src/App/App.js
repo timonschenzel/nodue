@@ -74,6 +74,7 @@ module.exports = class App
 		return this.retrieveObjectProperyWithExpression(this.config, expression);
 	}
 
+	// Rewrite with prototype method
 	retrieveObjectProperyWithExpression(object, expression)
 	{
 		expression = expression.replace('/', '.');
