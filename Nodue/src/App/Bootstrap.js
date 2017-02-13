@@ -59,7 +59,6 @@ module.exports = class Bootstrap
 			  			let flatObject = this[i].flattern();
 
 			  			if (Object.keys(flatObject).length === 0) {
-			  				console.log(this);
 			  				toReturn[i] = this;
 			  			} else {
 				  			for (let x in flatObject) {
@@ -82,7 +81,10 @@ module.exports = class Bootstrap
 	extendPrototype()
 	{
 		let extend = app.fileLoader.loadFrom('Nodue/src/ExtendPrototype');
-		console.log(extend.flattern());
+		
+		for (let path in extend.flattern()) {
+			app.fileLoader.load('Nodue/src/ExtendPrototype/' + path + '.js');
+		}
 	}
 
 	loadNodueFiles()
