@@ -7,10 +7,9 @@ module.exports = class Bootstrap
 	{
 		return [
 			'loadFsModule',
+			'loadSugarModule',
 			'loadPluralizeModule',
 			'loadEnvFile',
-			'addObjectFlattenBehaviour',
-			'extendPrototype',
 			'loadNodueFiles',
 			'loadCoreHelpers',
 			'loadPathModule',
@@ -34,6 +33,11 @@ module.exports = class Bootstrap
 		global.fs = require('fs');
 	}
 
+	loadSugarModule()
+	{
+		global.Sugar = require('sugar');
+	}
+
 	loadPluralizeModule()
 	{
 		global.pluralize = require('pluralize')
@@ -44,52 +48,46 @@ module.exports = class Bootstrap
 		require('dotenv').config();
 	}
 
-	addObjectFlattenBehaviour()
-	{
-		Object.defineProperty(Object.prototype, 'flattern', {
-		  set: function() {},
-		  get: function() {
-		  	return function() {
-			  	let toReturn = {};
-
-			  	for (let i in this) {
-			  		if (! this.hasOwnProperty(i)) continue;
-
-			  		if (typeof this[i] == 'object') {
-			  			let flatObject = this[i].flattern();
-
-			  			if (Object.keys(flatObject).length === 0) {
-			  				toReturn[i] = this;
-			  			} else {
-				  			for (let x in flatObject) {
-				  				if (! flatObject.hasOwnProperty(x)) continue;
-
-				  				toReturn[i + '/' + x] = flatObject[x];
-				  			}
-			  			}
-			  		} else {
-			  			toReturn[i] = this[i];
-			  		}
-			  	}
-			  	return toReturn;
-		  	}
-		  },
-		  configurable: true
-		});
-	}
-
-	extendPrototype()
-	{
-		let extend = app.fileLoader.loadFrom('Nodue/src/ExtendPrototype');
-		
-		for (let path in extend.flattern()) {
-			app.fileLoader.load('Nodue/src/ExtendPrototype/' + path + '.js');
-		}
-	}
-
 	loadNodueFiles()
 	{
 		global.Nodue = app.fileLoader.loadFrom('Nodue/src');
+
+		Nodue.Object = Sugar.Object;
+
+		Nodue.Object.prototype.flattern = function() {
+		  	let toReturn = {};
+
+		  	for (let i in this.raw) {
+		  		if (! this.has(i)) continue;
+
+		  		if (typeof this[i] == 'object') {
+		  			let flatObject = Nodue.Object(this[i]).flattern();
+
+		  			if (flatObject.keys().length === 0) {
+		  				toReturn[i] = this;
+		  			} else {
+			  			for (let x in flatObject.raw) {
+			  				if (! flatObject.has(x)) continue;
+
+			  				toReturn[i + '/' + x] = flatObject[x];
+			  			}
+		  			}
+		  		} else {
+		  			toReturn[i] = this[i];
+		  		}
+		  	}
+
+		  	return toReturn;
+	  	}
+
+		let object = Nodue.Object({
+			'test': 123,
+			'foo': {
+				'test': 123,
+			}
+		});
+
+		// console.log(object.flattern());
 	}
 
 	loadCoreHelpers()
