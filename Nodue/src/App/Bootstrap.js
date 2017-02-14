@@ -96,6 +96,22 @@ module.exports = class Bootstrap
 	{
 		let helpers = Nodue.App.Helpers;
 		app.loadHelpersFrom(helpers);
+
+		// let boolean = false;
+		// let nullable = null;
+		// let undefinedable = undefined;
+		// let number = 1;
+		// let string = 'hit';
+		// let object = {};
+		// let array = [];
+
+		// collect(boolean);
+		// collect(nullable);
+		// collect(undefinedable);
+		// collect(number);
+		// collect(string);
+		// collect(object);
+		// collect(array);
 	}
 
 	loadPathModule()
