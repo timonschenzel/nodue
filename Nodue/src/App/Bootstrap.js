@@ -8,6 +8,7 @@ module.exports = class Bootstrap
 		return [
 			'loadFsModule',
 			'loadSugarModule',
+			'bootSupport',
 			'loadPluralizeModule',
 			'loadEnvFile',
 			'loadNodueFiles',
@@ -38,6 +39,28 @@ module.exports = class Bootstrap
 		global.Sugar = require('sugar');
 	}
 
+	bootSupport()
+	{
+		global.Arr = Sugar.Array;
+		global.Carbon = Sugar.Date;
+		global.Num = Sugar.Number;
+		global.Obj = Sugar.Object;
+		global.Str = Sugar.String;
+
+		// Load the Obj flattern method
+		app.fileLoader.load('Nodue/src/Support/Obj/flattern.js');
+
+		let support = Obj(app.fileLoader.loadFrom('Nodue/src/Support'));
+
+		support.flattern().forEach((file, path) => {
+			if (path != 'Obj/flattern') {
+				app.fileLoader.load(`Nodue/src/Support/${path}.js`);
+			}
+		});
+
+		dump(Str('test_some_string').camelize());
+	}
+
 	loadPluralizeModule()
 	{
 		global.pluralize = require('pluralize')
@@ -51,43 +74,6 @@ module.exports = class Bootstrap
 	loadNodueFiles()
 	{
 		global.Nodue = app.fileLoader.loadFrom('Nodue/src');
-
-		Nodue.Object = Sugar.Object;
-
-		Nodue.Object.prototype.flattern = function() {
-		  	let toReturn = {};
-
-		  	for (let i in this.raw) {
-		  		if (! this.has(i)) continue;
-
-		  		if (typeof this[i] == 'object') {
-		  			let flatObject = Nodue.Object(this[i]).flattern();
-
-		  			if (flatObject.keys().length === 0) {
-		  				toReturn[i] = this;
-		  			} else {
-			  			for (let x in flatObject.raw) {
-			  				if (! flatObject.has(x)) continue;
-
-			  				toReturn[i + '/' + x] = flatObject[x];
-			  			}
-		  			}
-		  		} else {
-		  			toReturn[i] = this[i];
-		  		}
-		  	}
-
-		  	return toReturn;
-	  	}
-
-		let object = Nodue.Object({
-			'test': 123,
-			'foo': {
-				'test': 123,
-			}
-		});
-
-		// console.log(object.flattern());
 	}
 
 	loadCoreHelpers()
