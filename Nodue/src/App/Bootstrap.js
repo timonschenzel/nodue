@@ -41,24 +41,22 @@ module.exports = class Bootstrap
 
 	bootSupport()
 	{
-		global.Arr = Sugar.Array;
-		global.Carbon = Sugar.Date;
-		global.Num = Sugar.Number;
-		global.Obj = Sugar.Object;
-		global.Str = Sugar.String;
+		global.array = Sugar.Array;
+		global.date = Sugar.Date;
+		global.number = Sugar.Number;
+		global.object = Sugar.Object;
+		global.string = Sugar.String;
 
 		// Load the Obj flattern method
-		app.fileLoader.load('Nodue/src/Support/Obj/flattern.js');
+		app.fileLoader.load('Nodue/src/Support/object/flattern.js');
 
-		let support = Obj(app.fileLoader.loadFrom('Nodue/src/Support'));
+		let support = object(app.fileLoader.loadFrom('Nodue/src/Support'));
 
 		support.flattern().forEach((file, path) => {
-			if (path != 'Obj/flattern') {
+			if (path != 'object/flattern') {
 				app.fileLoader.load(`Nodue/src/Support/${path}.js`);
 			}
 		});
-
-		dump(Str('test_some_string').camelize());
 	}
 
 	loadPluralizeModule()

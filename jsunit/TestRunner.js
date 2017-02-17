@@ -66,9 +66,13 @@ module.exports = class TestRunner
 		let annotations = this.annotations.getSync(this.path(`${location}/${path}.js`));
 
 		for (let name of Object.getOwnPropertyNames(Object.getPrototypeOf(testClass))) {
+			let hasTestAnnotation = false;
 		    let method = testClass[name];
-		    let hasTestAnnotation = annotations[name].test === true;
 
+		    if (typeof annotations[name] == 'object') {
+		    	hasTestAnnotation = annotations[name].test === true;
+			}
+		    
 		    // Default filters:
 		    // 1. Skip constructor
 		    // 2. Only call methods with a 'test' prefix or a 'test' annotation

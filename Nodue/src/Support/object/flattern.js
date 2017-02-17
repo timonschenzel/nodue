@@ -1,4 +1,4 @@
-Obj.prototype.flattern = function() {
+object.prototype.flattern = function() {
   	let toReturn = {};
 
   	this.forEach((item, key) => {
@@ -10,7 +10,7 @@ Obj.prototype.flattern = function() {
 
   		if (typeof item == 'object' && objectIsNotEmpty) {
 
-  			let flatObject = Obj(item).flattern();
+  			let flatObject = object(item).flattern();
 
 			flatObject.forEach((subItem, subKey) => {
 				toReturn[key + '/' + subKey] = subItem;
@@ -20,5 +20,5 @@ Obj.prototype.flattern = function() {
   		}
   	});
 
-  	return Obj(toReturn);
+  	return object(toReturn);
 }

@@ -69,6 +69,10 @@ function analyze(data) {
     // Get line type
     var type = identify(lines[num]);
 
+    if (type.name == 'get') {
+      continue;
+    }
+
     switch (type.id) {
       case 'dbannotest':
         current['test'] = true;

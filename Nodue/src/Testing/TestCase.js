@@ -7,6 +7,8 @@ module.exports = class TestCase
 
 	assertEquals(expected, value, message)
 	{
+		value = this.normalizeValue(value);
+
 		// .is(value, expected, [message])
 		test(this.name, async t => {
 			await t.deepEqual(value, expected, message);
@@ -15,6 +17,8 @@ module.exports = class TestCase
 
 	assertNotEquals(expected, value, message)
 	{
+		value = this.normalizeValue(value);
+
 		// .not(value, expected, [message])
 		test(this.name, async t => {
 			await t.not(value, expected, message);
@@ -23,6 +27,8 @@ module.exports = class TestCase
 
 	assertTrue(value, message)
 	{
+		value = this.normalizeValue(value);
+
 		// .truthy(value, [message])
 		test(this.name, async t => {
 			await t.truthy(value, message);
@@ -31,6 +37,8 @@ module.exports = class TestCase
 
 	assertFalse(value, message)
 	{
+		value = this.normalizeValue(value);
+
 		// .falsy(value, [message])
 		test(this.name, async t => {
 			await t.falsy(value, message);
@@ -39,6 +47,8 @@ module.exports = class TestCase
 
 	assertDeepEqual(expected, value, message)
 	{
+		value = this.normalizeValue(value);
+
 		// .deepEqual(value, expected, [message])
 		test(this.name, async t => {
 			await t.deepEqual(value, expected, message);
@@ -47,6 +57,8 @@ module.exports = class TestCase
 
 	assertNotDeepEqual(expected, value, message)
 	{
+		value = this.normalizeValue(value);
+
 		// .notDeepEqual(value, expected, [message])
 		test(this.name, async t => {
 			await t.notDeepEqual(value, expected, message);
@@ -98,7 +110,7 @@ module.exports = class TestCase
 		});
 	}
 
-	assertNotRegExp()
+	assertNotRegExp(contents, regex, message)
 	{
 		// .notRegex(contents, regex, [message])
 		test(this.name, async t => {
@@ -106,11 +118,20 @@ module.exports = class TestCase
 		});
 	}
 
-	takeSnapshot()
+	takeSnapshot(contents, message)
 	{
 		// .snapshot(contents, [message])
 		test(this.name, async t => {
 			await t.snapshot(contents, message);
 		});
+	}
+
+	normalizeValue(value)
+	{
+		if (typeof value == 'object' && value.hasOwnProperty('raw')) {
+			return value.raw;
+		}
+
+		return value;
 	}
 }
