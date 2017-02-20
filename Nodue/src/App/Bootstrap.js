@@ -6,7 +6,6 @@ module.exports = class Bootstrap
 	get tasks()
 	{
 		return [
-			'loadFsModule',
 			'loadSugarModule',
 			'bootSupport',
 			'loadPluralizeModule',
@@ -27,11 +26,6 @@ module.exports = class Bootstrap
 			'loadVueServerRenderer',
 			'startHotReload',
 		];
-	}
-
-	loadFsModule()
-	{
-		global.fs = require('fs');
 	}
 
 	loadSugarModule()

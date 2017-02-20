@@ -21,26 +21,38 @@ module.exports = class App
 
 	registerConfig(name, config)
 	{
-		this._config[name] = config;
+		let tempConfig = {};
+
+		if (Object.keys(this._config).length > 0) {
+			tempConfig = this._config.raw;
+		}
+		
+		tempConfig[name] = config;
+
+		this._config = object(tempConfig);
 	}
 
-	config(path = null)
+	config(expression = null)
 	{
 		if (Object.keys(this._config).length === 0) {
-			return this._config;
+			return null;
 		}
 
-		if (! path) {
-			path = 'app';
+		if (! expression) {
+			expression = 'app';
 		}
 
-		if (path.includes('.') || path.includes('/')) {
-			path = path.replace('/', '.');
+		if (expression.includes('.') || expression.includes('/')) {
+			let config = this._config.find(expression);
 
-			return this.retrieveObjectProperyWithExpression(this._config, path);
+			if (! config) {
+				return this._config.find('app.' + expression);
+			}
+
+			return config;
 		}
 
-		return this._config[path];
+		return this._config.get(expression).raw;
 	}
 
 	resetConfig()
@@ -67,11 +79,6 @@ module.exports = class App
 	path(additionalPath)
 	{
 		return path.normalize(this.basePath + additionalPath);
-	}
-
-	fetchConfig(expression)
-	{
-		return this.retrieveObjectProperyWithExpression(this.config, expression);
 	}
 
 	// Rewrite with prototype method
@@ -180,6 +187,12 @@ module.exports = class App
 	addProxyPart(property)
 	{
 		this.proxyParts.push(property);
+	}
+
+	loadCoreModules()
+	{
+		global.fs = require('fs');
+		global.path = require('path');
 	}
 
 	bootstrap()

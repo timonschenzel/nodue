@@ -1,6 +1,18 @@
 module.exports = class AppTest extends TestCase
 {
 	/** test */
+	it_is_able_to_generate_a_proper_path_with_a_base_url_and_addon()
+	{
+		let realPath = app.basePath;
+
+		app.basePath = '/Projects/nodue/bootstrap/../';
+
+		this.assertEquals('/Projects/nodue/test_folder', app.path('test_folder'));
+
+		app.basePath = realPath;
+	}
+
+	/** test */
 	it_is_able_to_load_a_specific_file()
 	{
 		fs.writeFileSync('./tests/dummy.js', 'module.exports = { foo: "bar" }');
@@ -57,23 +69,40 @@ module.exports = class AppTest extends TestCase
 		app.registerConfig('app', {
 			foo: 'bar',
 			bar: 'baz',
+			sub: {
+				name: 'nodue',
+			}
 		});
 
 		app.registerConfig('database', {
 			user: 'bar',
 		 	password: 'baz',
 		 	database: 'nodue',
+		 	table: {
+		 		name: 'nodue',
+		 	}
 		});
 
 		this.assertEquals({
 			foo: 'bar',
 			bar: 'baz',
+			sub: {
+				name: 'nodue',
+			}
 		}, app.config());
+
+		this.assertEquals('nodue', app.config('sub.name'));
+		this.assertEquals('nodue', app.config('app.sub.name'));
 
 		this.assertEquals({
 			user: 'bar',
 		 	password: 'baz',
 		 	database: 'nodue',
+		 	table: {
+		 		name: 'nodue',
+		 	}
 		}, app.config('database'));
+
+		this.assertEquals('nodue', app.config('database.table.name'));
 	}
 }

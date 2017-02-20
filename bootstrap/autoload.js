@@ -1,5 +1,7 @@
 global.app = require('./app');
 
-app.basePath = __dirname + '/../';
+app.loadCoreModules();
+
+app.basePath = path.normalize(__dirname + '/..');
 
 app.bootstrap();
