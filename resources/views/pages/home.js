@@ -7,7 +7,7 @@
 	methods: {
 		testConsoleLog()
 		{
-			console.log('test');
+			console.log('Hello World');
 		},
 
 		toggleDivVisibility()

@@ -11,7 +11,7 @@
 	</ul>
 
 	<hr>
-	<button @click="testConsoleLog">console.log test</button>
+	<button @click="testConsoleLog">console.log - Hello World</button>
 	<button @click="toggleDivVisibility">Toggle div visibility</button>
 
 	<div v-show="showDiv">
