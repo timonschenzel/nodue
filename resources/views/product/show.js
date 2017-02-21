@@ -11,7 +11,7 @@
 	},
 
 	methods: {
-		test()
+		replaceFirstProductName()
 		{
 			this.products[0].name = 'Test..';
 		}

@@ -44,7 +44,7 @@ socket.on('pageRequest', (response) => {
 		if (response.hot) {
 			let currentComponentData = window.vm.$root.$children[0].$data;
 
-			response.data = merge(response.data, currentComponentData);
+			// response.data = merge(response.data, currentComponentData);
 		}
 
 		let component = {};

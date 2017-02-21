@@ -11,10 +11,10 @@
 	</ul>
 
 	<hr>
-	<button @click="test">My Button</button>
-	<button @click="hideDiv">Hide div</button>
+	<button @click="testConsoleLog">console.log test</button>
+	<button @click="toggleDivVisibility">Toggle div visibility</button>
 
 	<div v-show="showDiv">
-		Hide Me.
+		Toggle Me.
 	</div>
 </div>

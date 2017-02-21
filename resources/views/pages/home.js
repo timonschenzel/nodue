@@ -5,19 +5,14 @@
 	},
 
 	methods: {
-		test()
+		testConsoleLog()
 		{
 			console.log('test');
 		},
 
-		deleteSomething()
+		toggleDivVisibility()
 		{
-			console.log('delete');
-		},
-
-		hideDiv()
-		{
-			this.showDiv = false;
+			this.showDiv = this.showDiv ? false : true;
 		}
 	}
 }
