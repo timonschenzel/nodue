@@ -1,18 +1,31 @@
 <div>
-	<h1>{{ title }}</h1>
-	<p>{{ slogan }}</p>
-	<p>{{ text }}</p>
+	<section class="hero is-primary">
+		<div class="hero-body">
+			<div class="container">
+				<h1 class="title">
+					{{ title }}
+				</h1>
+				<h2 class="subtitle">
+					{{ slogan }}
+				</h2>
+			</div>
+		</div>
+	</section>
 
-	<ul>
+	<hr />
+	<p>{{ text }}</p>
+	<hr />
+
+	<ol>
 		<li
 			v-for="item in items"
 			v-text="item"
 		></li>
-	</ul>
+	</ol>
 
 	<hr>
-	<button @click="testConsoleLog">console.log - Hello World</button>
-	<button @click="toggleDivVisibility">Toggle div visibility</button>
+	<button class="button is-primary" @click="testConsoleLog">console.log - Hello World</button>
+	<button class="button is-primary" @click="toggleDivVisibility">Toggle div visibility</button>
 
 	<div v-show="showDiv">
 		Toggle Me.
