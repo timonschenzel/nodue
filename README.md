@@ -5,7 +5,7 @@ Expressive Node.js + Vue.js framework with hot reload
 1. git clone https://github.com/timonSchenzel/nodue.git
 2. cd nodue
 3. npm install
-4. Compile assets with Laravel Mix: npm run dev (this will watch for changes) npm run webpack will compile assets a single time.
+4. Compile assets with Laravel Mix: `npm run dev` (this will watch for changes) `npm run webpack` will compile assets a single time.
 
 ## Start working
 You have some options here, if you want to use option 3 or 4 install nodemon globally (`npm install -g nodemon`):
