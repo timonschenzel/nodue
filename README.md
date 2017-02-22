@@ -63,6 +63,7 @@ module.exports = class PagesController extends Controller
 ```
 
 5. View behavior files
+
 View behavior will give us the possibility ineract with a view without reloading the page. Something like toggle the visibility from a div element. To create a view behavior file follow this convention: `[name-from-the-view-file].js`.
 
 6. Create the view behavior file `home.js` within `resources/views/pages`:
