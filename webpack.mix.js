@@ -1,31 +1,7 @@
 let mix = require('laravel-mix').mix;
+let nodueCompiler = require('./Nodue/src/Webpack/Compiler').compiler();
 
-/**
- * Compile layout files.
- */
-let fs = require('fs');
-let files = fs.readdirSync('./resources/views/layout');
-
-let layoutTemplates = [];
-let layoutTemplatesString = 'module.exports = {';
-files.forEach(file => {
-	let name = file.replace('.vue', '') + '-layout';
-	let content = fs.readFileSync(`./resources/views/layout/${file}`, 'utf8');
-	layoutTemplates[name] = content;
-
-	layoutTemplatesString += "'" + name + "': `" + content + "`,"
-
-	// content = `
-	// 	Vue.component('${name}-layout', {
-	// 		template: \`
-	// 			${content}
-	// 		\`
-	// 	})
-	// `;
-});
-layoutTemplatesString += '};'
-
-fs.writeFileSync('./storage/framework/cache/layout_templates.js', layoutTemplatesString);
+nodueCompiler.compileLayoutFiles();
 
 /*
  |--------------------------------------------------------------------------
@@ -38,7 +14,8 @@ fs.writeFileSync('./storage/framework/cache/layout_templates.js', layoutTemplate
  |
  */
 
-mix.js('resources/assets/js/main.js', 'public/js');
+mix.js('resources/assets/js/app.js', 'public/js')
+	.sass('resources/assets/sass/app.scss', 'public/css');
 
 // Full API
 // mix.js(src, output);
