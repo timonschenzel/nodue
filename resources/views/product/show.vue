@@ -1,18 +1,6 @@
-<div>
-	<section class="hero is-primary">
-		<div class="hero-body">
-			<div class="container">
-				<h1 class="title">
-					Nodue
-				</h1>
-				<h2 class="subtitle">
-					View all products
-				</h2>
-			</div>
-		</div>
-	</section>
-	
-	<hr />
+<app-layout>
+	<template slot="title">Nodue</template>
+	<template slot="slogan">View all products</template>
 
 	<div>
 		Seconds: {{ counter }}<br />
@@ -22,4 +10,4 @@
 			<li v-for="(product, index) in products">#{{ index }} &mdash; {{ product.name }}</li>
 		</ul>
 	</div>
-</div>
+</app-layout>

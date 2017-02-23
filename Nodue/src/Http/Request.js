@@ -42,7 +42,9 @@ module.exports = class Request
 
 		let controller = app.loadController(controllerName);
 		
-		return await controller[controllerFunctionName]();
+		let response = await controller[controllerFunctionName]();
+		response.url = this.url;
+		return response;
 	}
 
 	findControllerName(expression)

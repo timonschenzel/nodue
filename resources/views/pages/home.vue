@@ -1,19 +1,9 @@
-<div>
-	<section class="hero is-primary">
-		<div class="hero-body">
-			<div class="container">
-				<h1 class="title">
-					{{ title }}
-				</h1>
-				<h2 class="subtitle">
-					{{ slogan }}
-				</h2>
-			</div>
-		</div>
-	</section>
+<app-layout>
+	<template slot="title">{{ title }}</template>
+	<template slot="slogan">{{ slogan }}</template>
 
-	<hr />
 	<p>{{ text }}</p>
+	
 	<hr />
 
 	<ol>
@@ -30,4 +20,4 @@
 	<div v-show="showDiv">
 		Toggle Me.
 	</div>
-</div>
+</app-layout>

@@ -81,24 +81,6 @@ module.exports = class App
 		return path.normalize(this.basePath + additionalPath);
 	}
 
-	// Rewrite with prototype method
-	retrieveObjectProperyWithExpression(object, expression)
-	{
-		expression = expression.replace('/', '.');
-
-		let parts = expression.split('.');
-
-		for(var part of parts) {
-			if(object != undefined && object.hasOwnProperty(part)) {
-				object = object[part];
-			} else {
-				object = undefined;
-			}
-		}
-
-		return object;
-	}
-
 	run()
 	{
 		server.start();
