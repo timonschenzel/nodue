@@ -1,4 +1,4 @@
-<app-layout>
+<homepage-layout>
 	<template slot="title">{{ title }}</template>
 	<template slot="slogan">{{ slogan }}</template>
 
@@ -20,4 +20,4 @@
 	<div v-show="showDiv">
 		Toggle Me.
 	</div>
-</app-layout>
+</homepage-layout>

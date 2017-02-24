@@ -3,10 +3,10 @@
 		<div class="hero-body">
 			<div class="container">
 				<h1 class="title">
-					Homepage
+					Nodue
 				</h1>
 				<h2 class="subtitle">
-					Nodue
+					Homepage
 				</h2>
 			</div>
 		</div>
@@ -20,6 +20,6 @@
 
 		<slot></slot>
 
-		<slot name="footer">Nodue</slot>
+		<footer-layout></footer-layout>
 	</div>
 </div>

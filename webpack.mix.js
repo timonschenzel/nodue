@@ -15,7 +15,8 @@ nodueCompiler.compileLayoutFiles();
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-	.sass('resources/assets/sass/app.scss', 'public/css');
+	.sass('resources/assets/sass/app.sass', 'public/css');
+	// .js('resources/assets/layouts/*', 'public/layouts');
 
 // Full API
 // mix.js(src, output);

@@ -1,5 +1,5 @@
 <div>
-	<section class="hero is-primary">
+	<section class="hero is-primary is-bold">
 		<div class="hero-body">
 			<div class="container">
 				<h1 class="title">
@@ -20,6 +20,6 @@
 
 		<slot></slot>
 
-		<slot name="footer"></slot>
+		<footer-layout></footer-layout>
 	</div>
 </div>

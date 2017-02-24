@@ -8,13 +8,13 @@ module.exports = class Compiler
 	compileLayoutFiles()
 	{
 		let fs = require('fs');
-		let files = fs.readdirSync('./resources/views/layout');
+		let files = fs.readdirSync('./resources/layouts');
 
 		let layoutTemplates = [];
 		let layoutTemplatesString = 'module.exports = {';
 		files.forEach(file => {
 			let name = file.replace('.vue', '') + '-layout';
-			let content = fs.readFileSync(`./resources/views/layout/${file}`, 'utf8');
+			let content = fs.readFileSync(`./resources/layouts/${file}`, 'utf8');
 			layoutTemplates[name] = content;
 
 			layoutTemplatesString += "'" + name + "': `" + content + "`,"
