@@ -40,6 +40,9 @@ module.exports = class Bootstrap
 		for (let template in templates) {
 			Vue.component(template, {
 				template: templates[template],
+				data() {
+					return this.$root.$children[0].$data;
+				}
 			});
 		}
 	}

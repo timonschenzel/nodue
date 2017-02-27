@@ -3,10 +3,10 @@
 		<div class="hero-body">
 			<div class="container">
 				<h1 class="title">
-					Nodue
+					<slot name="title">{{ title || 'Default title' }}</slot>
 				</h1>
 				<h2 class="subtitle">
-					Homepage
+					<slot name="slogan">{{ slogan || 'Default slogan' }}</slot>
 				</h2>
 			</div>
 		</div>

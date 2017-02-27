@@ -1,6 +1,6 @@
 <homepage-layout>
-	<template slot="title">{{ title }}</template>
-	<template slot="slogan">{{ slogan }}</template>
+<!-- 	<template slot="title">My custom title</template>
+	<template slot="slogan">My slogan</template> -->
 
 	<p>{{ text }}</p>
 	
