@@ -3,10 +3,10 @@
 		<div class="hero-body">
 			<div class="container">
 				<h1 class="title">
-					<slot name="title">{{ this.$root.activeComponent }}</slot>
+					<slot name="title">{{ title }}</slot>
 				</h1>
 				<h2 class="subtitle">
-					<slot name="slogan">{{ this.$root.activeComponent }}</slot>
+					<slot name="slogan">{{ slogan }}</slot>
 				</h2>
 			</div>
 		</div>

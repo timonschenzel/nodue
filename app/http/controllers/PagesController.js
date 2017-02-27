@@ -12,6 +12,11 @@ module.exports = class PagesController extends Controller
 				'Shopping?',
 				'Sleeping',
 			],
+			shareWithLayout: false,
+			layoutData: {
+				title: 'Test',
+				slogan: 'My slogan',
+			}
 		});
 	}
 }

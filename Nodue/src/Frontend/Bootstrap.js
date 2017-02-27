@@ -41,7 +41,13 @@ module.exports = class Bootstrap
 			Vue.component(template, {
 				template: templates[template],
 				data() {
-					return this.$root.$children[0].$data;
+					if (this.$root.$children[0].layoutData) {
+						return this.$root.$children[0].layoutData;
+					} else if (this.$root.$children[0].shareWithLayout !== false) {
+						return this.$root.$children[0].$data;
+					} else {
+						return {};
+					}
 				}
 			});
 		}

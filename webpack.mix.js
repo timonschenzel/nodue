@@ -1,7 +1,7 @@
-let mix = require('laravel-mix').mix;
-let nodueCompiler = require('./Nodue/src/Webpack/Compiler').compiler();
+let mix = require('./Nodue/src/Webpack/Compiler').compiler();
 
-nodueCompiler.compileLayoutFiles();
+// mix.compileLayoutFiles();
+// let mix = require('laravel-mix').mix;
 
 /*
  |--------------------------------------------------------------------------
@@ -14,9 +14,9 @@ nodueCompiler.compileLayoutFiles();
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-	.sass('resources/assets/sass/app.sass', 'public/css');
-	// .js('resources/assets/layouts/*', 'public/layouts');
+mix.js('Nodue/src/Frontend/app.js', 'public/js')
+	.sass('resources/assets/sass/app.sass', 'public/css')
+	.compileLayoutFiles('resources/layouts');
 
 // Full API
 // mix.js(src, output);
