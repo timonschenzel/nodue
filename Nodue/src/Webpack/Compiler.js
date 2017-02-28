@@ -69,7 +69,9 @@ module.exports = class Compiler
 
 	combine(files, destination)
 	{
-		this.mix.combine(src, output);
+		this.mix.combine(files, destination);
+
+		this.compileLayoutFiles('resources/layouts');
 
 		return this;
 	}

@@ -3,6 +3,7 @@ module.exports = {'app-layout': `<div>
 		<div class="hero-body">
 			<div class="container">
 				<h1 class="title">
+					TEST
 					<slot name="title">{{ title }}</slot>
 				</h1>
 				<h2 class="subtitle">
