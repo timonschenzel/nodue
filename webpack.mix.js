@@ -1,17 +1,4 @@
-let mix = require('./Nodue/src/Webpack/Compiler').compiler();
-
-let fs = require('fs');
-
-let layoutFiles = fs.readdirSync('./resources/layouts').filter(function(file) {
-    return file.match(/.*\.vue$/);
-});
-
-layoutFiles = layoutFiles.map(entry => {
-	return `./resources/layouts/${entry}`;
-});
-
-// mix.compileLayoutFiles();
-// let mix = require('laravel-mix').mix;
+let mix = require('laravel-mix').mix;
 
 /*
  |--------------------------------------------------------------------------
@@ -25,8 +12,7 @@ layoutFiles = layoutFiles.map(entry => {
  */
 
 mix.js('Nodue/src/Frontend/app.js', 'public/js')
-	.sass('resources/assets/sass/app.sass', 'public/css')
-	.combine(layoutFiles, 'public/layout_files.js');
+	.sass('resources/assets/sass/app.sass', 'public/css');
 
 // Full API
 // mix.js(src, output);

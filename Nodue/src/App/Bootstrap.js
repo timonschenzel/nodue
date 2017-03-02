@@ -24,7 +24,8 @@ module.exports = class Bootstrap
 			'loadRoutes',
 			'loadVue',
 			'loadVueServerRenderer',
-			'startHotReload',
+			'startLayoutCompilerWatcherIfNeeded',
+			'startHotReloadIfNeeded',
 		];
 	}
 
@@ -171,7 +172,16 @@ module.exports = class Bootstrap
 		global.VueRenderer = require('vue-server-renderer').createRenderer();
 	}
 
-	startHotReload()
+	startLayoutCompilerWatcherIfNeeded()
+	{
+		if (! process.argv.includes('dev')) {
+			return;
+		}
+
+		AssetsCompiler.watchChanges();
+	}
+
+	startHotReloadIfNeeded()
 	{
 		if (! process.argv.includes('hot')) {
 			return;

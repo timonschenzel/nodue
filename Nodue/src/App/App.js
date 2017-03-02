@@ -2,6 +2,8 @@ module.exports = class App
 {
 	constructor()
 	{
+		this.isBooted = false;
+		this.isRunning = false;
 		this._basePath = false;
 		this._config = {};
 		this._hot = false;
@@ -83,7 +85,9 @@ module.exports = class App
 
 	run()
 	{
+		app.isBooted = true;
 		server.start();
+		app.isRunning = true;
 	}
 
 	async handle(request)

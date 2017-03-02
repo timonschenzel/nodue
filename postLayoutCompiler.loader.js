@@ -1,11 +1,10 @@
+let layoutData;
+let name = 0;
 let path = require('path');
 
 module.exports = function(source) {
-	let name = path.basename(this.resourcePath);
-	name = name.replace('.vue.layout', '') + '-layout';
-	return `{
-		"${name}": \`${source}\`
-	}`
+	console.log('-- post loader');
+	// console.log(source);
 	// name++;
 	// if (layoutData == false) {
 	// 	let layoutData = '{';

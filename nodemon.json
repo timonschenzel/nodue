@@ -1,6 +1,9 @@
 {
 	"ignore": [
-		"resources/views",
+		"Nodue/src/Frontend",
+		"public",
+		"resources",
+		"storage",
 	 	"app/http/controllers",
 	 	"database/database.sqlite-journal",
 	 	"database/database.sqlite"

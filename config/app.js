@@ -22,6 +22,7 @@ module.exports = {
 		request: 'Http.Request',
 		server: 'App.Server',
 		hotReload: 'App.HotReload',
+		AssetsCompiler: 'AssetsCompiler.Compiler',
 	},
 
 	/**
@@ -39,4 +40,9 @@ module.exports = {
 	 * @type {Number}
 	 */
 	port: env('PORT', 80),
+
+	resources: {
+		layoutsFolder: './resources/layouts',
+		layoutsCacheFile: './storage/framework/cache/layout_templates.js',
+	},
 }
