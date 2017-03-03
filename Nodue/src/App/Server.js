@@ -66,6 +66,8 @@ module.exports = class Server
 				throw error;
 			}
 
+			app.isRunning = true;
+
 		  	console.log(`Server is running at localhost:${this.port}`);
 		});
 	}

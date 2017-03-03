@@ -1,6 +1,7 @@
 {
 	"ignore": [
 		"Nodue/src/Frontend",
+		"node_modules",
 		"public",
 		"resources",
 		"storage",

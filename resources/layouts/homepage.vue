@@ -21,6 +21,6 @@
 		<slot></slot>
 
 		<footer-layout></footer-layout>
-		TEST2
+		TEST
 	</div>
 </div>

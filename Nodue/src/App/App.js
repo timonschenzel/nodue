@@ -85,9 +85,7 @@ module.exports = class App
 
 	run()
 	{
-		app.isBooted = true;
 		server.start();
-		app.isRunning = true;
 	}
 
 	async handle(request)
@@ -186,6 +184,8 @@ module.exports = class App
 		this.bootstrapper.tasks.forEach(task => {
 			this.runBootstrapTask(task);
 		});
+
+		app.isBooted = true;
 	}
 
 	runBootstrapTask(task)
