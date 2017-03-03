@@ -1,6 +1,6 @@
 module.exports = {
 	template: `
-		<li :class="{'is-active': isActive }"><a :href="href"><slot></a></li>
+		<li :class="{'is-active': isActive }"><a :href="href"><slot></slot></a></li>
 	`,
 	
 	props: ['href'],

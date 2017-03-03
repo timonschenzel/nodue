@@ -32,6 +32,7 @@ module.exports = {
 		Controller: 'Http.Controller',
 		Model: 'ORM.Model',
 		TestCase: 'Testing.TestCase',
+		VueComponentCompiler: 'AssetsCompiler.VueComponentCompiler',
 	},
 
 	/**
@@ -45,4 +46,9 @@ module.exports = {
 		layoutsFolder: './resources/layouts',
 		layoutsCacheFile: './storage/framework/cache/layout_templates.js',
 	},
+
+	components: {
+		globalFolder: './resources/assets/js/components/global',
+		globalCacheFolder: './storage/framework/cache/global_components.js',
+	}
 }

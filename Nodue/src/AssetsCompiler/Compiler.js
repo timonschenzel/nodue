@@ -2,35 +2,41 @@ module.exports = class Compiler
 {
 	constructor()
 	{
-		this.layoutsFolder = app.config('resources.layoutsFolder');
-		this.layoutsCacheFile = app.config('resources.layoutsCacheFile');
+		this.layoutsFolder = app.path(app.config('resources.layoutsFolder'));
+		this.layoutsCacheFile = app.path(app.config('resources.layoutsCacheFile'));
+		this.globalComponentsFolder = app.path(app.config('components.globalFolder'));
+		this.globalCacheFolder = app.path(app.config('components.globalCacheFolder'));
 	}
 
 	watchChanges()
 	{
-		chokidar.watch(app.path(this.layoutsFolder)).on('all', async (event, path) => {
+		chokidar.watch(this.layoutsFolder).on('all', async (event, path) => {
 			if (fs.lstatSync(path).isFile() && app.isRunning) {
 				this.compileLayoutFiles();
 			}
+		});
+
+		chokidar.watch(this.globalComponentsFolder).on('all', async (event, path) => {
+			if (fs.lstatSync(path).isFile() && app.isRunning) {
+				this.compileGlobalComponents();
+			}
+		});
+	}
+
+	compileGlobalComponents()
+	{
+		VueComponentCompiler.compile({
+			input: this.globalComponentsFolder,
+			output: this.globalCacheFolder,
 		});
 	}
 
 	compileLayoutFiles()
 	{
-		let fs = require('fs');
-		let files = fs.readdirSync(app.path(this.layoutsFolder));
-
-		let layoutTemplates = [];
-		let layoutTemplatesString = 'module.exports = {';
-		files.forEach(file => {
-			let name = file.replace('.vue', '') + '-layout';
-			let content = fs.readFileSync(`./${this.layoutsFolder}/${file}`, 'utf8');
-			layoutTemplates[name] = content;
-
-			layoutTemplatesString += "'" + name + "': `" + content + "`,"
+		VueComponentCompiler.compile({
+			input: this.layoutsFolder,
+			output: this.layoutsCacheFile,
+			suffix: '-layout',
 		});
-		layoutTemplatesString += '};'
-
-		fs.writeFileSync(this.layoutsCacheFile, layoutTemplatesString);
 	}
 }

@@ -56,6 +56,5 @@ module.exports = {'app-layout': `<div>
 		<slot></slot>
 
 		<footer-layout></footer-layout>
-		TEST
 	</div>
 </div>`,};

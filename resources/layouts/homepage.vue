@@ -21,6 +21,5 @@
 		<slot></slot>
 
 		<footer-layout></footer-layout>
-		TEST
 	</div>
 </div>

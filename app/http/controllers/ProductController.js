@@ -6,6 +6,9 @@ module.exports = class PagesController extends Controller
 
 		let counter = null;
 
-		return view('product.show', { products, counter });
+		let title = 'Products';
+		let slogan = 'This is great!';
+
+		return view('product.show', { products, counter, title, slogan });
 	}
 }

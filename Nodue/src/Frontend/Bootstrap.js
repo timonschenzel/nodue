@@ -9,6 +9,7 @@ module.exports = class Bootstrap
 			'loadSocketIO',
 			'loadjQuery',
 			'loadVue',
+			'createGlobalComponents',
 			'createLayoutComponents',
 			'connectWithServer',
 			'mapAnchorElements',
@@ -31,6 +32,17 @@ module.exports = class Bootstrap
 	loadVue()
 	{
 		window.Vue = require('vue');
+	}
+
+	createGlobalComponents()
+	{
+		let templates = require('../../../storage/framework/cache/global_components.js');
+
+		for (let template in templates) {
+			let temp = '';
+			eval('temp = ' + templates[template]);
+			Vue.component(template, temp);
+		}
 	}
 
 	createLayoutComponents()
