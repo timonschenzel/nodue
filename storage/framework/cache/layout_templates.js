@@ -15,7 +15,7 @@ module.exports = {'app-layout': `<div>
 	<div class="container">
 
 		<slot name="nav">
-			<navigation></navigation>
+			<n-nav></n-nav>
 		</slot>
 
 		<slot></slot>
@@ -50,7 +50,7 @@ module.exports = {'app-layout': `<div>
 	<div class="container">
 
 		<slot name="nav">
-			<navigation>Welcome</navigation>
+			<n-nav></n-nav>
 		</slot>
 
 		<slot></slot>

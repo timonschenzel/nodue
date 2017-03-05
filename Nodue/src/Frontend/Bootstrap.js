@@ -39,9 +39,7 @@ module.exports = class Bootstrap
 		let templates = require('../../../storage/framework/cache/global_components.js');
 
 		for (let template in templates) {
-			let temp = '';
-			eval('temp = ' + templates[template]);
-			Vue.component(template, temp);
+			Vue.component(template, templates[template]);
 		}
 	}
 

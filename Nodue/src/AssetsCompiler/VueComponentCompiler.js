@@ -1,57 +1,34 @@
 module.exports = class VueComponentCompiler
 {
-	constructor(options)
+	constructor(file, options)
 	{
+		this.file = file;
 		this.options = options;
-		this.compileData = '';
+		this.compiler = new VueComponentCompilerTasks(this.file, this.options);
 	}
 
-	static compile(options)
+	static compile(file, options)
 	{
-		let compiler = new this(options);
+		let compiler = new this(file, options);
 
-		compiler.compileInternal();
+		return compiler.compileComponent();
 	}
 
-	compileInternal()
+	compileComponent()
 	{
-		let files = fs.readdirSync(this.options.input);
-
-		files.forEach(file => {
-			let name = file.replace(path.extname(file), '');
-
-			if (this.options.suffix) {
-				name += this.options.suffix;
-			}
-
-			if (this.options.prefix) {
-				name = this.options.prefix + name;
-			}
-
-			this.compileComponent(`${this.options.input}/${file}`, this.camelCaseToDash(name));
+		this.compiler.tasks.forEach(task => {
+			this.runTask(task);
 		});
-		
-		this.storeCompilation();
+
+		return this.compiler.transformation;
 	}
 
-	compileComponent(filePath, name)
+	runTask(task)
 	{
-		let content = fs.readFileSync(filePath, 'utf8');
-
-		content = content.replace('`', '\\`');
-		content = content.replace('`,', '\\`,');
-		content = content.replace('module.exports = ', '');
-
-		this.compileData += "'" + name + "': `" + content + "`,"
-	}
-
-	storeCompilation()
-	{
-		fs.writeFileSync(this.options.output, `module.exports = {${this.compileData}};`);
-	}
-
-	camelCaseToDash(string)
-	{
-	    return string.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
+		if(typeof this.compiler[task] == 'function') {
+			this.compiler[task]();
+		} else {
+			console.log(`Compile task [${task}] was not found.`);
+		}
 	}
 }

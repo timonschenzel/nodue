@@ -32,7 +32,9 @@ module.exports = {
 		Controller: 'Http.Controller',
 		Model: 'ORM.Model',
 		TestCase: 'Testing.TestCase',
+		VueCompiler: 'AssetsCompiler.VueCompiler',
 		VueComponentCompiler: 'AssetsCompiler.VueComponentCompiler',
+		VueComponentCompilerTasks: 'AssetsCompiler.VueComponentCompilerTasks',
 	},
 
 	/**
@@ -48,6 +50,7 @@ module.exports = {
 	},
 
 	components: {
+		prefix: 'n',
 		globalFolder: './resources/assets/js/components/global',
 		globalCacheFolder: './storage/framework/cache/global_components.js',
 	}

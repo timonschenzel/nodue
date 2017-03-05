@@ -1,10 +1,14 @@
 module.exports = {
 	view(pathExpression, data)
 	{
-		let basePath = app.path('resources/views/');
+		let basePath = 'resources/views/';
 
 		let viewPath = basePath + pathExpression.split('.').join('/') + '.vue';
-		let template = fs.readFileSync(viewPath, 'utf8');
+
+		let template = VueCompiler.compile({
+			input: viewPath,
+			compileAsString: true,
+		});
 
 		let behavior = false;
 		let behaviorPath = basePath + pathExpression.split('.').join('/') + '.js';

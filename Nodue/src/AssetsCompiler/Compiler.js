@@ -25,7 +25,7 @@ module.exports = class Compiler
 
 	compileGlobalComponents()
 	{
-		VueComponentCompiler.compile({
+		VueCompiler.compile({
 			input: this.globalComponentsFolder,
 			output: this.globalCacheFolder,
 		});
@@ -33,10 +33,12 @@ module.exports = class Compiler
 
 	compileLayoutFiles()
 	{
-		VueComponentCompiler.compile({
+		VueCompiler.compile({
 			input: this.layoutsFolder,
 			output: this.layoutsCacheFile,
 			suffix: '-layout',
+			globalPrefix: false,
+			compileAsString: true,
 		});
 	}
 }

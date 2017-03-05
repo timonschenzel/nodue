@@ -18,4 +18,22 @@ module.exports = class FileLoader
 	{
 		return this.load(path);
 	}
+
+	fileExists(path)
+	{
+		try {
+			return fs.lstatSync(path).isFile();
+		} catch (e) {
+		    return false;
+		}
+	}
+
+	directoryExists(path)
+	{
+		try {
+			return fs.lstatSync(path).isDirectory();
+		} catch (e) {
+		    return false;
+		}
+	}
 }

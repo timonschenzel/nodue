@@ -4,6 +4,11 @@
 
 	<p>{{ text }}</p>
 	
+	<hr>
+
+	<test>Hello World</test>
+	<hello></hello>
+
 	<hr />
 
 	<ol>
@@ -14,6 +19,7 @@
 	</ol>
 
 	<hr>
+
 	<button class="button is-primary" @click="testConsoleLog">console.log - Hello World</button>
 	<button class="button is-primary" @click="toggleDivVisibility">Toggle div visibility</button>
 

@@ -15,7 +15,7 @@
 	<div class="container">
 
 		<slot name="nav">
-			<navigation>Welcome</navigation>
+			<nav></nav>
 		</slot>
 
 		<slot></slot>

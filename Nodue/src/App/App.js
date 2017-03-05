@@ -207,10 +207,10 @@ module.exports = class App
 		return this.getFile(`config/${fileName}`);
 	}
 
-	getClass(path)
+	getClass(path, ...parameters)
 	{
 		let object = require(path);
-		return new object;
+		return new object(parameters);
 	}
 
 	loadController(name)
@@ -229,5 +229,20 @@ module.exports = class App
 				global[functionName] = helper[file][functionName];
 			}
 		}
+	}
+
+	directoryExists(path)
+	{
+		return this.fileLoader.directoryExists(app.path(path));
+	}
+
+	fileExists(path)
+	{
+		return this.fileLoader.fileExists(app.path(path));
+	}
+
+	globalComponentExists(name)
+	{
+		return this.fileExists(app.config('components.globalFolder') + '/' + name);
 	}
 }
