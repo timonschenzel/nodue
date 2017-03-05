@@ -24,7 +24,7 @@ module.exports = class FileLoader
 		try {
 			return fs.lstatSync(path).isFile();
 		} catch (e) {
-		    return false;
+			return false;
 		}
 	}
 
@@ -33,7 +33,7 @@ module.exports = class FileLoader
 		try {
 			return fs.lstatSync(path).isDirectory();
 		} catch (e) {
-		    return false;
+			return false;
 		}
 	}
 }
