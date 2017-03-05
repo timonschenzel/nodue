@@ -18,7 +18,7 @@ module.exports = class VueComponentCompilerTasks
 			'addGlobalPrefixToFileNameIfNeeded',
 			'convertNameIntoHyphen',
 			'trimRawData',
-			'removeSemicolonAtTheEndOfTheRawDataOfNeeded',
+			'removeSemicolonAtTheEndOfTheRawDataIfNeeded',
 			'removeModuleDotExportsAtTheBeginningOfRawDataIfNeeded',
 			'backslashBackticksInRawDataIfNeeded',
 			'prefixCustomComponentReferences',
@@ -62,7 +62,7 @@ module.exports = class VueComponentCompilerTasks
 		this.rawData = this.rawData.trim();
 	}
 
-	removeSemicolonAtTheEndOfTheRawDataOfNeeded()
+	removeSemicolonAtTheEndOfTheRawDataIfNeeded()
 	{
 		if (this.rawData.charAt(this.rawData.length - 1) == ';') {
 			this.rawData = this.rawData.slice(0, -1);
