@@ -116,6 +116,7 @@ module.exports = class VueComponentCompilerTasks
 	{
 		if (this.options.compileAsString) {
 			this.transformation = "'" + this.name + "': `" + this.rawData + "`,";
+		} else if(this.options.) {
 		} else {
 			this.transformation = "'" + this.name + "': " + this.rawData + ",";
 		}

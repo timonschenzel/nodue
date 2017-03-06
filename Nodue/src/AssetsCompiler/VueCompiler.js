@@ -3,6 +3,7 @@ module.exports = class VueCompiler
 	constructor(options)
 	{
 		this.options = options;
+		this.inputInfo = fs.lstatSync(this.options.input);
 		this.transformation = '';
 	}
 
@@ -18,11 +19,9 @@ module.exports = class VueCompiler
 		let files = [];
 		let basePath = '';
 
-		let pathInfo = fs.lstatSync(this.options.input);
-
-		if (pathInfo.isFile()) {
+		if (this.inputInfo.isFile()) {
 			files[0] = this.options.input;
-		} else if (pathInfo.isDirectory()) {
+		} else if (this.inputInfo.isDirectory()) {
 			files = fs.readdirSync(this.options.input);
 			basePath = this.options.input + '/';
 		}

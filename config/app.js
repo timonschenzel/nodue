@@ -45,6 +45,8 @@ module.exports = {
 	port: env('PORT', 80),
 
 	resources: {
+		viewsFolder: './resources/views',
+		viewsCacheFolder: './storage/framework/cache/views',
 		layoutsFolder: './resources/layouts',
 		layoutsCacheFile: './storage/framework/cache/layout_templates.js',
 	},
