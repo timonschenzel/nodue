@@ -52,10 +52,19 @@ module.exports = class VueCompiler
 
 	ensureOutputLocationExists()
 	{
-		let outputFolder = this.options.output.split('/');
-		let fileName = outputFolder.pop();
-		outputFolder = outputFolder.join('/');
+		let outputFolder = null;
+		let fileName = null;
 
+		if (this.options.output.includes('/')) {
+			outputFolder = this.options.output.split('/');
+			fileName = outputFolder.pop();
+			outputFolder = outputFolder.join('/');
+		} else if (this.options.output.includes('\\')) {
+			outputFolder = this.options.output.split('\\');
+			fileName = outputFolder.pop();
+			outputFolder = outputFolder.join('\\');
+		}
+		
 		if (! fs.existsSync(outputFolder)) {
 			fs.mkdirSync(outputFolder);
 		}
