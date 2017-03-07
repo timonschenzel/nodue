@@ -1,4 +1,4 @@
-module.exports = {'nshow': `<app-layout>
+module.exports = `<app-layout>
 	<template slot="title">Nodue</template>
 	<template slot="slogan">View all products</template>
 
@@ -10,4 +10,4 @@ module.exports = {'nshow': `<app-layout>
 			<li v-for="(product, index) in products">#{{ index }} &mdash; {{ product.name }}</li>
 		</ul>
 	</div>
-</app-layout>`,};
+</app-layout>`;

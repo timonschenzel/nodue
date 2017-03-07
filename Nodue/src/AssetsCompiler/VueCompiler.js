@@ -2,6 +2,7 @@ module.exports = class VueCompiler
 {
 	constructor(options)
 	{
+		this.cacheFolder = app.path(app.config('app.cacheFolder'));
 		this.options = options;
 		this.inputInfo = fs.lstatSync(this.options.input);
 		this.transformation = '';
@@ -21,9 +22,11 @@ module.exports = class VueCompiler
 
 		if (this.inputInfo.isFile()) {
 			files[0] = this.options.input;
+			this.options.compileSingleFile = true;
 		} else if (this.inputInfo.isDirectory()) {
 			files = fs.readdirSync(this.options.input);
 			basePath = this.options.input + '/';
+			this.options.compileSingleFile = false;
 		}
 
 		files.forEach(file => {
@@ -39,6 +42,22 @@ module.exports = class VueCompiler
 
 	storeTransformation()
 	{
-		fs.writeFileSync(this.options.output, `module.exports = {${this.transformation}};`);
+		this.ensureOutputLocationExists();
+
+		if (! this.options.compileSingleFile) {
+			this.transformation = `{${this.transformation}}`;
+		}
+		fs.writeFileSync(this.options.output, `module.exports = ${this.transformation};`);
+	}
+
+	ensureOutputLocationExists()
+	{
+		let outputFolder = this.options.output.split('/');
+		let fileName = outputFolder.pop();
+		outputFolder = outputFolder.join('/');
+
+		if (! fs.existsSync(outputFolder)) {
+			fs.mkdirSync(outputFolder);
+		}
 	}
 }

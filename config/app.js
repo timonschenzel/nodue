@@ -44,6 +44,8 @@ module.exports = {
 	 */
 	port: env('PORT', 80),
 
+	cacheFolder: './storage/framework/cache',
+
 	resources: {
 		viewsFolder: './resources/views',
 		viewsCacheFolder: './storage/framework/cache/views',

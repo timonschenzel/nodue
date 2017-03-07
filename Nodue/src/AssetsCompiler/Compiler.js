@@ -12,20 +12,20 @@ module.exports = class Compiler
 
 	watchChanges()
 	{
-		chokidar.watch(this.viewsFolder).on('all', async (event, path) => {
-			if (fs.lstatSync(path).isFile() && app.isRunning) {
-				this.compileViewFile(path);
+		chokidar.watch(this.viewsFolder).on('all', async (event, file) => {
+			if (fs.lstatSync(file).isFile() && path.extname(file) == '.vue' && app.isRunning) {
+				this.compileViewFile(file);
 			}
 		});
 
-		chokidar.watch(this.layoutsFolder).on('all', async (event, path) => {
-			if (fs.lstatSync(path).isFile() && app.isRunning) {
+		chokidar.watch(this.layoutsFolder).on('all', async (event, file) => {
+			if (fs.lstatSync(file).isFile() && app.isRunning) {
 				this.compileLayoutFiles();
 			}
 		});
 
-		chokidar.watch(this.globalComponentsFolder).on('all', async (event, path) => {
-			if (fs.lstatSync(path).isFile() && app.isRunning) {
+		chokidar.watch(this.globalComponentsFolder).on('all', async (event, file) => {
+			if (fs.lstatSync(file).isFile() && app.isRunning) {
 				this.compileGlobalComponents();
 			}
 		});
@@ -33,10 +33,13 @@ module.exports = class Compiler
 
 	compileViewFile(file)
 	{
+		let viewPath = file.replace(this.viewsFolder, '');
+		let viewCachePath = viewPath.replace('.vue', '.js');
+
 		VueCompiler.compile({
 			input: file,
 			// Support from name flag
-			output: this.viewsCacheFolder + '/[name].js',
+			output: this.viewsCacheFolder + viewCachePath,
 			compileAsString: true,
 		});
 	}

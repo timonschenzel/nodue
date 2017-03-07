@@ -114,11 +114,20 @@ module.exports = class VueComponentCompilerTasks
 
 	compileComponent()
 	{
+		if (! this.options.compileSingleFile) {
+			this.transformation = "'" + this.name + "': ";
+		}
+
 		if (this.options.compileAsString) {
-			this.transformation = "'" + this.name + "': `" + this.rawData + "`,";
-		} else if(this.options.) {
+			this.transformation += "`" + this.rawData + "`";
+			if (! this.options.compileSingleFile) {
+				this.transformation += ",";
+			}
 		} else {
-			this.transformation = "'" + this.name + "': " + this.rawData + ",";
+			this.transformation += this.rawData;
+			if (! this.options.compileSingleFile) {
+				this.transformation += ",";
+			}
 		}
 	}
 }

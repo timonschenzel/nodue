@@ -1,4 +1,4 @@
-module.exports = {'nhome': `<homepage-layout>
+module.exports = `<homepage-layout>
 <!-- 	<template slot="title">My custom title</template>
 	<template slot="slogan">My slogan</template> -->
 
@@ -26,4 +26,4 @@ module.exports = {'nhome': `<homepage-layout>
 	<div v-show="showDiv">
 		Toggle Me.
 	</div>
-</homepage-layout>`,};
+</homepage-layout>`;
