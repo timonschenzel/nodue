@@ -14,8 +14,8 @@ module.exports = class PagesController extends Controller
 			],
 			shareWithLayout: false,
 			layoutData: {
-				title: 'Test',
-				slogan: 'My slogan',
+				title: 'Nodue',
+				slogan: 'This is amazing!',
 			}
 		});
 	}

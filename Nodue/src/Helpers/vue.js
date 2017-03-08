@@ -7,7 +7,8 @@ module.exports = {
 		let fullViewPath = app.path(viewPath);
 		let viewCachePath = app.path(app.config('app.cacheFolder') + '/views/' + viewPathStructure + '.js');
 
-		if (! fs.existsSync(viewCachePath)) {
+		if (! fs.existsSync(viewCachePath) || app.hot) {
+			delete require.cache[require.resolve(viewCachePath)];
 			AssetsCompiler.compileViewFile(fullViewPath);
 		}
 		

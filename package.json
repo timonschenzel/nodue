@@ -4,14 +4,15 @@
     "webpack": "cross-env NODE_ENV=development webpack --progress --hide-modules",
     "debug": "cross-env NODE_ENV=development webpack --watch --progress",
     "dev": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules",
+    "webpack-silent": "cross-env NODE_ENV=development webpack --watch --hide-modules",
     "hmr": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
     "production": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "nodue": "node --harmony-async-await index.js",
-    "nodue:dev": "nodemon --watch app --watch config --watch Nodue/src --harmony-async-await index.js -- dev",
+    "nodue-dev": "nodemon --watch app --watch config --watch Nodue/src --harmony-async-await index.js -- dev",
+    "nodue:dev": "concurrently \"npm run nodue-dev hot\" \"npm run webpack-silent\"",
     "testskarma": "karma start karma.conf.js --log-level debug --single-run",
     "test": "node --harmony-async-await node_modules/ava/cli.js jsunit/jsunit.js",
-    "tests": "node --harmony-async-await node_modules/ava/cli.js jsunit/jsunit.js",
-    "all": "concurrently \"npm run nodue:dev hot\" \"npm run dev\""
+    "tests": "node --harmony-async-await node_modules/ava/cli.js jsunit/jsunit.js"
   },
   "devDependencies": {
     "auto-loader": "^0.2.0",
