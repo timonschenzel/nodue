@@ -15,7 +15,8 @@ module.exports = class Bootstrap
 			'mapAnchorElements',
 			'handlePopstate',
 			'createComponentFunction',
-			'handleForNewPageContent',
+			'processNewPageContent',
+			'processLayoutUpdates',
 		];
 	}
 
@@ -48,19 +49,24 @@ module.exports = class Bootstrap
 		let templates = require('../../../storage/framework/cache/layout_templates.js');
 
 		for (let template in templates) {
-			Vue.component(template, {
-				template: templates[template],
-				data() {
-					if (this.$root.$children[0].layoutData) {
-						return this.$root.$children[0].layoutData;
-					} else if (this.$root.$children[0].shareWithLayout !== false) {
-						return this.$root.$children[0].$data;
-					} else {
-						return {};
-					}
-				}
-			});
+			this.createLayoutComponent(template, templates[template]);
 		}
+	}
+
+	createLayoutComponent(name, template)
+	{
+		Vue.component(name, {
+			template: template,
+			data() {
+				if (this.$root.$children[0].layoutData) {
+					return this.$root.$children[0].layoutData;
+				} else if (this.$root.$children[0].shareWithLayout !== false) {
+					return this.$root.$children[0].$data;
+				} else {
+					return {};
+				}
+			}
+		});
 	}
 
 	connectWithServer()
@@ -68,6 +74,9 @@ module.exports = class Bootstrap
 		window.socket = io('?url=' + window.location.pathname);
 	}
 
+	/**
+	 * @todo only for internal actions.
+	 */
 	mapAnchorElements()
 	{
 		$(document).on('click', 'a', e => {
@@ -104,9 +113,10 @@ module.exports = class Bootstrap
 		};
 	}
 
-	handleForNewPageContent()
+	processNewPageContent()
 	{
 		socket.on('pageRequest', (response) => {
+			console.log('page update!');
 			if (typeof response === 'object') {
 				// Hot reload
 				if (response.hot) {
@@ -135,5 +145,16 @@ module.exports = class Bootstrap
 				$('#app').html(response);
 			}
 		});
+	}
+
+	processLayoutUpdates()
+	{
+		socket.on('templateUpdate', (response) => {
+			console.log('template update!');
+			console.log(response);
+
+			this.createLayoutComponent(response.name, response.template);
+		});
+		
 	}
 }

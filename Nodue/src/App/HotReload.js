@@ -40,16 +40,26 @@ module.exports = class HotReload
 			 	let template = fs.readFileSync(path, 'utf8');
 
 			 	if (page) {
-			 		request.track({ url });
-			 		let response = await app.handle(request);
-
-			 		response.name = page + '-' + this.createHash(template);
-			 		response.hot = true;
-
-				 	server.io.to('page.' + url).emit('pageRequest', response);
+			 		await this.pushContentUpdate(url, page, template);
 			 	}
 		 	}
 		});
+	}
+
+	async pushContentUpdate(url, page, template)
+	{
+ 		request.track({ url });
+ 		let response = await app.handle(request);
+
+ 		response.name = page + '-' + this.createHash(template);
+ 		response.hot = true;
+
+	 	server.io.to('page.' + url).emit('pageRequest', response);
+	}
+
+	pushTemplateUpdate()
+	{
+
 	}
 
 	inspectEndpoint(endpoint)

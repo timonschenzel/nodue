@@ -22,6 +22,28 @@ module.exports = class Compiler
 			if (fs.lstatSync(file).isFile() && app.isRunning) {
 				this.compileLayoutFiles();
 			}
+
+			// Push template update
+			let layoutsCacheFilePath = app.path('storage/framework/cache/layout_templates.js');
+			let layoutName = file.replace(this.layoutsFolder, '');
+			layoutName = layoutName.replace('.vue', '');
+			layoutName = layoutName.replace('/', '');
+			layoutName = layoutName + '-layout';
+
+			delete require.cache[require.resolve(layoutsCacheFilePath)];
+			let newTemplates = require(layoutsCacheFilePath);
+			let newTemplate = newTemplates[layoutName];
+
+			server.io.to('page./').emit('templateUpdate', {
+				name: layoutName,
+				template: newTemplate,
+			});
+
+			request.track({url: '/'});
+			let response = await app.handle(request);
+			response.name = 'page-home' + '-' + hotReload.createHash(newTemplate);
+			response.hot = true;
+			server.io.to('page./').emit('pageRequest', response);
 		});
 
 		chokidar.watch(this.globalComponentsFolder).on('all', async (event, file) => {
