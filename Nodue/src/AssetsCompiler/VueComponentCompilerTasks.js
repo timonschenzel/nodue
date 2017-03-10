@@ -87,7 +87,8 @@ module.exports = class VueComponentCompilerTasks
 		let tagRegex = null;
 		let regex = new RegExp(
 		  /<(.*?)>/,
-		  'gim');
+		  'gim'
+		);
 
 		while (tagRegex = regex.exec(this.rawData)) {
 			let fullTag = tagRegex[0];

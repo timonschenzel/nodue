@@ -8,9 +8,11 @@ module.exports = class HotReload
 
 		this.views = [];
 
+		this.layouts = [];
+
 		this.behaviors = [];
 
-		this.pages = {};
+		this.pages = [];
 	}
 
 	start()
@@ -57,11 +59,6 @@ module.exports = class HotReload
 	 	server.io.to('page.' + url).emit('pageRequest', response);
 	}
 
-	pushTemplateUpdate()
-	{
-
-	}
-
 	inspectEndpoint(endpoint)
 	{
 		let routeExpression = route.getRoutes[endpoint];
@@ -73,15 +70,24 @@ module.exports = class HotReload
 			let controllerPath = app.path(`app/http/controllers/${controllerName}.js`);
 			let viewPath = app.path(`resources/views/${viewDir}/${controllerFunctionName}.vue`);
 			let behaviorPath = app.path(`resources/views/${viewDir}/${controllerFunctionName}.js`);
+			let layoutName = this.findLayoutNameInViewfile(viewPath);
 
 			this.endpoints[endpoint] = {
 				view: viewPath,
 				controller: controllerPath,
 				behavior: behaviorPath,
+				layout: layoutName,
 			};
 
 			this.controllers[controllerPath] = endpoint;
 			this.views[viewPath] = endpoint;
+			if (layoutName) {
+				if (! this.layouts[layoutName]) {
+					this.layouts[layoutName] = [];
+				}
+
+				this.layouts[layoutName].push(endpoint);
+			}
 			this.behaviors[behaviorPath] = endpoint;
 			this.pages[endpoint] = viewDir + '_' + controllerFunctionName;
 		}
@@ -109,5 +115,25 @@ module.exports = class HotReload
 	    }
 
 	    return hash;
+	}
+
+	findLayoutNameInViewfile(filePath)
+	{
+		let viewContent = fs.readFileSync(filePath, 'utf8');
+
+		let layoutRegex = null;
+		let layoutName = null;
+		let regex = new RegExp(
+		  /<([A-Z])\w+-layout>/,
+		  'gim'
+		);
+
+		while (layoutRegex = regex.exec(viewContent)) {
+			layoutName = layoutRegex[0];
+			layoutName = layoutName.replace('<', '');
+			layoutName = layoutName.replace('>', '');
+		}
+
+		return layoutName;
 	}
 }

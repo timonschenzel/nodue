@@ -33,17 +33,21 @@ module.exports = class Compiler
 			delete require.cache[require.resolve(layoutsCacheFilePath)];
 			let newTemplates = require(layoutsCacheFilePath);
 			let newTemplate = newTemplates[layoutName];
-
-			server.io.to('page./').emit('templateUpdate', {
+			
+			server.io.sockets.emit('templateUpdate', {
 				name: layoutName,
 				template: newTemplate,
 			});
 
-			request.track({url: '/'});
-			let response = await app.handle(request);
-			response.name = 'page-home' + '-' + hotReload.createHash(newTemplate);
-			response.hot = true;
-			server.io.to('page./').emit('pageRequest', response);
+			if (hotReload.layouts[layoutName]) {
+				hotReload.layouts[layoutName].forEach(async endpoint => {
+					request.track({url: endpoint});
+					let response = await app.handle(request);
+					response.name = hotReload.pages[endpoint] + '-' + hotReload.createHash(newTemplate);
+					response.hot = true;
+					server.io.to('page.' + endpoint).emit('pageRequest', response);
+				});
+			}
 		});
 
 		chokidar.watch(this.globalComponentsFolder).on('all', async (event, file) => {
