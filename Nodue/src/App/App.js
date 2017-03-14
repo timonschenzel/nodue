@@ -90,9 +90,9 @@ module.exports = class App
 
 	async handle(request)
 	{
-		let requestExpression = route.direct(request.url);
+		let routing = route.direct(request.url);
 
-		let response = request.capture(requestExpression);
+		let response = request.capture(routing.expression, routing.parameters);
 
 		return response;
 		// return this.make('Http.Response', response);

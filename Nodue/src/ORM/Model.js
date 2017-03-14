@@ -24,7 +24,7 @@ module.exports = class Model
 
 	async find(id)
 	{
-		return await this.bookshelf.where('id', id).fetch().then(result => {
+		return await this.bookshelf.where('id', id[0]).fetch().then(result => {
 			return result;
 		});
 	}

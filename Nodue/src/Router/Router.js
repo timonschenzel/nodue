@@ -8,11 +8,15 @@ module.exports = class Router
 
 	get(url, action)
 	{
+		url = this.normalize(url);
+
 		this.getRoutes[url] = action;
 	}
 
 	post(url, action)
 	{
+		url = this.normalize(url);
+
 		this.postRoutes[url] = action;
 	}
 
@@ -28,18 +32,77 @@ module.exports = class Router
 
 	direct(url)
 	{
+		url = this.normalize(url);
+
 		let expression = this.getRoutes[url];
+		let route = expression;
 
-		if (! expression) {
-			if (url.startsWith('/')) {
-				url = url.slice(1);
-			} else {
-				url = '/' + url;
-			}
-
-			return this.getRoutes[url];
+		if (! route) {
+			return this.findMatch(url);
 		}
 
-		return expression;
+		return {
+			expression: route,
+			parameters: [],
+		};
+	}
+
+	normalize(url)
+	{
+		if (! url.startsWith('/')) {
+			url = '/' + url;
+		}
+
+		return url;
+	}
+
+	findMatch(url)
+	{
+		let urlParts = this.getParts(url);
+		let parameters = [];
+
+		for (let route in this.getRoutes) {
+			parameters = [];
+			let routeParts = this.getParts(route);
+
+			if (urlParts.length != routeParts.length) {
+				continue;
+			}
+
+			let match = true;
+			let count = 0;
+			for (let urlPart in urlParts) {
+				if (urlParts[urlPart] != routeParts[count] && ! routeParts[count].includes('{')) {
+					match = false;
+				}
+
+				if (routeParts[count].includes('{')) {
+					parameters.push(urlParts[urlPart]);
+				}
+
+				count++;
+			}
+
+			if (match) {
+				return {
+					expression: this.getRoutes[route],
+					parameters: parameters,
+				};
+			}
+		}
+
+		return {
+			expression: null,
+			parameters: null,
+		};
+	}
+
+	getParts(url)
+	{
+		let parts = url.split('/');
+
+		parts.shift();
+
+		return parts;
 	}
 }

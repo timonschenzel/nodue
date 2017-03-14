@@ -7,7 +7,12 @@ module.exports = {'n-hello': {
 		<div class="tabs">
 		    <ul>
 		    	<n-nav-item href="/">Home</n-nav-item>
-		    	<n-nav-item href="/products/show">Products</n-nav-item>
+		    	<n-nav-item href="/product">Products</n-nav-item>
+		    	<n-nav-item href="/product/1">Product 1</n-nav-item>
+		    	<n-nav-item href="/product/2">Product 2</n-nav-item>
+		    	<n-nav-item href="/product/3">Product 3</n-nav-item>
+		    	<n-nav-item href="/product/4">Product 4</n-nav-item>
+		    	<n-nav-item href="/product/5">Product 5</n-nav-item>
 		    </ul>
 		</div>
 	`,

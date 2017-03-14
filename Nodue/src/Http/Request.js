@@ -20,30 +20,34 @@ module.exports = class Request
 		}
 	}
 
-	async capture(expression)
+	async capture(expression, parameters = [])
 	{
 		if (! expression) {
 			return '404';
 		}
 
 		if(typeof expression == 'function') {
-			return await expression();
+			return await expression(...parameters);
 		}
 
 		if(typeof expression == 'string') {
-			return await this.handle(expression);
+			return await this.handle(expression, parameters);
 		}
 	}
 
-	async handle(expression)
+	async handle(expression, parameters = [])
 	{
 		let controllerName = this.findControllerName(expression);
 		let controllerFunctionName = this.findControllerFunctionName(expression);
 
 		let controller = app.loadController(controllerName);
 		
-		let response = await controller[controllerFunctionName]();
-		response.url = this.url;
+		let response = await controller[controllerFunctionName](...parameters);
+
+		if (typeof response == 'object') {
+			response.url = this.url;
+		}
+		
 		return response;
 	}
 

@@ -19,4 +19,9 @@ module.exports = class PagesController extends Controller
 			}
 		});
 	}
+
+	contact(message)
+	{
+		return `Contact page, message: ${message}`;
+	}
 }

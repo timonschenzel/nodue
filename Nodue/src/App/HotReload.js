@@ -53,8 +53,10 @@ module.exports = class HotReload
  		request.track({ url });
  		let response = await app.handle(request);
 
- 		response.name = page + '-' + this.createHash(template);
- 		response.hot = true;
+ 		if (typeof response == 'object') {
+ 			response.name = page + '-' + this.createHash(template);
+ 			response.hot = true;
+ 		}
 
 	 	server.io.to('page.' + url).emit('pageRequest', response);
 	}
@@ -119,6 +121,10 @@ module.exports = class HotReload
 
 	findLayoutNameInViewfile(filePath)
 	{
+		if (! fs.existsSync(filePath)) {
+			return;
+		}
+
 		let viewContent = fs.readFileSync(filePath, 'utf8');
 
 		let layoutRegex = null;

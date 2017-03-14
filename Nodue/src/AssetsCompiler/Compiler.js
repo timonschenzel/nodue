@@ -28,6 +28,7 @@ module.exports = class Compiler
 			let layoutName = file.replace(this.layoutsFolder, '');
 			layoutName = layoutName.replace('.vue', '');
 			layoutName = layoutName.replace('/', '');
+			layoutName = layoutName.replace('\\', '');
 			layoutName = layoutName + '-layout';
 
 			delete require.cache[require.resolve(layoutsCacheFilePath)];

@@ -1,5 +1,6 @@
 route.get('/', 'PagesController@home');
-route.get('/products/show', 'ProductController@show');
-route.get('/products/index', () => 'test');
+route.get('/contact/{message}', 'PagesController@contact');
+route.get('/product', 'ProductController@index');
+route.get('/product/{product}', 'ProductController@show');
 
 route.get('test', () => 'test');

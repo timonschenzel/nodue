@@ -54,7 +54,9 @@ module.exports = class Server
 		  		request.track(incommingRequest);
 		  		let response = await app.handle(request);
 
-		  		response.name = response.name + '-' + new Date().getTime();
+		  		if (typeof response == 'object') {
+		  			response.name = response.name + '-' + new Date().getTime();
+		  		}
 
 		  		socket.volatile.emit('pageRequest', response);
 		  	});
