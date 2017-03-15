@@ -33,6 +33,12 @@ module.exports = class VueCompiler
 			this.transformation += VueComponentCompiler.compile(path.normalize(basePath + file), this.options);
 		});
 		
+		this.transformation = this.transformation.trim();
+
+		if (this.transformation.endsWith(',')) {
+			this.transformation = this.transformation.slice(0, -1);
+		}
+
 		if (this.options.output) {
 			this.storeTransformation();
 		} else {

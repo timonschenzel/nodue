@@ -35,7 +35,7 @@ module.exports = class VueCompilerTest extends TestCase
 	<n-nav-item>Link 1</n-nav-item>
 	<n-nav-item>Link 2</n-nav-item>
 	<n-nav-item>Link 3</n-nav-item>
-</ul>\`'nav-item': \`<li><slot></slot></li>\`};`, compiledContent);
+</ul>\`,'nav-item': \`<li><slot></slot></li>\`};`, compiledContent);
 
 		fs.unlinkSync('./tests/merged_components.js');
 	}
@@ -56,7 +56,7 @@ module.exports = class VueCompilerTest extends TestCase
 	<n-nav-item>Link 1</n-nav-item>
 	<n-nav-item>Link 2</n-nav-item>
 	<n-nav-item>Link 3</n-nav-item>
-</ul>\`'layout-nav-item': \`<li><slot></slot></li>\`};`, compiledContent);
+</ul>\`,'layout-nav-item': \`<li><slot></slot></li>\`};`, compiledContent);
 
 		fs.unlinkSync('./tests/merged_components.js');
 	}
@@ -77,7 +77,7 @@ module.exports = class VueCompilerTest extends TestCase
 	<n-nav-item>Link 1</n-nav-item>
 	<n-nav-item>Link 2</n-nav-item>
 	<n-nav-item>Link 3</n-nav-item>
-</ul>\`'nav-item-layout': \`<li><slot></slot></li>\`};`, compiledContent);
+</ul>\`,'nav-item-layout': \`<li><slot></slot></li>\`};`, compiledContent);
 
 		fs.unlinkSync('./tests/merged_components.js');
 	}
@@ -97,7 +97,7 @@ module.exports = class VueCompilerTest extends TestCase
 	<n-nav-item>Link 1</n-nav-item>
 	<n-nav-item>Link 2</n-nav-item>
 	<n-nav-item>Link 3</n-nav-item>
-</ul>\`'n-nav-item': \`<li><slot></slot></li>\`};`, compiledContent);
+</ul>\`,'n-nav-item': \`<li><slot></slot></li>\`};`, compiledContent);
 
 		fs.unlinkSync('./tests/merged_components.js');
 	}
