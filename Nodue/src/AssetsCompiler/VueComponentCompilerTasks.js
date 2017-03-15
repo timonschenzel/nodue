@@ -34,21 +34,21 @@ module.exports = class VueComponentCompilerTasks
 	addSuffixToFileNameIfNeeded()
 	{
 		if (this.options.suffix) {
-			this.name += this.options.suffix;
+			this.name = this.name + '-' + this.options.suffix;
 		}
 	}
 
 	addPrefixToFileNameIfNeeded()
 	{
 		if (this.options.prefix) {
-			this.name = this.options.prefix + this.name;
+			this.name = this.options.prefix + '-' + this.name;
 		}
 	}
 
 	addGlobalPrefixToFileNameIfNeeded()
 	{
-		if (this.options.globalPrefix !== false) {
-			this.name = app.config('components.prefix') + this.name;
+		if (this.options.globalPrefix !== false && ! this.options.prefix && ! this.options.suffix) {
+			this.name = app.config('components.prefix') + '-' + this.name;
 		}
 	}
 

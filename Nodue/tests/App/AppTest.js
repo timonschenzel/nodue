@@ -1,6 +1,6 @@
 module.exports = class AppTest extends TestCase
 {
-	/** test */
+	/** @test */
 	it_is_able_to_generate_a_proper_path_with_a_base_url_and_addon()
 	{
 		let realPath = app.basePath;
@@ -12,7 +12,7 @@ module.exports = class AppTest extends TestCase
 		app.basePath = realPath;
 	}
 
-	/** test */
+	/** @test */
 	it_is_able_to_load_a_specific_file()
 	{
 		fs.writeFileSync('./tests/dummy.js', 'module.exports = { foo: "bar" }');
@@ -26,7 +26,7 @@ module.exports = class AppTest extends TestCase
 		fs.unlinkSync('./tests/dummy.js');
 	}
 
-	/** test */
+	/** @test */
 	it_is_able_to_load_multiple_files_inside_a_directory()
 	{
 		fs.mkdirSync('./tests/dummy');
@@ -48,7 +48,7 @@ module.exports = class AppTest extends TestCase
 		fs.rmdirSync('./tests/dummy');
 	}
 
-	/** test */
+	/** @test */
 	it_is_able_to_fetch_a_config_file()
 	{
 		// Create dummy config file
@@ -61,7 +61,7 @@ module.exports = class AppTest extends TestCase
 		fs.unlinkSync('./config/dummy.js');
 	}
 
-	/** test */
+	/** @test */
 	it_is_able_to_return_data_from_config_files()
 	{
 		app.resetConfig();

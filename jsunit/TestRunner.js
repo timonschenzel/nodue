@@ -101,7 +101,7 @@ module.exports = class TestRunner
 
     getTestFilesInLocation(object)
     {
-    	let toReturn = {};
+    	let testFilePaths = {};
     	
     	for (let i in object) {
     		if (!object.hasOwnProperty(i)) continue;
@@ -112,16 +112,17 @@ module.exports = class TestRunner
     				if (!flatObject.hasOwnProperty(x)) continue;
     				
     				if (x.toLowerCase().endsWith('test')) {
-    					toReturn[i + '/' + x] = flatObject[x];
+    					testFilePaths[i + '/' + x] = flatObject[x];
     				}
     			}
     		} else {
     			if (i.toLowerCase().endsWith('test')) {
-    				toReturn[i] = object[i];
+    				testFilePaths[i] = object[i];
     			}
     		}
     	}
-    	return toReturn;
+
+    	return testFilePaths;
     }
 
 	getTestLocations()

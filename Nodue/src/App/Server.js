@@ -37,10 +37,7 @@ module.exports = class Server
 			socket.join('page.' + requestedUrl);
 			request.track({ url: requestedUrl });
 			let response = await app.handle(request);
-
-			setTimeout(() => {
-				socket.volatile.emit('pageRequest', response);
-			}, 500);
+			socket.emit('pageRequest', response);
 
 			// User request a page
 		  	socket.on('pageRequest', async (incommingRequest) => {
@@ -58,7 +55,7 @@ module.exports = class Server
 		  			response.name = response.name + '-' + new Date().getTime();
 		  		}
 
-		  		socket.volatile.emit('pageRequest', response);
+		  		socket.emit('pageRequest', response);
 		  	});
 		});
 
@@ -70,7 +67,7 @@ module.exports = class Server
 
 			app.isRunning = true;
 
-		  	console.log(`Server is running at localhost:${this.port}`);
+		  	console.info(`Server is running at localhost:${this.port}`);
 		});
 	}
 }

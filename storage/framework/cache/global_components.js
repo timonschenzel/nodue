@@ -2,7 +2,7 @@ module.exports = {'n-hello': {
 	template: `
 		<div style="color: green;">Hello</div>
 	`,
-},'n-nav': {
+}'n-nav': {
 	template: `
 		<div class="tabs">
 		    <ul>
@@ -16,7 +16,7 @@ module.exports = {'n-hello': {
 		    </ul>
 		</div>
 	`,
-},'n-nav-item': {
+}'n-nav-item': {
 	template: `
 		<li :class="{'is-active': isActive }"><a :href="href"><slot></slot></a></li>
 	`,
@@ -28,7 +28,7 @@ module.exports = {'n-hello': {
 			return this.href == this.$root.activePageUri;
 		}
 	}
-},'n-test': {
+}'n-test': {
 	template: `
 		<div style="color: red;"><slot></slot></div>
 	`,
@@ -36,4 +36,4 @@ module.exports = {'n-hello': {
 	props: [
 		'text',
 	]
-},};
+}};

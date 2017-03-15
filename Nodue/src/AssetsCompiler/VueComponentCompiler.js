@@ -20,6 +20,12 @@ module.exports = class VueComponentCompiler
 			this.runTask(task);
 		});
 
+		this.compiler.transformation = this.compiler.transformation.trim();
+
+		if (this.compiler.transformation.endsWith(',')) {
+			this.compiler.transformation = this.compiler.transformation.slice(0, -1);
+		}
+
 		return this.compiler.transformation;
 	}
 
