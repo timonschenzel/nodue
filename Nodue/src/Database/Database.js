@@ -15,6 +15,7 @@ module.exports = class Database
 
 	settings()
 	{
+		// this._settings.debug = true;
 		return this._settings;
 	}
 

@@ -61,7 +61,7 @@ module.exports = class TestRunner
 		}
 	}
 
-	runTestsInClass(testClass, path, location)
+	async runTestsInClass(testClass, path, location)
 	{
 		let annotations = this.annotations.getSync(this.path(`${location}/${path}.js`));
 
@@ -76,6 +76,10 @@ module.exports = class TestRunner
 		    // Default filters:
 		    // 1. Skip constructor
 		    // 2. Only call methods with a 'test' prefix or a 'test' annotation
+		    
+		    /**
+		     * @todo fix for async methods
+		     */
 		    if ( ! method instanceof Function || method === testClass || name == 'constructor' || (! name.startsWith('test') && ! hasTestAnnotation)) {
 		    	continue;
 		    }
@@ -86,7 +90,7 @@ module.exports = class TestRunner
 		    }
 
 		    testClass.name = path + ' -> ' + name;
-		    testClass[name]();
+		    await testClass[name]();
 		}
 	}
 

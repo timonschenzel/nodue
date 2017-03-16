@@ -25,15 +25,19 @@ module.exports = class Model
 	async find(id)
 	{
 		return await this.bookshelf.where('id', id[0]).fetch().then(result => {
-			return result;
+		    return result;
+		}).catch(error => {
+		  	console.error(error.stack);
 		});
 	}
 
 	async all()
 	{
 		return await this.bookshelf.fetchAll().then(result => {
-			return result;
-		})
+		    return result;
+		}).catch(error => {
+		  	console.error(error.stack);
+		});
 	}
 
 	settings()

@@ -5,6 +5,18 @@ module.exports = class TestCase
 		this.name = null;
 	}
 
+	async visit(url)
+	{
+		request.track({ url });
+		let response = await app.handle(request);
+
+		let vm = new Vue({
+		  render (h) {
+		    return h('div', 'hello')
+		  }
+		});
+	}
+
 	assertEquals(expected, value, message)
 	{
 		value = this.normalizeValue(value);
