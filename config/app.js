@@ -32,6 +32,7 @@ module.exports = {
 		Controller: 'Http.Controller',
 		Model: 'ORM.Model',
 		TestCase: 'Testing.TestCase',
+		VueTester: 'Testing.VueTester',
 		VueCompiler: 'AssetsCompiler.VueCompiler',
 		VueComponentCompiler: 'AssetsCompiler.VueComponentCompiler',
 		VueComponentCompilerTasks: 'AssetsCompiler.VueComponentCompilerTasks',

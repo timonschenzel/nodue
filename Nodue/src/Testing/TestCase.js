@@ -10,11 +10,63 @@ module.exports = class TestCase
 		request.track({ url });
 		let response = await app.handle(request);
 
-		let vm = new Vue({
-		  render (h) {
-		    return h('div', 'hello')
-		  }
-		});
+		let globalComponents = require('../../../storage/framework/cache/global_components.js');
+
+		for (let componentName in globalComponents) {
+			Vue.component(componentName, globalComponents[componentName]);
+		}
+
+		let templates = require('../../../storage/framework/cache/layout_templates.js');
+
+		for (let templateName in templates) {
+			Vue.component(templateName, {
+				template: templates[templateName],
+				data() {
+					return {};
+				}
+			});
+		}
+
+		let component = {};
+		if (response.behavior) {
+			eval('component = ' + response.behavior);
+		}
+
+		component.template = response.template;
+		component.data = function()
+		{
+			return response.data;
+		}
+
+		this.vm = new Vue(component);
+
+		return this;
+
+		// return new VueTester(this, new Vue(component));
+	}
+
+	async see(regex)
+	{
+		this.assertRegExp(regex, await this.toHtml());
+	}
+
+	async andSee(regex)
+	{
+		await this.see(regex);
+	}
+
+	async toHtml()
+	{
+		let html = null;
+
+		await VueRenderer.renderToString(
+ 			this.vm,
+ 			async (error, result) => {
+ 				html = result;
+ 			}
+ 		);
+
+ 		return html;
 	}
 
 	assertEquals(expected, value, message)
@@ -114,7 +166,7 @@ module.exports = class TestCase
 		});
 	}
 
-	assertRegExp(contents, regex, message)
+	assertRegExp(regex, contents, message)
 	{
 		// .regex(contents, regex, [message])
 		test(this.name, async t => {
@@ -122,7 +174,7 @@ module.exports = class TestCase
 		});
 	}
 
-	assertNotRegExp(contents, regex, message)
+	assertNotRegExp(regex, contents, message)
 	{
 		// .notRegex(contents, regex, [message])
 		test(this.name, async t => {
