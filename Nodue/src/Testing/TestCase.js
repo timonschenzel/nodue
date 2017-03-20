@@ -2,6 +2,7 @@ module.exports = class TestCase
 {
 	constructor()
 	{
+		this.vm = null;
 		this.name = null;
 	}
 
@@ -40,7 +41,7 @@ module.exports = class TestCase
 
 		this.vm = new Vue(component);
 
-		return this;
+		return await this;
 
 		// return new VueTester(this, new Vue(component));
 	}
