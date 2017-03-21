@@ -90,7 +90,13 @@ module.exports = class TestRunner
 		    }
 
 		    testClass.name = path + ' -> ' + name;
-		    await testClass[name]();
+		    
+		    try {
+		    	await testClass[name]();
+			} catch(error) {
+				console.log('jsUnit error');
+				console.log(error);
+			}
 		}
 	}
 

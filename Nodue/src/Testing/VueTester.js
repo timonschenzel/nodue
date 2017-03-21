@@ -6,6 +6,12 @@ module.exports = class VueTester
 		this.tester = testCaseInstance;
 	}
 
+	static async test(testCaseInstance, vm)
+	{
+		let tester = new this(testCaseInstance, vm);
+		return await tester;
+	}
+
 	async toHtml()
 	{
 		let html = null;
@@ -20,13 +26,47 @@ module.exports = class VueTester
  		return html;
 	}
 
-	async see()
+	async assertSee(expression)
 	{
-		await this.tester.assertRegExp(/ERROR/, html);
+		let rawExpression = expression;
+
+		if (typeof expression == 'string') {
+			expression = new RegExp(expression, 'gim');
+		}
+
+		this.tester.assertRegExp(expression, await this.toHtml(), `Assert that "${rawExpression}" should exists on the page, but it was not found.`);
+
+		return this;
 	}
 
-	async andSee()
+	andSee(expression)
 	{
-		return this.see();
+		return this.assertSee(expression);
+	}
+
+	see(expression)
+	{
+		return this.assertSee(expression);
+	}
+
+	async assertNotSee(expression)
+	{
+		let rawExpression = expression;
+
+		if (typeof expression == 'string') {
+			expression = new RegExp(expression, 'gim');
+		}
+
+		this.tester.assertNotRegExp(expression, await this.toHtml(), `Assert that "${rawExpression}" should not exists on the page, but it was found.`);
+	}
+
+	andNotSee(expression)
+	{
+		return this.assertNotSee(expression);
+	}
+
+	notSee(expression)
+	{
+		return this.assertNotSee(expression);
 	}
 }

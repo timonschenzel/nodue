@@ -39,35 +39,7 @@ module.exports = class TestCase
 			return response.data;
 		}
 
-		this.vm = new Vue(component);
-
-		return await this;
-
-		// return new VueTester(this, new Vue(component));
-	}
-
-	async see(regex)
-	{
-		this.assertRegExp(regex, await this.toHtml());
-	}
-
-	async andSee(regex)
-	{
-		await this.see(regex);
-	}
-
-	async toHtml()
-	{
-		let html = null;
-
-		await VueRenderer.renderToString(
- 			this.vm,
- 			async (error, result) => {
- 				html = result;
- 			}
- 		);
-
- 		return html;
+		return VueTester.test(this, new Vue(component));
 	}
 
 	assertEquals(expected, value, message)
