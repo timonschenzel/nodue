@@ -3,8 +3,19 @@ module.exports = class ViewProductsTest extends TestCase
 	/** @test */
 	async test_a_user_is_able_to_view_a_specific_product()
 	{
+		// try {
+		// 	console.log('HIT1');
+		// 	Product.where({ id: 1 }).fetch().then(product => {
+		// 		console.log('HIT3');
+		// 	});
+		// 	console.log('HIT2');
+		// } catch(error) {
+		// 	console.log(error);
+		// }
+
 		let page = await this.visit('/');
 		page.assertSee('Toggle me.');
+
 		// page.vm.toggleDivVisibility();
 		// page.assertHidden('Toggle me.');
 

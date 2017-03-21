@@ -4,6 +4,9 @@ module.exports = class TestCase
 	{
 		this.vm = null;
 		this.name = null;
+
+		Vue.config.debug = false;
+		Vue.config.silent = true;
 	}
 
 	async visit(url)

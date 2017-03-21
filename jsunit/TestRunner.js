@@ -54,10 +54,10 @@ module.exports = class TestRunner
 		this.getTestLocations();
 	}
 
-	test()
+	async test()
 	{
 		for (let location in this.locations) {
-			this.runTestsInLocation(location);
+			await this.runTestsInLocation(location);
 		}
 	}
 
@@ -100,12 +100,12 @@ module.exports = class TestRunner
 		}
 	}
 
-	runTestsInLocation(location)
+	async runTestsInLocation(location)
 	{
         let testFiles = this.getTestFilesInLocation(this.locations[location]);
 
         for (let filePath in testFiles) {
-        	this.runTestsInClass(new testFiles[filePath](), filePath, location);
+        	await this.runTestsInClass(new testFiles[filePath](), filePath, location);
         }
     }
 
