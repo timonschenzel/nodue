@@ -1,4 +1,4 @@
-global.vm = new Vue({
+window.vm = new Vue({
 	el: '#app',
 
 	data: {
