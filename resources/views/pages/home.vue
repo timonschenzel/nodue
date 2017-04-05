@@ -13,9 +13,11 @@
 
 	<ol>
 		<li
-			v-for="item in items"
+			v-for="item in shared.items"
 			v-text="item"
 		></li>
+
+		<input type="text" class="input" placeholder="Add another task" v-model="newItem" @keyup.enter="addItem">
 	</ol>
 
 	<hr>
@@ -23,7 +25,7 @@
 	<button class="button is-primary" @click="testConsoleLog">console.log - Hello World</button>
 	<button class="button is-primary" @click="toggleDivVisibility">Toggle div visibility</button>
 
-	<div v-show="showDiv">
+	<div v-show="shared.showDiv">
 		Toggle Me.
 	</div>
 </homepage-layout>

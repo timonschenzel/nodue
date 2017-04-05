@@ -8,6 +8,7 @@ module.exports = class Bootstrap
 		return [
 			'loadSocketIO',
 			'loadjQuery',
+			'loadVuex',
 			'loadVue',
 			'createGlobalComponents',
 			'createLayoutComponents',
@@ -17,6 +18,7 @@ module.exports = class Bootstrap
 			'createComponentFunction',
 			'processNewPageContent',
 			'processLayoutUpdates',
+			'processSharedDateUpdates',
 		];
 	}
 
@@ -30,9 +32,36 @@ module.exports = class Bootstrap
 		window.$ = require('jquery');
 	}
 
+	loadVuex()
+	{
+		window.Vuex = require('vuex').default;
+	}
+
 	loadVue()
 	{
 		window.Vue = require('vue');
+
+		Vue.use(Vuex);
+
+		window.store = new Vuex.Store({
+			state: {
+				count: 0,
+				showDiv: true,
+			},
+			mutations: {
+				increment (state) {
+					state.count++
+				},
+				toggleDivVisibility(state) {
+					state.showDiv = state.showDiv ? false : true;
+				},
+			},
+			getters: {
+				showDiv: (state, getters) => {
+					return state.showDiv;
+				}
+			}
+		});
 	}
 
 	createGlobalComponents()
@@ -58,13 +87,19 @@ module.exports = class Bootstrap
 		Vue.component(name, {
 			template: template,
 			data() {
+				let data = {};
+
 				if (this.$root.$children[0].layoutData) {
-					return this.$root.$children[0].layoutData;
+					data = this.$root.$children[0].layoutData;
 				} else if (this.$root.$children[0].shareWithLayout !== false) {
-					return this.$root.$children[0].$data;
+					data = this.$root.$children[0].$data;
 				} else {
-					return {};
+					data = {};
 				}
+
+				data.store = store;
+
+				return data;
 			}
 		});
 	}
@@ -116,7 +151,6 @@ module.exports = class Bootstrap
 	processNewPageContent()
 	{
 		socket.on('pageRequest', (response) => {
-			console.log('page update!');
 			if (typeof response === 'object') {
 				// Hot reload
 				if (response.hot) {
@@ -128,7 +162,24 @@ module.exports = class Bootstrap
 					eval('component = ' + response.behavior);
 				}
 
+				component.watch = {
+					shared: {
+						handler: function (update, oldVal) {
+							if (! update.fromServer) {
+								socket.emit('sharedDataUpdate', {
+									url: window.location.pathname,
+									data: update,
+								});
+							} else {
+								delete this.shared.fromServer;
+							}
+						},
+						deep: true
+					}
+				};
+
 				component.template = response.template;
+				response.data.store = store;
 				component.data = function()
 				{
 					return response.data;
@@ -155,6 +206,18 @@ module.exports = class Bootstrap
 
 			this.createLayoutComponent(response.name, response.template);
 		});
-		
+	}
+
+	processSharedDateUpdates()
+	{
+		socket.on('sharedDataUpdate', (update) => {
+			console.log('shared date update!');
+
+			if (vm.$children[0]) {
+				vm.$children[0].$data.isUpdatingSharedData = true;
+				vm.$children[0].$data.shared = update;
+				vm.$children[0].$data.isUpdatingSharedData = false;
+			}
+		});
 	}
 }

@@ -45,8 +45,10 @@
   },
   "dependencies": {
     "bulma": "^0.2.3",
+    "serve-favicon": "^2.4.2",
     "sqlite3": "^3.1.8",
     "sugar": "^2.0.4",
+    "vuex": "^2.2.1",
     "webpack": "^2.2.0"
   }
 }

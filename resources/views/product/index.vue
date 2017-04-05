@@ -7,7 +7,7 @@
 		<button class="button is-primary" @click="replaceFirstProductName">Replace first product name with 'Test..'</button>
 		<hr>
 		<ul>
-			<li v-for="(product, index) in products">#{{ index }} &mdash; {{ product.name }}</li>
+			<li v-for="(product, index) in shared.products">#{{ index }} &mdash; {{ product.name }}</li>
 		</ul>
 	</div>
 </app-layout>

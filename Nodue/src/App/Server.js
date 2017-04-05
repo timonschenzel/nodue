@@ -6,7 +6,9 @@ module.exports = class Server
 
 		this.express = require('express');
 		this.server = this.express();
+		this.favicon = require('serve-favicon');
 		this.server.use(this.express.static('public'));
+		this.server.use(this.favicon(app.path('public/favicon.ico')));
 		this.http = require('http').Server(this.server);
 		this.io = require('socket.io')(this.http);
 	}
@@ -56,6 +58,11 @@ module.exports = class Server
 		  		}
 
 		  		socket.emit('pageRequest', response);
+		  	});
+
+		  	socket.on('sharedDataUpdate', async (update) => {
+		  		update.data.fromServer = true;
+		  		server.io.to('page.' + update.url).emit('sharedDataUpdate', update.data);
 		  	});
 		});
 

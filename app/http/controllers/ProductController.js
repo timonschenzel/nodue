@@ -9,7 +9,7 @@ module.exports = class PagesController extends Controller
 		let title = 'Products';
 		let slogan = 'This is great!';
 
-		return view('product.index', { products, counter, title, slogan });
+		return view('product.index', { shared: { products }, counter, title, slogan });
 	}
 
 	async show(id)
