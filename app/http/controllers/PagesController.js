@@ -7,20 +7,17 @@ module.exports = class PagesController extends Controller
 			title: 'Nodue',
 			slogan: 'This is great!',
 			text: 'Welcome World',
+			items: [
+				'Go to the store',
+				'Shopping?',
+				'Sleeping',
+			],
 			newItem: '',
 			shareWithLayout: false,
 			layoutData: {
 				title: 'Nodue',
 				slogan: 'This is amazing!',
 			},
-			shared: {
-				showDiv: true,
-				items: [
-					'Go to the store',
-					'Shopping?',
-					'Sleeping',
-				],
-			}
 		});
 	}
 

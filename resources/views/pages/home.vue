@@ -13,7 +13,7 @@
 
 	<ol>
 		<li
-			v-for="item in shared.items"
+			v-for="item in items"
 			v-text="item"
 		></li>
 
@@ -25,7 +25,7 @@
 	<button class="button is-primary" @click="testConsoleLog">console.log - Hello World</button>
 	<button class="button is-primary" @click="toggleDivVisibility">Toggle div visibility</button>
 
-	<div v-show="shared.showDiv">
+	<div v-show="showDiv">
 		Toggle Me.
 	</div>
 </homepage-layout>

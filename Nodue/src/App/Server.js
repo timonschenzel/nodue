@@ -61,8 +61,8 @@ module.exports = class Server
 		  	});
 
 		  	socket.on('sharedDataUpdate', async (update) => {
-		  		update.data.fromServer = true;
-		  		server.io.to('page.' + update.url).emit('sharedDataUpdate', update.data);
+		  		update.fromServer = true;
+		  		server.io.to('page.' + update.url).emit('sharedDataUpdate', update);
 		  	});
 		});
 

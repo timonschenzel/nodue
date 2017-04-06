@@ -162,21 +162,45 @@ module.exports = class Bootstrap
 					eval('component = ' + response.behavior);
 				}
 
-				component.watch = {
-					shared: {
+				if (! response.data.shared) {
+					response.data.shared = {};
+				}
+
+				if (! response.data.shared.__dataItems) {
+					response.data.shared.__dataItems = {};
+				}
+
+				component.watch = {};
+
+				if (response.data.shared) {
+					component.watch['shared'] = {
 						handler: function (update, oldVal) {
-							if (! update.fromServer) {
-								socket.emit('sharedDataUpdate', {
-									url: window.location.pathname,
-									data: update,
-								});
-							} else {
-								delete this.shared.fromServer;
-							}
+							console.log('update!');
+							socket.emit('sharedDataUpdate', {
+								item: 'shared',
+								url: window.location.pathname,
+								payload: update,
+							});
 						},
 						deep: true
-					}
-				};
+					};
+				}
+
+				if (component.sharedDataItems) {
+					component.sharedDataItems.forEach(sharedDataItem => {
+						component.watch[sharedDataItem] = {
+							handler: function (update, oldVal) {
+								console.log('update!');
+								socket.emit('sharedDataUpdate', {
+									item: sharedDataItem,
+									url: window.location.pathname,
+									payload: update,
+								});
+							},
+							deep: true
+						};
+					});
+				}
 
 				component.template = response.template;
 				response.data.store = store;
@@ -202,7 +226,6 @@ module.exports = class Bootstrap
 	{
 		socket.on('templateUpdate', (response) => {
 			console.log('template update!');
-			console.log(response);
 
 			this.createLayoutComponent(response.name, response.template);
 		});
@@ -212,11 +235,9 @@ module.exports = class Bootstrap
 	{
 		socket.on('sharedDataUpdate', (update) => {
 			console.log('shared date update!');
-
-			if (vm.$children[0]) {
-				vm.$children[0].$data.isUpdatingSharedData = true;
-				vm.$children[0].$data.shared = update;
-				vm.$children[0].$data.isUpdatingSharedData = false;
+			let item = update.item;
+			if (vm.$children[0] && vm.$children[0].$data[item] != update.payload) {
+				vm.$children[0].$data[item] = update.payload;
 			}
 		});
 	}
