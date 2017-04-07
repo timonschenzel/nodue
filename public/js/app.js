@@ -14236,12 +14236,20 @@ module.exports = function () {
 						component.sharedDataItems.forEach(function (sharedDataItem) {
 							component.watch[sharedDataItem] = {
 								handler: function handler(update, oldVal) {
-									console.log('update!');
-									socket.emit('sharedDataUpdate', {
-										item: sharedDataItem,
-										url: window.location.pathname,
-										payload: update
-									});
+									var internal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+									console.log(update);
+									if (!update.fromServer) {
+										socket.emit('sharedDataUpdate', {
+											item: sharedDataItem,
+											url: window.location.pathname,
+											payload: update
+										});
+									} else if ((typeof update === 'undefined' ? 'undefined' : _typeof(update)) == 'object' && update.payload) {
+										console.log('update payload!');
+										console.log(this);
+										this.watch[sharedDataItem].handler(update.payload, update.payload, true);
+									}
 								},
 								deep: true
 							};
@@ -14284,7 +14292,7 @@ module.exports = function () {
 				console.log('shared date update!');
 				var item = update.item;
 				if (vm.$children[0] && vm.$children[0].$data[item] != update.payload) {
-					vm.$children[0].$data[item] = update.payload;
+					vm.$children[0].$data[item] = update;
 				}
 			});
 		}
