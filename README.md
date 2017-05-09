@@ -16,8 +16,8 @@ You have some options here, if you want to use option 3 or 4 install nodemon glo
 
 1. `npm run nodue` - This will boot Nodue (for production)
 2. `npm run nodue hot` - This will boot Nodue with hot reload feature
-3. `npm run nodue:dev` - This will boot Nodue with nodemon, nodemon will watch every change (excluded controller/view files) and will reboot Nodue automaticaly when changing something. 
-4. `npm run nodue-dev` - This will boot Nodue with nodemon, nodemon will watch every change (excluded controller/view files) and will reboot Nodue automaticaly when changing something. And will start Laravel Mix.
+3. `npm run nodue:dev` - This will boot Nodue with nodemon, nodemon will watch every change (excluded controller/view files) and will reboot Nodue automaticaly when changing something. And will start Laravel Mix.
+4. `npm run nodue-dev` - This will boot Nodue with nodemon, nodemon will watch every change (excluded controller/view files) and will reboot Nodue automaticaly when changing something.
 
 ## Workflow example
 For example: you want to create a welcome page.
