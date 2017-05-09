@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "auto-loader": "^0.2.0",
-    "ava": "^0.18.1",
+    "ava": "^0.19.1",
     "axios": "^0.15.3",
     "bookshelf": "^0.10.3",
     "bulma": "^0.2.1",
