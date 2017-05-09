@@ -1,6 +1,9 @@
 # Nodue
 Expressive Node.js + Vue.js framework with hot reload
 
+## Node.js
+Install current version from Node.js (not LTS): https://nodejs.org/en/download/current
+
 ## Install
 1. git clone https://github.com/timonSchenzel/nodue.git
 2. cd nodue
@@ -13,8 +16,8 @@ You have some options here, if you want to use option 3 or 4 install nodemon glo
 
 1. `npm run nodue` - This will boot Nodue (for production)
 2. `npm run nodue hot` - This will boot Nodue with hot reload feature
-3. `npm run nodue:dev` - This will boot Nodue with nodemon, nodemon will watch every change (excluded controller/view files) and will reboot Nodue automaticaly when changing something.
-4. `npm run nodue:dev hot` - This will boot Nodue with nodemon and hot reload
+3. `npm run nodue:dev` - This will boot Nodue with nodemon, nodemon will watch every change (excluded controller/view files) and will reboot Nodue automaticaly when changing something. And will start Laravel Mix.
+4. `npm run nodue-dev` - This will boot Nodue with nodemon, nodemon will watch every change (excluded controller/view files) and will reboot Nodue automaticaly when changing something.
 
 ## Workflow example
 For example: you want to create a welcome page.
@@ -89,7 +92,7 @@ View behavior will give us the possibility interact with a view without reloadin
 }
 ```
 
-6. View files and view behavior files will use Vue.js, for more information view: https://vuejs.org/v2/guide/.
+7. View files and view behavior files will use Vue.js, for more information view: https://vuejs.org/v2/guide/.
 
 ## Hot Reload
 The best part.
