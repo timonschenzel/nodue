@@ -25,4 +25,9 @@ module.exports = class PagesController extends Controller
 	{
 		return `Contact page, message: ${message}`;
 	}
+
+	hello()
+	{
+		return `Hello World.`;
+	}
 }

@@ -17,33 +17,39 @@ module.exports = class HotReload
 
 	start()
 	{
+		console.log('Start hot reload feature.');
+
 		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\..|\/node_modules|\/database|\/storage/ }).on('all', async (event, path) => {
 			if (fs.lstatSync(path).isFile() && app.isRunning) {
-				let url = false;
+				let urls = false;
 
 				if (this.views[path] !== undefined) {
-					url = this.views[path];
+					urls = this.views[path];
 				}
 
 				if (this.behaviors[path] !== undefined) {
-					url = this.behaviors[path];
+					urls = this.behaviors[path];
 				}
 
 				if (this.controllers[path] !== undefined) {
-					url = this.controllers[path];
+					urls = this.controllers[path];
 					// Delete reference in cache
 					delete require.cache[require.resolve(path)];
 					// Renew the object in cache
 					require(path);
 				}
 
-				let viewPath = app.path(path.split(app.basePath)[1]);
-			 	let page = this.pages[url];
-			 	let template = fs.readFileSync(path, 'utf8');
+			 	urls.forEach(async (url) => {
+		 			let viewPath = app.path(path.split(app.basePath)[1]);
+		 		 	let page = this.pages[url];
+		 		 	let template = fs.readFileSync(path, 'utf8');
 
-			 	if (page) {
-			 		await this.pushContentUpdate(url, page, template);
-			 	}
+		 		 	console.log(url);
+
+		 		 	if (page) {
+		 		 		await this.pushContentUpdate(url, page, template);
+		 		 	}
+			 	});
 		 	}
 		});
 	}
@@ -81,8 +87,16 @@ module.exports = class HotReload
 				layout: layoutName,
 			};
 
-			this.controllers[controllerPath] = endpoint;
-			this.views[viewPath] = endpoint;
+			if (! this.controllers[controllerPath]) {
+				this.controllers[controllerPath] = [];
+			}
+
+			if (! this.views[viewPath]) {
+				this.views[viewPath] = [];
+			}
+
+			this.controllers[controllerPath].push(endpoint);
+			this.views[viewPath].push(endpoint);
 			if (layoutName) {
 				if (! this.layouts[layoutName]) {
 					this.layouts[layoutName] = [];
