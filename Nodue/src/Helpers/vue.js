@@ -22,7 +22,7 @@ module.exports = {
 
 		return {
 			name: pathExpression.split('.').join('-'),
-			template: template,
+			template: `<app>${template}</app>`,
 			data: data,
 			behavior: behavior,
 		};

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 61);
+/******/ 	return __webpack_require__(__webpack_require__.s = 62);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -289,7 +289,7 @@ var keys = __webpack_require__(38);
 var hasBinary = __webpack_require__(10);
 var sliceBuffer = __webpack_require__(27);
 var after = __webpack_require__(26);
-var utf8 = __webpack_require__(59);
+var utf8 = __webpack_require__(60);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
@@ -13910,12 +13910,12 @@ module.exports = function () {
 	}, {
 		key: 'loadVuex',
 		value: function loadVuex() {
-			window.Vuex = __webpack_require__(57).default;
+			window.Vuex = __webpack_require__(58).default;
 		}
 	}, {
 		key: 'loadVue',
 		value: function loadVue() {
-			window.Vue = __webpack_require__(56);
+			window.Vue = __webpack_require__(57);
 
 			Vue.use(Vuex);
 
@@ -13938,6 +13938,11 @@ module.exports = function () {
 					}
 				}
 			});
+		}
+	}, {
+		key: 'createAppComponent',
+		value: function createAppComponent() {
+			Vue.component('app', { template: '<div><slot></slot></div>' });
 		}
 	}, {
 		key: 'createGlobalComponents',
@@ -14134,7 +14139,7 @@ module.exports = function () {
    * The bootstrap tasks for Nodue frontend.
    */
 		get: function get() {
-			return ['loadSocketIO', 'loadjQuery', 'loadVuex', 'loadVue', 'createGlobalComponents', 'createLayoutComponents', 'connectWithServer', 'mapAnchorElements', 'handlePopstate', 'createComponentFunction', 'processNewPageContent', 'processLayoutUpdates', 'processSharedDateUpdates'];
+			return ['loadSocketIO', 'loadjQuery', 'loadVuex', 'loadVue', 'createAppComponent', 'createGlobalComponents', 'createLayoutComponents', 'connectWithServer', 'mapAnchorElements', 'handlePopstate', 'createComponentFunction', 'processNewPageContent', 'processLayoutUpdates', 'processSharedDateUpdates'];
 		}
 	}]);
 
@@ -14930,7 +14935,7 @@ try {
 ;(function () {
   // Detect the `define` function exposed by asynchronous module loaders. The
   // strict `define` check is necessary for compatibility with `r.js`.
-  var isLoader = "function" === "function" && __webpack_require__(58);
+  var isLoader = "function" === "function" && __webpack_require__(59);
 
   // A set of types used to distinguish objects from primitives.
   var objectTypes = {
@@ -17678,7 +17683,7 @@ var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(60);
+    NodeWebSocket = __webpack_require__(61);
   } catch (e) { }
 }
 
@@ -18628,7 +18633,8 @@ function toArray(list, index) {
 
 
 /***/ }),
-/* 56 */
+/* 56 */,
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28266,7 +28272,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15), __webpack_require__(0)))
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29080,7 +29086,7 @@ var index_esm = {
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -29089,7 +29095,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/wtf8 v1.0.0 by @mathias */
@@ -29329,13 +29335,13 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(24);

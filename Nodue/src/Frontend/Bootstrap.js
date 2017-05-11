@@ -10,6 +10,7 @@ module.exports = class Bootstrap
 			'loadjQuery',
 			'loadVuex',
 			'loadVue',
+			'createAppComponent',
 			'createGlobalComponents',
 			'createLayoutComponents',
 			'connectWithServer',
@@ -62,6 +63,11 @@ module.exports = class Bootstrap
 				}
 			}
 		});
+	}
+
+	createAppComponent()
+	{
+		Vue.component('app', {template: '<div><slot></slot></div>'});
 	}
 
 	createGlobalComponents()
