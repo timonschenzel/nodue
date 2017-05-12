@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 62);
+/******/ 	return __webpack_require__(__webpack_require__.s = 61);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -289,7 +289,7 @@ var keys = __webpack_require__(38);
 var hasBinary = __webpack_require__(10);
 var sliceBuffer = __webpack_require__(27);
 var after = __webpack_require__(26);
-var utf8 = __webpack_require__(60);
+var utf8 = __webpack_require__(59);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
@@ -13908,14 +13908,19 @@ module.exports = function () {
 			window.$ = __webpack_require__(13);
 		}
 	}, {
+		key: 'loadPretty',
+		value: function loadPretty() {
+			window.pretty = __webpack_require__(65).pretty;
+		}
+	}, {
 		key: 'loadVuex',
 		value: function loadVuex() {
-			window.Vuex = __webpack_require__(58).default;
+			window.Vuex = __webpack_require__(57).default;
 		}
 	}, {
 		key: 'loadVue',
 		value: function loadVue() {
-			window.Vue = __webpack_require__(57);
+			window.Vue = __webpack_require__(56);
 
 			Vue.use(Vuex);
 
@@ -13940,9 +13945,21 @@ module.exports = function () {
 			});
 		}
 	}, {
-		key: 'createAppComponent',
-		value: function createAppComponent() {
-			Vue.component('app', { template: '<div><slot></slot></div>' });
+		key: 'createViewPresentationComponent',
+		value: function createViewPresentationComponent() {
+			Vue.component('view-presentation', { template: '<div><slot></slot></div>' });
+		}
+	}, {
+		key: 'createStringPresentationComponent',
+		value: function createStringPresentationComponent() {
+			Vue.component('string-presentation', { template: '\n\t\t\t<section class="hero hero-body is-fullheight is-primary">\n\t\t\t\t<div class="hero-body">\n\t\t\t\t\t<div class="container has-text-centered">\n\t\t\t\t\t\t<h3 class="title is-2">\n\t\t\t\t\t\t\t<slot></slot>\n\t\t\t\t\t\t</h3>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</section>'
+			});
+		}
+	}, {
+		key: 'createObjectPresentationComponent',
+		value: function createObjectPresentationComponent() {
+			Vue.component('object-presentation', { template: '\n\t\t\t<section class="hero hero-body is-fullheight is-primary">\n\t\t\t\t<div class="hero-body">\n\t\t\t\t\t<div class="container">\n\t\t\t\t\t\t<h3 class="title is-2">\n\t\t\t\t\t\t\t<slot></slot>\n\t\t\t\t\t\t</h3>\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\t\t\t</section>'
+			});
 		}
 	}, {
 		key: 'createGlobalComponents',
@@ -14139,7 +14156,7 @@ module.exports = function () {
    * The bootstrap tasks for Nodue frontend.
    */
 		get: function get() {
-			return ['loadSocketIO', 'loadjQuery', 'loadVuex', 'loadVue', 'createAppComponent', 'createGlobalComponents', 'createLayoutComponents', 'connectWithServer', 'mapAnchorElements', 'handlePopstate', 'createComponentFunction', 'processNewPageContent', 'processLayoutUpdates', 'processSharedDateUpdates'];
+			return ['loadSocketIO', 'loadjQuery', 'loadPretty', 'loadVuex', 'loadVue', 'createViewPresentationComponent', 'createStringPresentationComponent', 'createObjectPresentationComponent', 'createGlobalComponents', 'createLayoutComponents', 'connectWithServer', 'mapAnchorElements', 'handlePopstate', 'createComponentFunction', 'processNewPageContent', 'processLayoutUpdates', 'processSharedDateUpdates'];
 		}
 	}]);
 
@@ -14935,7 +14952,7 @@ try {
 ;(function () {
   // Detect the `define` function exposed by asynchronous module loaders. The
   // strict `define` check is necessary for compatibility with `r.js`.
-  var isLoader = "function" === "function" && __webpack_require__(59);
+  var isLoader = "function" === "function" && __webpack_require__(58);
 
   // A set of types used to distinguish objects from primitives.
   var objectTypes = {
@@ -17683,7 +17700,7 @@ var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(61);
+    NodeWebSocket = __webpack_require__(60);
   } catch (e) { }
 }
 
@@ -18633,8 +18650,7 @@ function toArray(list, index) {
 
 
 /***/ }),
-/* 56 */,
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28272,7 +28288,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15), __webpack_require__(0)))
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29086,7 +29102,7 @@ var index_esm = {
 
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -29095,7 +29111,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/wtf8 v1.0.0 by @mathias */
@@ -29335,17 +29351,227 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(24);
 module.exports = __webpack_require__(25);
+
+
+/***/ }),
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports.pretty = function(jsObject, indentLength, outputTo, fullFunction) {
+    var indentString,
+        newLine,
+        newLineJoin,
+        TOSTRING,
+        TYPES,
+        valueType,
+        repeatString,
+        prettyObject,
+        prettyObjectJSON,
+        prettyObjectPrint,
+        prettyArray,
+        functionSignature,
+        pretty,
+        visited;
+
+    TOSTRING = Object.prototype.toString;
+
+    TYPES = {
+        'undefined': 'undefined',
+        'number': 'number',
+        'boolean': 'boolean',
+        'string': 'string',
+        '[object Function]': 'function',
+        '[object RegExp]': 'regexp',
+        '[object Array]': 'array',
+        '[object Date]': 'date',
+        '[object Error]': 'error'
+    };
+
+    if (!Object.keys) {
+        Object.keys = (function() {
+            'use strict';
+            var hasOwnProperty = Object.prototype.hasOwnProperty,
+                hasDontEnumBug = !({
+                    toString: null
+                }).propertyIsEnumerable('toString'),
+                dontEnums = [
+                    'toString',
+                    'toLocaleString',
+                    'valueOf',
+                    'hasOwnProperty',
+                    'isPrototypeOf',
+                    'propertyIsEnumerable',
+                    'constructor'
+                ],
+                dontEnumsLength = dontEnums.length;
+
+            return function(obj) {
+                if (typeof obj !== 'function' && (typeof obj !== 'object' || obj === null)) {
+                    throw new TypeError('Object.keys called on non-object');
+                }
+
+                var result = [],
+                    prop, i;
+
+                for (prop in obj) {
+                    if (hasOwnProperty.call(obj, prop)) {
+                        result.push(prop);
+                    }
+                }
+
+                if (hasDontEnumBug) {
+                    for (i = 0; i < dontEnumsLength; i++) {
+                        if (hasOwnProperty.call(obj, dontEnums[i])) {
+                            result.push(dontEnums[i]);
+                        }
+                    }
+                }
+                return result;
+            };
+        }());
+    }
+
+    valueType = function(o) {
+        var type = TYPES[typeof o] || TYPES[TOSTRING.call(o)] || (o ? 'object' : 'null');
+        return type;
+    };
+
+    repeatString = function(src, length) {
+        var dst = '',
+            index;
+        for (index = 0; index < length; index += 1) {
+            dst += src;
+        }
+
+        return dst;
+    };
+
+    prettyObjectJSON = function(object, indent) {
+        var value = [],
+            property;
+
+        indent += indentString;
+        Object.keys(object).forEach(function (property) {
+            value.push(indent + '"' + property + '": ' + pretty(object[property], indent));
+        });
+
+        return value.join(newLineJoin) + newLine;
+    };
+
+    prettyObjectPrint = function(object, indent) {
+        var value = [],
+            property;
+
+        indent += indentString;
+        Object.keys(object).forEach(function (property) {
+            value.push(indent + property + ': ' + pretty(object[property], indent));
+        });
+        return value.join(newLineJoin) + newLine;
+    };
+
+    prettyArray = function(array, indent) {
+        var index,
+            length = array.length,
+            value = [];
+
+        indent += indentString;
+        for (index = 0; index < length; index += 1) {
+            value.push(pretty(array[index], indent, indent));
+        }
+
+        return value.join(newLineJoin) + newLine;
+    };
+
+    functionSignature = function(element) {
+        var signatureExpression,
+            signature;
+
+        element = element.toString();
+        signatureExpression = new RegExp('function\\s*.*\\s*\\(.*\\)');
+        signature = signatureExpression.exec(element);
+        signature = signature ? signature[0] : '[object Function]';
+        return fullFunction ? element : '"' + signature + '"';
+    };
+
+    pretty = function(element, indent, fromArray) {
+        var type;
+
+        type = valueType(element);
+        fromArray = fromArray || '';
+        if (visited.indexOf(element) === -1) {
+            switch (type) {
+                case 'array':
+                    visited.push(element);
+                    return fromArray + '[' + newLine + prettyArray(element, indent) + indent + ']';
+
+                case 'boolean':
+                    return fromArray + (element ? 'true' : 'false');
+
+                case 'date':
+                    return fromArray + '"' + element.toString() + '"';
+
+                case 'number':
+                    return fromArray + element;
+
+                case 'object':
+                    visited.push(element);
+                    return fromArray + '{' + newLine + prettyObject(element, indent) + indent + '}';
+
+                case 'string':
+                    return fromArray + JSON.stringify(element);
+
+                case 'function':
+                    return fromArray + functionSignature(element);
+
+                case 'undefined':
+                    return fromArray + 'undefined';
+
+                case 'null':
+                    return fromArray + 'null';
+
+                default:
+                    if (element.toString) {
+                        return fromArray + '"' + element.toString() + '"';
+                    }
+                    return fromArray + '<<<ERROR>>> Cannot get the string value of the element';
+            }
+        }
+        return fromArray + 'circular reference to ' + element.toString();
+    };
+
+    if (jsObject) {
+        if (indentLength === undefined) {
+            indentLength = 4;
+        }
+
+        outputTo = (outputTo || 'print').toLowerCase();
+        indentString = repeatString(outputTo === 'html' ? '&nbsp;' : ' ', indentLength);
+        prettyObject = outputTo === 'print' ? prettyObjectPrint : prettyObjectJSON;
+        newLine = outputTo === 'html' ? '<br/>' : '\n';
+        newLineJoin = ',' + newLine;
+        visited = [];
+        return pretty(jsObject, '') + newLine;
+    }
+
+    return 'Error: no Javascript object provided';
+};
 
 
 /***/ })

@@ -8,6 +8,7 @@ module.exports = class Bootstrap
 		return [
 			'loadSugarModule',
 			'bootSupport',
+			'loadPretty',
 			'loadPluralizeModule',
 			'loadEnvFile',
 			'loadNodueFiles',
@@ -52,6 +53,11 @@ module.exports = class Bootstrap
 				app.fileLoader.load(`Nodue/src/Support/${path}.js`);
 			}
 		});
+	}
+
+	loadPretty()
+	{
+		global.pretty = require('js-object-pretty-print').pretty;
 	}
 
 	loadPluralizeModule()

@@ -44,10 +44,25 @@ module.exports = class Request
 		
 		let response = await controller[controllerFunctionName](...parameters);
 
+		return this.processResponse(response, expression);
+
+	}
+
+	processResponse(response, expression)
+	{
+		if (response instanceof VueComponent == false) {
+			expression = expression.replace('Controller', '');
+			response = new VueComponent({
+				type: typeof response,
+				name: expression.split('@').join('-'),
+				data: {data: response},
+			});
+		}
+
 		if (typeof response == 'object') {
 			response.url = this.url;
 		}
-		
+
 		return response;
 	}
 

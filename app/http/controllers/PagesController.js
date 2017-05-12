@@ -23,11 +23,11 @@ module.exports = class PagesController extends Controller
 
 	contact(message)
 	{
-		return `Contact page, message: ${message}`;
+		return `Contact page 2, message: ${message}`;
 	}
 
 	hello()
 	{
-		return `Hello World.`;
+		return 'Hello World.';
 	}
 }

@@ -8,9 +8,12 @@ module.exports = class Bootstrap
 		return [
 			'loadSocketIO',
 			'loadjQuery',
+			'loadPretty',
 			'loadVuex',
 			'loadVue',
-			'createAppComponent',
+			'createViewPresentationComponent',
+			'createStringPresentationComponent',
+			'createObjectPresentationComponent',
 			'createGlobalComponents',
 			'createLayoutComponents',
 			'connectWithServer',
@@ -31,6 +34,11 @@ module.exports = class Bootstrap
 	loadjQuery()
 	{
 		window.$ = require('jquery');
+	}
+
+	loadPretty()
+	{
+		window.pretty = require('js-object-pretty-print').pretty;
 	}
 
 	loadVuex()
@@ -65,9 +73,39 @@ module.exports = class Bootstrap
 		});
 	}
 
-	createAppComponent()
+	createViewPresentationComponent()
 	{
-		Vue.component('app', {template: '<div><slot></slot></div>'});
+		Vue.component('view-presentation', {template: `<div><slot></slot></div>`});
+	}
+	
+	createStringPresentationComponent()
+	{
+		Vue.component('string-presentation', {template: `
+			<section class="hero hero-body is-fullheight is-primary">
+				<div class="hero-body">
+					<div class="container has-text-centered">
+						<h3 class="title is-2">
+							<slot></slot>
+						</h3>
+					</div>
+				</div>
+			</section>`
+		});
+	}
+
+	createObjectPresentationComponent()
+	{
+		Vue.component('object-presentation', {template: `
+			<section class="hero hero-body is-fullheight is-primary">
+				<div class="hero-body">
+					<div class="container">
+						<h3 class="title is-2">
+							<slot></slot>
+						</h3>
+					</div>
+				</div>
+			</section>`
+		});
 	}
 
 	createGlobalComponents()

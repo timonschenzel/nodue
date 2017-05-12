@@ -20,11 +20,13 @@ module.exports = {
 			behavior = fs.readFileSync(behaviorPath, 'utf8');
 		}
 
-		return {
+
+		return new VueComponent({
+			type: 'view',
 			name: pathExpression.split('.').join('-'),
-			template: `<app>${template}</app>`,
+			template: template,
 			data: data,
 			behavior: behavior,
-		};
+		});
 	},
 }
