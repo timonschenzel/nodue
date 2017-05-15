@@ -1,4 +1,4 @@
-module.exports = {'app-layout': `<div>
+module.exports = {'app--layout': `<div>
 	<section class="hero is-primary is-bold">
 		<div class="hero-body">
 			<div class="container">
@@ -22,7 +22,7 @@ module.exports = {'app-layout': `<div>
 
 		<footer-layout></footer-layout>
 	</div>
-</div>`,'footer-layout': `<footer class="footer">
+</div>`,'footer--layout': `<footer class="footer">
 	<div class="container">
 		<div class="content has-text-centered">
 			<p>
@@ -33,7 +33,7 @@ module.exports = {'app-layout': `<div>
 			</p>
 		</div>
 	</div>
-</footer>`,'homepage-layout': `<div>
+</footer>`,'homepage--layout': `<div>
 	<section class="hero is-primary">
 		<div class="hero-body">
 			<div class="container">

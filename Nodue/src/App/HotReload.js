@@ -17,7 +17,7 @@ module.exports = class HotReload
 
 	start()
 	{
-		console.log('Start hot reload feature.');
+		console.log('[info] Start hot reload feature.');
 
 		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\..|\/node_modules|\/database|\/storage/ }).on('all', async (event, path) => {
 			if (fs.lstatSync(path).isFile() && app.isRunning) {
@@ -39,17 +39,17 @@ module.exports = class HotReload
 					require(path);
 				}
 
-			 	urls.forEach(async (url) => {
-		 			let viewPath = app.path(path.split(app.basePath)[1]);
-		 		 	let page = this.pages[url];
-		 		 	let template = fs.readFileSync(path, 'utf8');
+				if (urls && typeof urls == 'object') {
+				 	urls.forEach(async (url) => {
+			 			let viewPath = app.path(path.split(app.basePath)[1]);
+			 		 	let page = this.pages[url];
+			 		 	let template = fs.readFileSync(path, 'utf8');
 
-		 		 	console.log(url);
-
-		 		 	if (page) {
-		 		 		await this.pushContentUpdate(url, page, template);
-		 		 	}
-			 	});
+			 		 	if (page) {
+			 		 		await this.pushContentUpdate(url, page, template);
+			 		 	}
+				 	});
+			 	}
 		 	}
 		});
 	}

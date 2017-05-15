@@ -44,6 +44,7 @@
     "vue-timeago": "^3.0.4"
   },
   "dependencies": {
+    "better-sqlite3": "^2.3.3",
     "bulma": "^0.2.3",
     "js-object-pretty-print": "^0.3.0",
     "serve-favicon": "^2.4.2",

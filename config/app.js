@@ -31,6 +31,7 @@ module.exports = {
 	references: {
 		Controller: 'Http.Controller',
 		Model: 'ORM.Model',
+		NativeModel: 'ORM.NativeModel',
 		TestCase: 'Testing.TestCase',
 		VueComponent: 'App.VueComponent',
 		VueTester: 'Testing.VueTester',

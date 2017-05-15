@@ -4,6 +4,7 @@ module.exports = `<app-layout>
 
 	<div>
 		<h2>{{ product.name }}&nbsp;&mdash;&nbsp;#{{ product.id }}</h2>
+		<p>Product name is {{ product.name }}</p>
 		<hr>
 		<button class="button is-primary" @click="log">Log something</button>
 		<hr>

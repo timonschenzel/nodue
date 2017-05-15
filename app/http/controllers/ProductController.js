@@ -14,7 +14,7 @@ module.exports = class PagesController extends Controller
 
 	async show(id)
 	{
-		let product = await Product.find(id);
+		let product = Product.find(id);
 
 		let title = 'Products';
 		let slogan = 'This is great!';

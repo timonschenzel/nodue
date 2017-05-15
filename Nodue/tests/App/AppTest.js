@@ -104,5 +104,7 @@ module.exports = class AppTest extends TestCase
 		}, app.config('database'));
 
 		this.assertEquals('nodue', app.config('database.table.name'));
+
+		app.bootstrapper.loadConfigFiles();
 	}
 }
