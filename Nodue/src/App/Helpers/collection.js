@@ -11,38 +11,38 @@ module.exports = {
 	
 	collect(data)
 	{
-		console.log(typeof data);
-
-		if (typeof data == 'boolean') {
-
+		if (typeof data == 'undefined') {
+			return Sugar.Object;
 		}
 
 		if (typeof data == 'null') { // is object
-
+			return Sugar.Object;
 		}
 
-		if (typeof data == 'undefined') {
-
-		}
-
-		if (typeof data == 'number') {
-
-		}
-
-		if (typeof data == 'string') {
-
-		}
-
-		if (typeof data == 'object') {
-			// return Nodue.Nodue.Object(data);
-		}
-
-		if (typeof data == 'array') { // is object
-
+		if (typeof data == 'boolean') {
+			return data;
 		}
 
 		if (typeof data == 'symbol') {
-
+			return data;
 		}
+
+		if (typeof data == 'number') {
+			return Sugar.Number(data);
+		}
+
+		if (typeof data == 'string') {
+			return Sugar.String(data);
+		}
+
+		if (typeof data == 'object') {
+			return Sugar.Object(data);
+		}
+
+		if (typeof data == 'array') { // is object
+			return Sugar.Array(data);
+		}
+
+		return data;
 	}
 }

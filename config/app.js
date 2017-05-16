@@ -18,6 +18,7 @@ module.exports = {
 	 * Class instances.
 	 */
 	instances: {
+		DB: 'Database.Query.Builder',
 		route: 'Router.Router',
 		request: 'Http.Request',
 		server: 'App.Server',
