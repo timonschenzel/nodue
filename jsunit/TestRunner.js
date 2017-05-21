@@ -14,6 +14,8 @@ module.exports = class TestRunner
 
 		this.process = processData;
 
+		this.root = this.pathModule.normalize(__dirname + '/../');
+
 		this.pwd = processData.env.PWD + '/';
 
 		this.config = {};
@@ -148,7 +150,7 @@ module.exports = class TestRunner
 
 	path(additionalPath)
 	{
-		return this.pathModule.normalize(this.pwd + additionalPath);
+		return this.pathModule.normalize(this.root + additionalPath);
 	}
 
 	loadFilesFrom(path)
