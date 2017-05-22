@@ -7,7 +7,7 @@ module.exports = class AppTest extends TestCase
 
 		app.basePath = '/Projects/nodue/bootstrap/../';
 
-		this.assertEquals('/Projects/nodue/test_folder', app.path('test_folder'));
+		this.assertEquals(path.normalize('/Projects/nodue/test_folder'), app.path('test_folder'));
 
 		app.basePath = realPath;
 	}
