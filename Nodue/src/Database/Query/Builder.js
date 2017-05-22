@@ -46,22 +46,63 @@ module.exports = class Builder
 	    ];
 	}
 
-	from(table)
+	static table(table)
 	{
-		this._from = table;
+		let builder = new this;
 
-		return this;
+		builder._from = table;
+
+		return builder;
 	}
 
-	where(field, value = null)
+	static from(table)
 	{
+		return Builder.table(table);
+	}
+
+	where(field, operator, value = null)
+	{
+		if (! value && operator) {
+			value = operator;
+			operator = '=';
+		}
+
 		if (field && value) {
-			this._wheres[field] = value;
+			this._wheres[field] = {
+				value: value,
+				operator: operator,
+			};
 		}
 
 		if (typeof field == 'object') {
 			collect(field).forEach((subValue, subField) => {
-				this._wheres[subField] = subValue;
+				if (typeof subValue == 'object') {
+					collect(field).forEach((subSubFilter) => {
+						let subSubField = null;
+						let subSubOperator = null;
+						let subSubValue = null;
+
+						if(subSubFilter.length == 2) {
+							subSubField = subSubFilter[0];
+							subSubOperator = '=';
+							subSubValue = subSubFilter[1];
+						} else {
+							subSubField = subSubFilter[0];
+							subSubOperator = subSubFilter[1];
+							subSubValue = subSubFilter[2];
+						}
+
+						this._wheres[subSubField] = {
+							value: subSubValue,
+							operator: subSubOperator,
+						};
+					});
+				} else {
+					this._wheres[subField] = {
+						value: subValue,
+						operator: '=',
+					};
+				}
 			});
 		}
 
@@ -82,23 +123,27 @@ module.exports = class Builder
 	{
 		let where = '';
 
-		collect(this._wheres).forEach((value, field) => {
+		collect(this._wheres).forEach((fieldData, field) => {
 			if (where != '') {
 				where += ' AND ';
 			}
 
-			if (typeof value != 'number' || value.toString().includes('.') || value.toString().includes(',')) {
-				value = '"' + value + '"';
+			if (typeof fieldData['value'] != 'number' || fieldData['value'].toString().includes('.') || fieldData['value'].toString().includes(',')) {
+				fieldData['value'] = '"' + fieldData['value'] + '"';
 			}
 
-			where += field + ' = ' + value;
+			where += field + ' ' + fieldData['operator'] + ' ' + fieldData['value'];
 		});
 
-		return where;
+		if (! where) {
+			return '';
+		}
+
+		return ` WHERE ${where}`;
 	}
 
 	toString()
 	{
-		return `SELECT * FROM ${this._from} WHERE ${this.buildWhereClause()}`;
+		return `SELECT * FROM ${this._from}${this.buildWhereClause()}`;
 	}
 }

@@ -18,7 +18,6 @@ module.exports = {
 	 * Class instances.
 	 */
 	instances: {
-		DB: 'Database.Query.Builder',
 		route: 'Router.Router',
 		request: 'Http.Request',
 		server: 'App.Server',
@@ -30,6 +29,7 @@ module.exports = {
 	 * Class references.
 	 */
 	references: {
+		DB: 'Database.Query.Builder',
 		Controller: 'Http.Controller',
 		Model: 'ORM.Model',
 		NativeModel: 'ORM.NativeModel',
