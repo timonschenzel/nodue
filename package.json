@@ -11,8 +11,8 @@
     "nodue-dev": "nodemon --watch routes.js --watch app --watch config --watch Nodue/src --harmony-async-await index.js -- dev",
     "nodue:dev": "concurrently \"npm run nodue-dev hot\" \"npm run webpack-silent\"",
     "testskarma": "karma start karma.conf.js --log-level debug --single-run",
-    "test": "node --harmony-async-await node_modules/ava/cli.js jsunit/jsunit.js",
-    "tests": "node --harmony-async-await node_modules/ava/cli.js jsunit/jsunit.js"
+    "test": "node --harmony-async-await node_modules/ava/cli.js jsunit/jsunit.js || true",
+    "tests": "node --harmony-async-await node_modules/ava/cli.js jsunit/jsunit.js || true"
   },
   "devDependencies": {
     "auto-loader": "^0.2.0",
