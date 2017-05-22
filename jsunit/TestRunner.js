@@ -58,9 +58,13 @@ module.exports = class TestRunner
 
 	async test()
 	{
+		console.time('Time');
+
 		for (let location in this.locations) {
 			await this.runTestsInLocation(location);
 		}
+
+		console.timeEnd('Time');
 	}
 
 	async runTestsInClass(testClass, path, location)
