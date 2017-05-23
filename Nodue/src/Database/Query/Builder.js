@@ -7,7 +7,7 @@ module.exports = class Builder
 
 		this._connection = null;
 
-		this._binding = {
+		this._bindings = {
 	        'select': {},
 	        'join': {},
 	        'where': {},
@@ -16,7 +16,7 @@ module.exports = class Builder
 	        'union': {},
 	    };
 
-		this._columns = {};
+		this._columns = ['*'];
 
 		this._distinct = false;
 
@@ -46,6 +46,11 @@ module.exports = class Builder
 	    ];
 	}
 
+	static raw(sql)
+	{
+		return sql;
+	}
+
 	static table(table)
 	{
 		let builder = new this;
@@ -60,51 +65,69 @@ module.exports = class Builder
 		return Builder.table(table);
 	}
 
-	where(field, operator, value = null)
+	distinct()
 	{
-		if (! value && operator) {
+		this._distinct = true;
+
+		return this;
+	}
+
+	select(...columns)
+	{
+		this._columns = columns;
+
+		return this;
+	}
+
+	where(column, operator = null, value = null)
+	{
+		let filters = [];
+
+		// Skip operator value, so the operator value will be the compare value
+		if (! value && this.operatorIsInvalid(operator)) {
 			value = operator;
 			operator = '=';
 		}
 
-		if (field && value) {
-			this._wheres[field] = {
+		// Translate seperate parameters into a filter object
+		if (typeof column != 'object' && operator && value) {
+			filters = [
+				[column, operator, value],
+			];
+		}
+
+		// No filters yet? The column parameter must contain the filters as an object
+		if (! filters.length && typeof column == 'object') {
+			filters = column;
+		}
+
+		// Parse all filters
+		collect(filters).forEach((filter, filterColumn) => {
+			let column = null;
+			let operator = null;
+			let value = null;
+
+			// Filter given as a {column: value} object
+			if (! /^\d+$/.test(filterColumn)) {
+				filter = [filterColumn, filter];
+			}
+
+			if (filter.length == 2) {
+				column = filter[0];
+				operator = '=';
+				value = filter[1];
+			} else {
+				column = filter[0];
+				operator = filter[1];
+				value = filter[2];
+			}
+
+			// Store the where filter
+			this._wheres[column] = {
 				value: value,
 				operator: operator,
 			};
-		}
-
-		if (typeof field == 'object') {
-			collect(field).forEach((subValue, subField) => {
-				if (typeof subValue == 'object') {
-					collect(field).forEach((subSubFilter) => {
-						let subSubField = null;
-						let subSubOperator = null;
-						let subSubValue = null;
-
-						if(subSubFilter.length == 2) {
-							subSubField = subSubFilter[0];
-							subSubOperator = '=';
-							subSubValue = subSubFilter[1];
-						} else {
-							subSubField = subSubFilter[0];
-							subSubOperator = subSubFilter[1];
-							subSubValue = subSubFilter[2];
-						}
-
-						this._wheres[subSubField] = {
-							value: subSubValue,
-							operator: subSubOperator,
-						};
-					});
-				} else {
-					this._wheres[subField] = {
-						value: subValue,
-						operator: '=',
-					};
-				}
-			});
-		}
+		});
 
 		return this;
 	}
@@ -116,7 +139,7 @@ module.exports = class Builder
 
 	get()
 	{
-		return this.db.prepare(`SELECT * FROM ${this._from} WHERE ${this.buildWhereClause()}`).all();
+		return this.db.prepare(this.prepare()).all(this.bindings());
 	}
 
 	buildWhereClause()
@@ -142,8 +165,64 @@ module.exports = class Builder
 		return ` WHERE ${where}`;
 	}
 
+	buildSelectClause()
+	{
+		let select = 'SELECT ';
+
+		if (this._distinct) {
+			select += 'DISTINCT ';
+		}
+
+		select += this.buildColumnsClause();
+
+		return select;
+	}
+
+	buildColumnsClause()
+	{
+		return this._columns
+			.join(', ')
+			.replace(' as ', ' AS ');
+	}
+
+	prepareWhereClause()
+	{
+		let where = '';
+
+		collect(this._wheres).forEach((fieldData, field) => {
+			this._bindings['where'][field] = fieldData['value'];
+
+			if (where != '') {
+				where += ' AND ';
+			}
+
+			where += field + ' ' + fieldData['operator'] + ' :' + field;
+		});
+
+		if (! where) {
+			return '';
+		}
+
+		return ` WHERE ${where}`;
+	}
+
+	bindings()
+	{
+		return this._bindings['where'];
+	}
+
+	operatorIsInvalid(operator)
+	{
+		return ! this._operators.includes(operator);
+	}
+
 	toString()
 	{
-		return `SELECT * FROM ${this._from}${this.buildWhereClause()}`;
+		return `${this.buildSelectClause()} FROM ${this._from}${this.buildWhereClause()}`;
+	}
+
+	prepare()
+	{
+		return `${this.buildSelectClause()} FROM ${this._from}${this.prepareWhereClause()}`;
 	}
 }

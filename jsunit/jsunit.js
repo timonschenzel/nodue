@@ -8,6 +8,20 @@ let annotations = require('./annotations');
 global.test = require('ava');
 
 /**
+ * Load figures package, will make unicode symbols available for terminal/cmd.
+ *
+ * @type {Object}
+ */
+global.figures = require('figures');
+
+/**
+ * Load chalk package, terminal/cmd string styling done right.
+ *
+ * @type {Object}
+ */
+global.chalk = require('chalk');
+
+/**
  * Load jsUnit's test runner class.
  *
  * @type {TestRunner}

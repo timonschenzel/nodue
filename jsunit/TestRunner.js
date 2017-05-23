@@ -100,8 +100,9 @@ module.exports = class TestRunner
 		    try {
 		    	await testClass[name]();
 			} catch(error) {
-				console.log('jsUnit error');
-				console.log(error);
+				console.error(chalk.red(`${figures.cross} jsUnit error`));
+				console.error(error);
+				process.exit();
 			}
 		}
 	}
