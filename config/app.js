@@ -18,6 +18,12 @@ module.exports = {
 	 * Class instances.
 	 */
 	instances: {
+		DB: function(app) {
+			let sqlite3 = require('better-sqlite3');
+			let connection = new sqlite3(database_path('database.sqlite'));
+
+			return new Nodue.Database.Query.Builder(connection);
+		},
 		route: 'Router.Router',
 		request: 'Http.Request',
 		server: 'App.Server',
@@ -29,7 +35,6 @@ module.exports = {
 	 * Class references.
 	 */
 	references: {
-		DB: 'Database.Query.Builder',
 		Controller: 'Http.Controller',
 		Model: 'ORM.Model',
 		NativeModel: 'ORM.NativeModel',

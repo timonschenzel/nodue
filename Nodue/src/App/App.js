@@ -100,6 +100,10 @@ module.exports = class App
 
 	make(expression, ...parameters)
 	{
+		if (typeof expression == 'function') {
+			return expression(app);
+		}
+		
 		let object = this.resolve(expression);
 
 		if (parameters.length == 0) {
@@ -111,6 +115,10 @@ module.exports = class App
 
 	resolve(expression)
 	{
+		if (typeof expression == 'function') {
+			return expression(app);
+		}
+
 		expression = expression.replace('/', '.');
 
 		let parts = expression.split('.');

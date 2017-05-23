@@ -1,11 +1,11 @@
 module.exports = class Builder
 {
-	constructor()
+	constructor(connection)
 	{
-		let sqlite3 = require('better-sqlite3');
-		this.db = new sqlite3(database_path('database.sqlite'));
+		// let sqlite3 = require('better-sqlite3');
+		// this.db = new sqlite3(database_path('database.sqlite'));
 
-		this._connection = null;
+		this._connection = connection;
 
 		this._bindings = {
 	        'select': {},
@@ -46,23 +46,23 @@ module.exports = class Builder
 	    ];
 	}
 
-	static raw(sql)
+	raw(sql)
 	{
 		return sql;
 	}
 
-	static table(table)
+	table(table)
 	{
-		let builder = new this;
+		let builder = new this(this._connection);
 
 		builder._from = table;
 
 		return builder;
 	}
 
-	static from(table)
+	from(table)
 	{
-		return Builder.table(table);
+		return this.table(table);
 	}
 
 	distinct()
@@ -139,7 +139,7 @@ module.exports = class Builder
 
 	get()
 	{
-		return this.db.prepare(this.prepare()).all(this.bindings());
+		return this._connection.prepare(this.prepare()).all(this.bindings());
 	}
 
 	buildWhereClause()
