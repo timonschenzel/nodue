@@ -14,15 +14,20 @@ module.exports = {
 		'Helpers',
 	],
 
+	providers: [
+		'Database.DatabaseServiceProvider',
+	],
+
 	/**
 	 * Class instances.
 	 */
 	instances: {
 		DB: function(app) {
-			let sqlite3 = require('better-sqlite3');
-			let connection = new sqlite3(database_path('database.sqlite'));
+			// let sqlite3 = require('better-sqlite3');
+			// let connection = new sqlite3(database_path('database.sqlite'));
 
-			return new Nodue.Database.Query.Builder(connection);
+			// return new Nodue.Database.Query.Builder(connection);
+			return app.make('db');
 		},
 		route: 'Router.Router',
 		request: 'Http.Request',

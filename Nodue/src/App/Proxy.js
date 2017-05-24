@@ -7,13 +7,16 @@ module.exports = {
 
 		if (typeof target[property] == 'function') {
 			return function(...args) {
-
 				return target[property](...args);
 			}
 		}
 
 		if (target[property] !== undefined) {
 			return target[property];
+		}
+
+		if (typeof property == 'symbol') {
+			return property;
 		}
 
 		if('_' + property in target) {

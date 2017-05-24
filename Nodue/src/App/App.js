@@ -9,6 +9,8 @@ module.exports = class App
 		this._hot = false;
 		this.bootstrapper = this.getClass('./Bootstrap');
 		this.fileLoader = this.getClass('./FileLoader');
+		this.bindings = {};
+		this.instances = {};
 	}
 
 	set basePath(basePath)
@@ -100,26 +102,60 @@ module.exports = class App
 
 	make(expression, ...parameters)
 	{
-		if (typeof expression == 'function') {
-			return expression(app);
+		let binding = this.build(expression);
+
+		if (binding.shared) {
+			if (! this.instances[binding.path]) {
+				if (typeof binding.concrete == 'object') {
+					this.instances[binding.path] = binding.concrete;
+				} else {
+					this.instances[binding.path] = new binding.concrete;
+				}
+			}
+
+			return this.instances[binding.path];
 		}
-		
-		let object = this.resolve(expression);
+
+		if (typeof binding.concrete == 'function' && is_closure(binding.concrete)) {
+			binding.concrete = binding.concrete(app);
+		}
 
 		if (parameters.length == 0) {
-			return new object;
+			if (typeof binding.concrete == 'object') {
+				return binding.concrete;
+			}
+
+			return new binding.concrete;
 		} else {
-			return new object(...parameters);
+			if (typeof binding.concrete == 'object') {
+				return binding.concrete(...parameters);
+			}
+
+			return new binding.concrete(...parameters);
 		}
 	}
 
 	resolve(expression)
 	{
-		if (typeof expression == 'function') {
-			return expression(app);
+		return this.build(expression).concrete;
+	}
+
+	build(expression)
+	{
+		if (typeof expression == 'string') {
+			expression = expression.replace('/', '.');
 		}
 
-		expression = expression.replace('/', '.');
+		if (this.bindings[expression]) {
+			return this.bindings[expression];
+		}
+
+		if (typeof expression == 'function') {
+			return {
+				concrete: expression(app),
+				shared: false,
+			}
+		}
 
 		let parts = expression.split('.');
 
@@ -135,7 +171,10 @@ module.exports = class App
 		}
 
 		if(object != undefined) {
-			return object;
+			return {
+				concrete: object,
+				shared: false,
+			};
 		}
 
 		// Search in Nodue folder
@@ -150,30 +189,33 @@ module.exports = class App
 		}
 
 		if(object != undefined) {
-			return object;
+			return {
+				concrete: object,
+				shared: false,
+			};
 		}
 
-		return 'not found!';
+		throw new Error(`Binding [${expression}] was not found.`);
 	}
 
-	bind(object, expression)
+	bind(abstract, concrete = null, shared = false)
 	{
-		let parts = expression.split('.');
-		let objectName = parts.pop();
-
-		let appfilesClone = AppFiles;
-		let appFileClonePointer = appfilesClone;
-
-		for (let count = 0; count < parts.length; count++) {
-			if (count == parts.length - 1) {
-				// appfilesClone[parts[count]] = object;
-				appfilesClone[parts[count]][objectName] = object;
-			} else {
-				appfilesClone[parts[count]] = AppFiles[parts[count]];
-			}
-
-			appfilesClone = appfilesClone[parts[count]];
+		if (concrete == null) {
+			concrete = abstract;
 		}
+
+		let path = abstract.replace('/', '.');
+
+		this.bindings[path] = {
+			concrete,
+			shared,
+			path,
+		};
+	}
+
+	singleton(abstract, concrete = null)
+	{
+		this.bind(abstract, concrete, true);
 	}
 
 	addProxyPart(property)

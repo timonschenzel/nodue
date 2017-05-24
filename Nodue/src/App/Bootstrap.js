@@ -19,6 +19,7 @@ module.exports = class Bootstrap
 			'initDatabaseConnection',
 			'autoload',
 			'loadHelpers',
+			'runServiceProviders',
 			'setupInstances',
 			'setupReferences',
 			'loadModels',
@@ -122,6 +123,13 @@ module.exports = class Bootstrap
 	{
 		app.config().helpers.forEach(helper => {
 			app.loadHelpersFrom(helper);
+		});
+	}
+
+	runServiceProviders()
+	{
+		app.config().providers.forEach(provider => {
+			app.make(provider).register(app);
 		});
 	}
 

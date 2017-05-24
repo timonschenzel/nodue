@@ -107,4 +107,14 @@ module.exports = class AppTest extends TestCase
 
 		app.bootstrapper.loadConfigFiles();
 	}
+
+	/** @test */
+	binding_into_the_ioc_container()
+	{
+		class Foo {};
+
+		app.bind('foo', Foo);
+		
+		this.assertEquals(new Foo, app.make('foo'));
+	}
 }
