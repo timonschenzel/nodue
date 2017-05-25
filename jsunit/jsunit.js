@@ -1,3 +1,5 @@
+let startDate = new Date();
+
 let annotations = require('./annotations');
 
 /**
@@ -48,3 +50,5 @@ jsUnit.boot();
  * Finally, Run all tests found in all the test classes.
  */
 jsUnit.test();
+
+console.info("Time: %d seconds", (new Date() - startDate) / 1000);
