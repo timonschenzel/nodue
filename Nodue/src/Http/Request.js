@@ -20,29 +20,34 @@ module.exports = class Request
 		}
 	}
 
-	async capture(expression, parameters = [])
+	async capture(routing)
 	{
+		let expression = routing.expression;
+		let parameters = routing.parameters;
+		let namedParameters = routing.namedParameters;
+
 		if (! expression) {
 			return '404';
 		}
 
 		if(typeof expression == 'function') {
-			return await expression(...parameters);
+			return await DependenciesBuilder.resolve(expression, namedParameters);
 		}
 
 		if(typeof expression == 'string') {
-			return await this.handle(expression, parameters);
+			return await this.handle(expression, namedParameters);
 		}
 	}
 
-	async handle(expression, parameters = [])
+	async handle(expression, namedParameters = [])
 	{
 		let controllerName = this.findControllerName(expression);
 		let controllerFunctionName = this.findControllerFunctionName(expression);
 
+		// Add support for constructor injection
 		let controller = app.loadController(controllerName);
 		
-		let response = await controller[controllerFunctionName](...parameters);
+		let response = await DependenciesBuilder.resolve(controller[controllerFunctionName], namedParameters);
 
 		return this.processResponse(response, expression);
 

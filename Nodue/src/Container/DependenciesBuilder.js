@@ -18,7 +18,7 @@ module.exports = class DependenciesBuilder
 		return new object(...dependencies);
 	}
 
-	resolve(closure)
+	resolve(closure, overrides = [])
 	{
 		let closureRegex = new RegExp(
 		  /(function)?\s?\((\s?.*\s?)\)(\s)?(=>)?/,
@@ -31,7 +31,7 @@ module.exports = class DependenciesBuilder
 			parameters = parameters[2];
 		}
 
-		let dependencies = DependenciesResolver.resolve(parameters);
+		let dependencies = DependenciesResolver.resolve(parameters, overrides);
 
 		return closure(...dependencies);
 	}

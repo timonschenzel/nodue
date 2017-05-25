@@ -21,8 +21,9 @@ module.exports = class PagesController extends Controller
 		});
 	}
 
-	contact(message)
+	contact(/*Controller*/ controller, message)
 	{
+		controller.testing();
 		return `Contact page 2, message: ${message}`;
 	}
 

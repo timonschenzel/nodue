@@ -60,9 +60,12 @@ module.exports = class Router
 	{
 		let urlParts = this.getParts(url);
 		let parameters = [];
+		let namedParameters = {};
 
 		for (let route in this.getRoutes) {
 			parameters = [];
+			let namedParameters = {};
+
 			let routeParts = this.getParts(route);
 
 			if (urlParts.length != routeParts.length) {
@@ -78,6 +81,7 @@ module.exports = class Router
 
 				if (routeParts[count].includes('{')) {
 					parameters.push(urlParts[urlPart]);
+					namedParameters[routeParts[count].replace('{', '').replace('}', '')] = urlParts[urlPart];
 				}
 
 				count++;
@@ -87,6 +91,7 @@ module.exports = class Router
 				return {
 					expression: this.getRoutes[route],
 					parameters: parameters,
+					namedParameters: namedParameters,
 				};
 			}
 		}

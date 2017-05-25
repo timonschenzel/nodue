@@ -1,6 +1,6 @@
 module.exports = class DependenciesResolver
 {
-	resolve(dependencies = '')
+	resolve(dependencies = '', overrides = [])
 	{
 		let resolvedDependencies = [];
 
@@ -17,6 +17,8 @@ module.exports = class DependenciesResolver
 				typeHintObject = DependenciesBuilder.build(eval(typeHint));
 
 				resolvedDependencies.push(typeHintObject);
+			} else if(overrides[dependency]) {
+				resolvedDependencies.push(overrides[dependency]);
 			}
 		});
 

@@ -94,7 +94,7 @@ module.exports = class App
 	{
 		let routing = route.direct(request.url);
 
-		let response = request.capture(routing.expression, routing.parameters);
+		let response = request.capture(routing);
 
 		return response;
 		// return this.make('Http.Response', response);
