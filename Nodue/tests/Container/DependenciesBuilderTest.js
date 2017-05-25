@@ -30,9 +30,9 @@ module.exports = class DependenciesBuilderTest extends TestCase
 			return foo;
 		};
 
-		let depencency = DependenciesBuilder.resolve(closure);
+		let dependency = DependenciesBuilder.resolve(closure);
 
-		this.assertEquals(new Foo(new Bar(new Baz)), depencency);
+		this.assertEquals(new Foo(new Bar(new Baz)), dependency);
 	}
 
 	/** @test */
@@ -46,9 +46,9 @@ module.exports = class DependenciesBuilderTest extends TestCase
 			return foo;
 		};
 
-		let depencency = DependenciesBuilder.resolve(closure);
+		let dependency = DependenciesBuilder.resolve(closure);
 
-		this.assertEquals(new Foo(new Bar(new Baz)), depencency);
+		this.assertEquals(new Foo(new Bar(new Baz)), dependency);
 	}
 }
 
