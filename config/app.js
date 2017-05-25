@@ -34,6 +34,7 @@ module.exports = {
 		server: 'App.Server',
 		hotReload: 'App.HotReload',
 		AssetsCompiler: 'AssetsCompiler.Compiler',
+		ObjectBuilder: 'ObjectBuilder.Builder',
 	},
 
 	/**
