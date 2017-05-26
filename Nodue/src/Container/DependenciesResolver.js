@@ -8,17 +8,36 @@ module.exports = class DependenciesResolver
 
 		let typeHint = null;
 		let typeHintObject = null;
+		let dependencyName = null;
+		let dependencyDefaultValue = null;
 
 		dependencies.forEach(dependency => {
 			if (dependency.includes(' ')) {
-				typeHint = dependency.split(' ')[0];
+				[typeHint, dependencyName] = dependency.split(' ');
+			} else {
+				typeHint = null;
+				dependencyName = dependency;
+			}
 
+			if (dependencyName.includes('=')) {
+				[dependencyName, dependencyDefaultValue] = dependencyName.split('=');
+			} else {
+				dependencyDefaultValue = null;
+			}
+
+			if(overrides[dependencyName]) {
+				resolvedDependencies.push(overrides[dependencyName]);
+			} else if (typeHint) {
 				// Add try catch
 				typeHintObject = DependenciesBuilder.build(eval(typeHint));
 
 				resolvedDependencies.push(typeHintObject);
-			} else if(overrides[dependency]) {
-				resolvedDependencies.push(overrides[dependency]);
+			} else if (dependencyDefaultValue) {
+				if (/^\d+$/.test(dependencyDefaultValue)) {
+					dependencyDefaultValue = parseInt(dependencyDefaultValue);
+				}
+				
+				resolvedDependencies.push(dependencyDefaultValue);
 			}
 		});
 

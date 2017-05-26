@@ -1,6 +1,6 @@
 module.exports = class DependenciesBuilder
 {
-	build(object)
+	build(object, overrides = [])
 	{
 		let constructorRegex = new RegExp(
 		  /constructor\s?\((\s?.*\s?)\)/,
@@ -13,7 +13,7 @@ module.exports = class DependenciesBuilder
 			parameters = parameters[1];
 		}
 
-		let dependencies = DependenciesResolver.resolve(parameters);
+		let dependencies = DependenciesResolver.resolve(parameters, overrides);
 
 		return new object(...dependencies);
 	}

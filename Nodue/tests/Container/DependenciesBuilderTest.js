@@ -9,7 +9,7 @@ module.exports = class DependenciesBuilderTest extends TestCase
 
 		let foo = DependenciesBuilder.build(Foo);
 
-		this.assertEquals(2, foo.number);
+		this.assertEquals(123, foo.number);
 		this.assertEquals(new Foo(new Bar(new Baz)), foo);
 		this.assertEquals(new Bar(new Baz), foo.bar);
 		this.assertEquals(new Baz, foo.bar.baz);
@@ -50,11 +50,27 @@ module.exports = class DependenciesBuilderTest extends TestCase
 
 		this.assertEquals(new Foo(new Bar(new Baz)), dependency);
 	}
+
+	/** @test */
+	overriding_specific_dependencies_for_a_given_es6_closure()
+	{
+		let closure = (/*Foo*/ foo, number = 123) => {
+			return {foo, number};
+		};
+
+		let dependency = DependenciesBuilder.resolve(closure, {
+			foo: 'override-foo',
+			number: 456,
+		});
+
+		this.assertEquals('override-foo', dependency.foo);
+		this.assertEquals(456, dependency.number);
+	}
 }
 
 class Foo
 {
-	constructor(/*Bar*/ bar, number = 2)
+	constructor(/*Bar*/ bar, number = 123)
 	{
 		this.bar = bar;
 		this.number = number;
