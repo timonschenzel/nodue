@@ -151,7 +151,7 @@ module.exports = class Bootstrap
 	registerDepencenciesResolverStrategies()
 	{
 		DependenciesResolver.registerDefaultStrategy('container_binding', dependency => {
-			return app.make(dependency);
+			return app.resolve(dependency);
 		});
 	}
 

@@ -62,11 +62,11 @@ module.exports = class DependenciesResolver
 			if(overrides[dependencyName]) {
 				resolvedDependencies.push(overrides[dependencyName]);
 			} else if (typeHint) {
-				// try {
+				try {
 					typeHintObject = DependenciesBuilder.build(this.strategies[this.defaultStrategyName](typeHint));
-				// } catch(error) {
-				// 	typeHintObject = DependenciesBuilder.build(this.strategies['default'](typeHint));
-				// }
+				} catch(error) {
+					typeHintObject = DependenciesBuilder.build(this.strategies['default'](typeHint));
+				}
 
 				resolvedDependencies.push(typeHintObject);
 			} else if (dependencyDefaultValue) {
