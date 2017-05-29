@@ -22,6 +22,7 @@ module.exports = class Bootstrap
 			'runServiceProviders',
 			'setupInstances',
 			'setupReferences',
+			'registerDepencenciesResolverStrategies',
 			'loadModels',
 			'loadRoutes',
 			'loadVue',
@@ -145,6 +146,13 @@ module.exports = class Bootstrap
 		for (let alias in app.config().references) {
 			global[alias] = app.resolve(app.config().references[alias]);
 		}
+	}
+
+	registerDepencenciesResolverStrategies()
+	{
+		DependenciesResolver.registerDefaultStrategy('container_binding', dependency => {
+			return app.make(dependency);
+		});
 	}
 
 	loadModels()

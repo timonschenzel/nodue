@@ -1,5 +1,39 @@
 module.exports = class DependenciesResolver
 {
+	constructor()
+	{
+		this.defaultStrategyName = null;
+		this.strategies = {};
+
+		this.registerDefaultResolveStrategy();
+	}
+
+	registerDefaultResolveStrategy()
+	{
+		this.registerDefaultStrategy('default', dependency => {
+			return eval(dependency);
+		});
+	}
+
+	registerStrategy(name, implementation, asDefault = false)
+	{
+		this.strategies[name] = implementation;
+
+		if (asDefault) {
+			this.defaultStrategyName = name;
+		}
+	}
+
+	defaultStrategy(name)
+	{
+		this.defaultStrategyName = name;
+	}
+
+	registerDefaultStrategy(name, implementation)
+	{
+		this.registerStrategy(name, implementation, true);
+	}
+
 	resolve(dependencies = '', overrides = [])
 	{
 		let resolvedDependencies = [];
@@ -28,8 +62,11 @@ module.exports = class DependenciesResolver
 			if(overrides[dependencyName]) {
 				resolvedDependencies.push(overrides[dependencyName]);
 			} else if (typeHint) {
-				// Add try catch
-				typeHintObject = DependenciesBuilder.build(eval(typeHint));
+				// try {
+					typeHintObject = DependenciesBuilder.build(this.strategies[this.defaultStrategyName](typeHint));
+				// } catch(error) {
+				// 	typeHintObject = DependenciesBuilder.build(this.strategies['default'](typeHint));
+				// }
 
 				resolvedDependencies.push(typeHintObject);
 			} else if (dependencyDefaultValue) {

@@ -66,6 +66,28 @@ module.exports = class DependenciesBuilderTest extends TestCase
 		this.assertEquals('override-foo', dependency.foo);
 		this.assertEquals(456, dependency.number);
 	}
+
+	/** @test */
+	resolving_dependencies_from_the_container()
+	{
+		class IoCFoo
+		{
+			foo()
+			{
+				return 'bar';
+			}
+		}
+
+		app.bind('Foo', IoCFoo);
+
+		let closure = (/*Foo*/ foo) => {
+			return foo;
+		};
+
+		let dependency = DependenciesBuilder.resolve(closure);
+
+		this.assertEquals('bar', dependency.foo());
+	}
 }
 
 class Foo
