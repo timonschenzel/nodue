@@ -11,6 +11,8 @@ module.exports = class DependenciesBuilder
 
 		if (parameters[1]) {
 			parameters = parameters[1];
+		} else {
+			parameters = '';
 		}
 
 		let dependencies = DependenciesResolver.resolve(parameters, overrides);
@@ -29,6 +31,8 @@ module.exports = class DependenciesBuilder
 
 		if (parameters[2]) {
 			parameters = parameters[2];
+		} else {
+			parameters = '';
 		}
 
 		let dependencies = DependenciesResolver.resolve(parameters, overrides);

@@ -87,12 +87,12 @@ module.exports = class App
 
 	run()
 	{
-		server.start();
+		Server.start();
 	}
 
 	async handle(request)
 	{
-		let routing = route.direct(request.url);
+		let routing = Route.direct(request.url);
 
 		let response = request.capture(routing);
 

@@ -35,18 +35,18 @@ module.exports = class Compiler
 			let newTemplates = require(layoutsCacheFilePath);
 			let newTemplate = newTemplates[layoutName];
 			
-			server.io.sockets.emit('templateUpdate', {
+			Server.io.sockets.emit('templateUpdate', {
 				name: layoutName,
 				template: newTemplate,
 			});
 
-			if (hotReload.layouts[layoutName]) {
-				hotReload.layouts[layoutName].forEach(async endpoint => {
-					request.track({url: endpoint});
-					let response = await app.handle(request);
-					response.name = hotReload.pages[endpoint] + '-' + hotReload.createHash(newTemplate);
+			if (HotReload.layouts[layoutName]) {
+				HotReload.layouts[layoutName].forEach(async endpoint => {
+					Request.track({url: endpoint});
+					let response = await app.handle(Request);
+					response.name = HotReload.pages[endpoint] + '-' + HotReload.createHash(newTemplate);
 					response.hot = true;
-					server.io.to('page.' + endpoint).emit('pageRequest', response);
+					Server.io.to('page.' + endpoint).emit('pageRequest', response);
 				});
 			}
 		});

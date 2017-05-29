@@ -18,8 +18,8 @@ module.exports = class Server
 		this.server.get('*', (incommingRequest, response) => {
 			let content = null;
 
-			request.track(incommingRequest);
-			content = app.handle(request);
+			Request.track(incommingRequest);
+			content = app.handle(Request);
 
 			let baseContent = fs.readFileSync(app.basePath + 'resources/views/app.html', 'utf8');
 
@@ -27,8 +27,8 @@ module.exports = class Server
 		});
 		
 		this.server.post('*', (incommingRequest, response) => {
-			request.track(incommingRequest);
-			let content = app.handle(request);
+			Request.track(incommingRequest);
+			let content = app.handle(Request);
 
 			response.send(content);
 		});
@@ -37,8 +37,8 @@ module.exports = class Server
 			// First connection from user
 			let requestedUrl = socket.handshake.query.url;
 			socket.join('page.' + requestedUrl);
-			request.track({ url: requestedUrl });
-			let response = await app.handle(request);
+			Request.track({ url: requestedUrl });
+			let response = await app.handle(Request);
 			socket.emit('pageRequest', response);
 
 			// User request a page
@@ -50,8 +50,8 @@ module.exports = class Server
 		  		}
 		  		socket.join('page.' + incommingRequest.url);
 
-		  		request.track(incommingRequest);
-		  		let response = await app.handle(request);
+		  		Request.track(incommingRequest);
+		  		let response = await app.handle(Request);
 
 		  		if (typeof response == 'object') {
 		  			response.name = response.name + '-' + new Date().getTime();
@@ -62,7 +62,7 @@ module.exports = class Server
 
 		  	socket.on('sharedDataUpdate', async (update) => {
 		  		update.fromServer = true;
-		  		server.io.to('page.' + update.url).emit('sharedDataUpdate', update);
+		  		Server.io.to('page.' + update.url).emit('sharedDataUpdate', update);
 		  	});
 		});
 

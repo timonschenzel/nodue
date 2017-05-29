@@ -56,24 +56,24 @@ module.exports = class HotReload
 
 	async pushContentUpdate(url, page, template)
 	{
- 		request.track({ url });
- 		let response = await app.handle(request);
+ 		Request.track({ url });
+ 		let response = await app.handle(Request);
 
  		if (typeof response == 'object') {
  			response.name = page + '-' + this.createHash(template);
  			response.hot = true;
  		}
 
-	 	server.io.to('page.' + url).emit('pageRequest', response);
+	 	Server.io.to('page.' + url).emit('pageRequest', response);
 	}
 
 	inspectEndpoint(endpoint)
 	{
-		let routeExpression = route.getRoutes[endpoint];
+		let routeExpression = Route.getRoutes[endpoint];
 
 		if (typeof routeExpression === 'string') {
-			let controllerName = request.findControllerName(routeExpression);
-			let controllerFunctionName = request.findControllerFunctionName(routeExpression);
+			let controllerName = Request.findControllerName(routeExpression);
+			let controllerFunctionName = Request.findControllerFunctionName(routeExpression);
 			let viewDir = this.findViewPath(controllerName);
 			let controllerPath = app.path(`app/http/controllers/${controllerName}.js`);
 			let viewPath = app.path(`resources/views/${viewDir}/${controllerFunctionName}.vue`);

@@ -187,10 +187,10 @@ module.exports = class Bootstrap
 
 		app.hot = true;
 
-		for (let endpoint in route.getEndpoints()) {
-			hotReload.inspectEndpoint(endpoint);
+		for (let endpoint in Route.getEndpoints()) {
+			HotReload.inspectEndpoint(endpoint);
 		};
 
-		hotReload.start();
+		HotReload.start();
 	}
 }

@@ -11,8 +11,8 @@ module.exports = class TestCase
 
 	async visit(url)
 	{
-		request.track({ url });
-		let response = await app.handle(request);
+		Request.track({ url });
+		let response = await app.handle(Request);
 
 		let globalComponents = require('../../../storage/framework/cache/global_components.js');
 
