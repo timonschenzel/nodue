@@ -7,4 +7,13 @@ module.exports = {
 
 		return false;
 	},
+
+	is_instanceof(object, name)
+	{
+		if (typeof object != 'function') {
+			return false;
+		}
+
+		return Object.getPrototypeOf(object) == name;
+	}
 }

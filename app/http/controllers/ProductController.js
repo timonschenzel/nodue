@@ -1,8 +1,8 @@
 module.exports = class PagesController extends Controller
 {
-	async index()
+	index()
 	{
-		let products = await Product.all();
+		let products = Product.all();
 
 		let counter = null;
 
@@ -12,10 +12,8 @@ module.exports = class PagesController extends Controller
 		return view('product.index', { shared: { products }, counter, title, slogan });
 	}
 
-	async show(id)
+	show(/*Product*/ product)
 	{
-		let product = Product.find(id);
-
 		let title = 'Products';
 		let slogan = 'This is great!';
 

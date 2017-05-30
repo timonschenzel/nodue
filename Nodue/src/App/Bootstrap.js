@@ -157,9 +157,15 @@ module.exports = class Bootstrap
 
 	loadModels()
 	{
-		for (let model in AppFiles.models) {
-			let modelInstance = app.make(`models.${model}`);
-			global[model] = new Proxy(modelInstance, Nodue.ORM.Proxy);
+		for (let model in AppFiles) {
+			if (model == '.DS_Store') {
+				continue;
+			}
+
+			if (is_instanceof(AppFiles[model], NativeModel)) {
+				let modelInstance = app.make(`${model}`);
+				global[model] = new Proxy(modelInstance, Nodue.ORM.Proxy);
+			}
 		}
 	}
 

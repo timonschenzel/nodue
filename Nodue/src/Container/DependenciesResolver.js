@@ -60,7 +60,13 @@ module.exports = class DependenciesResolver
 			}
 
 			if(overrides[dependencyName]) {
-				resolvedDependencies.push(overrides[dependencyName]);
+				let object = DependenciesBuilder.build(this.strategies[this.defaultStrategyName](typeHint));
+				if (is_instanceof(object.constructor, NativeModel)) {
+					// Route Model Binding
+					resolvedDependencies.push(object.find(overrides[dependencyName]));
+				} else {
+					resolvedDependencies.push(overrides[dependencyName]);
+				}
 			} else if (typeHint) {
 				try {
 					typeHintObject = DependenciesBuilder.build(this.strategies[this.defaultStrategyName](typeHint));
