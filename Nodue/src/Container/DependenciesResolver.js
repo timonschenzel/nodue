@@ -60,12 +60,17 @@ module.exports = class DependenciesResolver
 			}
 
 			if(overrides[dependencyName]) {
-				let object = DependenciesBuilder.build(this.strategies[this.defaultStrategyName](typeHint));
-				if (is_instanceof(object.constructor, NativeModel)) {
-					// Route Model Binding
-					resolvedDependencies.push(object.find(overrides[dependencyName]));
-				} else {
-					resolvedDependencies.push(overrides[dependencyName]);
+				try {
+					let object = DependenciesBuilder.build(this.strategies[this.defaultStrategyName](typeHint));
+
+					if (is_instanceof(object.constructor, NativeModel)) {
+						// Route Model Binding
+						resolvedDependencies.push(object.find(overrides[dependencyName]));
+					} else {
+						resolvedDependencies.push(overrides[dependencyName]);
+					}
+				} catch(error) {
+					resolvedDependencies.push(DependenciesBuilder.build(this.strategies['default'](typeHint)));
 				}
 			} else if (typeHint) {
 				try {
@@ -85,6 +90,55 @@ module.exports = class DependenciesResolver
 		});
 
 		return resolvedDependencies;
+	}
+
+	getParsedDepencencies(object, overrides = [])
+	{
+		let parsedDependencies = {};
+
+		let constructorRegex = new RegExp(
+		  /constructor\s?\((\s?.*\s?)\)/,
+		  'gim'
+		);
+
+		let parameters = constructorRegex.exec(object.toString()) || '';
+
+		if (parameters[1]) {
+			parameters = parameters[1];
+		} else {
+			parameters = '';
+		}
+
+		let dependencies = this.parse(parameters);
+		let typeHint = null;
+		let dependencyName = null;
+		let dependencyDefaultValue = null;
+
+		dependencies.forEach(dependency => {
+			if (dependency.includes(' ')) {
+				[typeHint, dependencyName] = dependency.split(' ');
+			} else {
+				typeHint = null;
+				dependencyName = dependency;
+			}
+
+			if (dependencyName.includes('=')) {
+				[dependencyName, dependencyDefaultValue] = dependencyName.split('=');
+
+				if (/^\d+$/.test(dependencyDefaultValue)) {
+					dependencyDefaultValue = parseInt(dependencyDefaultValue);
+				}
+			} else {
+				dependencyDefaultValue = null;
+			}
+
+			parsedDependencies[dependencyName] = {
+				type: typeHint,
+				defaultValue: dependencyDefaultValue,
+			};
+		});
+
+		return parsedDependencies;
 	}
 
 	parse(dependencies = '')

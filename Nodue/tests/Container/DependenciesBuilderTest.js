@@ -54,6 +54,10 @@ module.exports = class DependenciesBuilderTest extends TestCase
 	/** @test */
 	overriding_specific_dependencies_for_a_given_es6_closure()
 	{
+		global.Foo = Foo;
+		global.Bar = Bar;
+		global.Baz = Baz;
+		
 		let closure = (/*Foo*/ foo, number = 123) => {
 			return {foo, number};
 		};
