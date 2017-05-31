@@ -1,24 +1,45 @@
 module.exports = class DependenciesResolverTest extends TestCase
 {
 	/** @test */
-	parsing_given_dependencies()
+	resolving_dependencies_from_a_class()
 	{
 		global.Foo = Foo;
 		global.Bar = Bar;
 		global.Baz = Baz;
 
-		let dependencies = DependenciesResolver.getParsedDepencencies(Foo);
+		let dependencies = DependenciesResolver.resolve(Foo);
 
-		this.assertEquals({
-			bar: {
-				type: 'Bar',
-				defaultValue: null,
-			},
-			number: {
-				type: null,
-				defaultValue: 123,
-			}
-		}, dependencies);
+		this.assertEquals([
+			new Bar(new Baz), 123
+		], dependencies);
+	}
+
+	/** @test */
+	resolving_dependencies_from_a_es5_closure()
+	{
+		global.Foo = Foo;
+		global.Bar = Bar;
+		global.Baz = Baz;
+
+		let dependencies = DependenciesResolver.resolve(function(/*Foo*/ foo, number = 123) {});
+
+		this.assertEquals([
+			new Foo(new Bar(new Baz)), 123
+		], dependencies);
+	}
+
+	/** @test */
+	resolving_dependencies_from_a_es6_closure()
+	{
+		global.Foo = Foo;
+		global.Bar = Bar;
+		global.Baz = Baz;
+
+		let dependencies = DependenciesResolver.resolve((/*Foo*/ foo, number = 123) => {});
+
+		this.assertEquals([
+			new Foo(new Bar(new Baz)), 123
+		], dependencies);
 	}
 }
 

@@ -32,6 +32,7 @@ module.exports = {
 		AssetsCompiler: 'AssetsCompiler.Compiler',
 		DependenciesBuilder: 'Container.DependenciesBuilder',
 		DependenciesResolver: 'Container.DependenciesResolver',
+		DependenciesDetector: 'Container.DependenciesDetector',
 	},
 
 	/**
