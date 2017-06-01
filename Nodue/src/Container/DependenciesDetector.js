@@ -1,42 +1,12 @@
 module.exports = class DependenciesDetector
 {
-	isClosure(dependency)
-	{
-		if (dependency.toString().match(/class\s/)) {
-		   return false;
-		}
-
-		if (dependency.toString().match(/constructor\s?\((\s?.*\s?)\)/)) {
-		   return false;
-		}
-
-		if (dependency.toString().match(/(function)?\s?\((\s?.*\s?)\)(\s)?(=>)?/)) {
-		   return true;
-		}
-
-		return false;
-	}
-
-	isClass(dependency)
-	{
-		if (dependency.toString().match(/class\s/)) {
-		   return true;
-		}
-
-		if (dependency.toString().match(/constructor\s?\((\s?.*\s?)\)/)) {
-		   return true;
-		}
-
-		return false;
-	}
-
 	detectFrom(dependency)
 	{
 		let parsedDependencies = {};
 		let regex = null;
 		let parameters = null;
 
-		if (this.isClass(dependency)) {
+		if (is_class(dependency)) {
 			regex = new RegExp(
 			  /constructor\s?\((\s?.*\s?)\)/,
 			  'gim'
@@ -51,7 +21,7 @@ module.exports = class DependenciesDetector
 			}
 		}
 
-		if (this.isClosure(dependency)) {
+		if (is_closure(dependency)) {
 			regex = new RegExp(
 			  /(function)?\s?\((\s?.*\s?)\)(\s)?(=>)?/,
 			  'gim'

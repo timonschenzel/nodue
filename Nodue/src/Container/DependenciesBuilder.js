@@ -4,13 +4,18 @@ module.exports = class DependenciesBuilder
 	{
 		let dependencies = DependenciesResolver.resolve(dependency, overrides);
 
-		return new dependency(...dependencies);
+		if (is_class(dependency)) {
+			return new dependency(...dependencies);
+		}
+
+		return dependency(...dependencies);
 	}
 
-	resolve(closure, overrides = [])
+	resolve(dependency, overrides = [])
 	{
-		let dependencies = DependenciesResolver.resolve(closure, overrides);
+		let dependencies = DependenciesResolver.resolve(dependency, overrides);
 
-		return closure(...dependencies);
+		
+		return dependency(...dependencies);
 	}
 }
