@@ -1,6 +1,6 @@
-module.exports = class DependenciesDetector
+module.exports = class DependenciesParser
 {
-	detectFrom(dependency)
+	parse(dependency)
 	{
 		let parsedDependencies = {};
 		let regex = null;
@@ -36,7 +36,7 @@ module.exports = class DependenciesDetector
 			}
 		}
 
-		let dependencies = this.parse(parameters);
+		let dependencies = this.parseParameters(parameters);
 		let typeHint = null;
 		let dependencyName = null;
 		let dependencyDefaultValue = null;
@@ -68,7 +68,7 @@ module.exports = class DependenciesDetector
 		return parsedDependencies;
 	}
 
-	parse(dependencies = '')
+	parseParameters(dependencies = '')
 	{
 		if (dependencies == null) {
 			dependencies = '';

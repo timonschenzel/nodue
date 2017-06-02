@@ -7,7 +7,7 @@ module.exports = class DependenciesResolverTest extends TestCase
 		global.Bar = Bar;
 		global.Baz = Baz;
 
-		let dependencies = DependenciesResolver.resolve(Foo);
+		let dependencies = resolve(Foo);
 
 		this.assertEquals([
 			new Bar(new Baz), 123
@@ -21,7 +21,7 @@ module.exports = class DependenciesResolverTest extends TestCase
 		global.Bar = Bar;
 		global.Baz = Baz;
 
-		let dependencies = DependenciesResolver.resolve(function(/*Foo*/ foo, number = 123) {});
+		let dependencies = resolve(function(/*Foo*/ foo, number = 123) {});
 
 		this.assertEquals([
 			new Foo(new Bar(new Baz)), 123
@@ -35,7 +35,7 @@ module.exports = class DependenciesResolverTest extends TestCase
 		global.Bar = Bar;
 		global.Baz = Baz;
 
-		let dependencies = DependenciesResolver.resolve((/*Foo*/ foo, number = 123) => {});
+		let dependencies = resolve((/*Foo*/ foo, number = 123) => {});
 
 		this.assertEquals([
 			new Foo(new Bar(new Baz)), 123

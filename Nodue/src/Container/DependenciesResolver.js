@@ -40,7 +40,7 @@ module.exports = class DependenciesResolver
 
 		let typeHintObject = null;
 
-		dependencies = DependenciesDetector.detectFrom(dependencies);
+		dependencies = DependenciesParser.parse(dependencies);
 
 		collect(dependencies).forEach((dependency, dependencyName) => {
 			if(overrides[dependencyName]) {

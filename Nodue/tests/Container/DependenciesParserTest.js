@@ -1,13 +1,13 @@
-module.exports = class DependenciesDetectorTest extends TestCase
+module.exports = class DependenciesParserTest extends TestCase
 {
 	/** @test */
-	detecting_dependencies_from_a_class()
+	parsing_dependencies_from_a_class()
 	{
 		global.Foo = Foo;
 		global.Bar = Bar;
 		global.Baz = Baz;
 
-		let dependencies = DependenciesDetector.detectFrom(Foo);
+		let dependencies = parse(Foo);
 
 		this.assertEquals({
 			bar: {
@@ -22,13 +22,13 @@ module.exports = class DependenciesDetectorTest extends TestCase
 	}
 
 	/** @test */
-	detecting_dependencies_from_a_es5_closure()
+	parsing_dependencies_from_a_es5_closure()
 	{
 		global.Foo = Foo;
 		global.Bar = Bar;
 		global.Baz = Baz;
 
-		let dependencies = DependenciesDetector.detectFrom(function(/*Foo*/ foo, number = 123) {});
+		let dependencies = parse(function(/*Foo*/ foo, number = 123) {});
 
 		this.assertEquals({
 			foo: {
@@ -43,13 +43,13 @@ module.exports = class DependenciesDetectorTest extends TestCase
 	}
 
 	/** @test */
-	detecting_dependencies_from_a_es6_closure()
+	parsing_dependencies_from_a_es6_closure()
 	{
 		global.Foo = Foo;
 		global.Bar = Bar;
 		global.Baz = Baz;
 
-		let dependencies = DependenciesDetector.detectFrom((/*Foo*/ foo, number = 123) => {});
+		let dependencies = parse((/*Foo*/ foo, number = 123) => {});
 
 		this.assertEquals({
 			foo: {

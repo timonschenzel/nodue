@@ -7,7 +7,7 @@ module.exports = class DependenciesBuilderTest extends TestCase
 		global.Bar = Bar;
 		global.Baz = Baz;
 
-		let foo = DependenciesBuilder.build(Foo);
+		let foo = build(Foo);
 
 		this.assertEquals(123, foo.number);
 		this.assertEquals(new Foo(new Bar(new Baz)), foo);
@@ -30,7 +30,7 @@ module.exports = class DependenciesBuilderTest extends TestCase
 			return foo;
 		};
 
-		let dependency = DependenciesBuilder.build(closure);
+		let dependency = build(closure);
 
 		this.assertEquals(new Foo(new Bar(new Baz)), dependency);
 	}
@@ -46,7 +46,7 @@ module.exports = class DependenciesBuilderTest extends TestCase
 			return foo;
 		};
 
-		let dependency = DependenciesBuilder.build(closure);
+		let dependency = build(closure);
 
 		this.assertEquals(new Foo(new Bar(new Baz)), dependency);
 	}
@@ -62,7 +62,7 @@ module.exports = class DependenciesBuilderTest extends TestCase
 			return {foo, number};
 		};
 
-		let dependency = DependenciesBuilder.build(closure, {
+		let dependency = build(closure, {
 			foo: 'override-foo',
 			number: 456,
 		});
@@ -88,7 +88,7 @@ module.exports = class DependenciesBuilderTest extends TestCase
 			return foo;
 		};
 
-		let dependency = DependenciesBuilder.build(closure);
+		let dependency = build(closure);
 
 		this.assertEquals('bar', dependency.foo());
 	}

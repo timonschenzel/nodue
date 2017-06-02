@@ -30,9 +30,9 @@ module.exports = {
 		Server: 'App.Server',
 		HotReload: 'App.HotReload',
 		AssetsCompiler: 'AssetsCompiler.Compiler',
+		DependenciesParser: 'Container.DependenciesParser',
 		DependenciesBuilder: 'Container.DependenciesBuilder',
 		DependenciesResolver: 'Container.DependenciesResolver',
-		DependenciesDetector: 'Container.DependenciesDetector',
 	},
 
 	/**
