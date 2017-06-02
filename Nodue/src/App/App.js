@@ -265,7 +265,7 @@ module.exports = class App
 
 	loadController(name)
 	{
-		return this.make(`http.controllers.${name}`);
+		return this.resolve(`http.controllers.${name}`);
 	}
 
 	loadHelpersFrom(helper)

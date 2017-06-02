@@ -31,7 +31,7 @@ module.exports = class Request
 		}
 
 		if(typeof expression == 'function') {
-			return await DependenciesBuilder.resolve(expression, namedParameters);
+			return await build(expression, namedParameters);
 		}
 
 		if(typeof expression == 'string') {
@@ -45,9 +45,19 @@ module.exports = class Request
 		let controllerFunctionName = this.findControllerFunctionName(expression);
 
 		// Add support for constructor injection
-		let controller = app.loadController(controllerName);
+		let controller = build(app.loadController(controllerName));
 		
-		let response = await DependenciesBuilder.resolve(controller[controllerFunctionName], namedParameters);
+		// Add support for route model binding
+		// let dependencies = parse(controller[controllerFunctionName]);
+
+		// dependencies.forEach((dependencyInfo, dependency) => {
+		// 	dump(dependencyInfo);
+		// 	if (is_instanceof(object.constructor, NativeModel)) {
+		// 		dump(dependencyInfo);
+		// 	}
+		// });
+
+		let response = await build(controller[controllerFunctionName], namedParameters);
 
 		return this.processResponse(response, expression);
 
