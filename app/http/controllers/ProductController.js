@@ -1,4 +1,4 @@
-module.exports = class PagesController extends Controller
+module.exports = class ProductController extends Controller
 {
 	index()
 	{

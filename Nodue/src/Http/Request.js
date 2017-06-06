@@ -48,14 +48,14 @@ module.exports = class Request
 		let controller = build(app.loadController(controllerName));
 		
 		// Add support for route model binding
-		// let dependencies = parse(controller[controllerFunctionName]);
+		let dependencies = resolve(controller[controllerFunctionName]);
 
-		// dependencies.forEach((dependencyInfo, dependency) => {
-		// 	dump(dependencyInfo);
-		// 	if (is_instanceof(object.constructor, NativeModel)) {
-		// 		dump(dependencyInfo);
-		// 	}
-		// });
+		collect(dependencies).forEach((dependency, dependencyName) => {
+			// Route model binding -> refactor, move into Router class
+			if (dependency != null && typeof dependency == 'object' && is_instanceof(dependency.constructor, NativeModel) && namedParameters[dependencyName]) {
+				namedParameters[dependencyName] = dependency.find(namedParameters[dependencyName]);
+			}
+		});
 
 		let response = await build(controller[controllerFunctionName], namedParameters);
 

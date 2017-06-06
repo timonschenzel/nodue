@@ -36,15 +36,17 @@ module.exports = class DependenciesResolver
 
 	resolve(dependencies = '', overrides = [])
 	{
-		let resolvedDependencies = [];
-
+		let resolvedDependencies = {};
+		let resolvedDependency = null;
 		let typeHintObject = null;
 
 		dependencies = DependenciesParser.parse(dependencies);
 
 		collect(dependencies).forEach((dependency, dependencyName) => {
+			resolvedDependency = null;
+
 			if(overrides[dependencyName]) {
-				resolvedDependencies.push(overrides[dependencyName]);
+				resolvedDependency = overrides[dependencyName];
 			} else if (dependency.type) {
 				try {
 					typeHintObject = DependenciesBuilder.build(this.strategies[this.defaultStrategyName](dependency.type));
@@ -52,14 +54,16 @@ module.exports = class DependenciesResolver
 					typeHintObject = DependenciesBuilder.build(this.strategies['default'](dependency.type));
 				}
 
-				resolvedDependencies.push(typeHintObject);
+				resolvedDependency = typeHintObject;
 			} else if (dependency.default) {
 				if (/^\d+$/.test(dependency.default)) {
 					dependency.default = parseInt(dependency.default);
 				}
-				
-				resolvedDependencies.push(dependency.default);
+
+				resolvedDependency = dependency.default;
 			}
+
+			resolvedDependencies[dependencyName] = resolvedDependency;
 		});
 
 		return resolvedDependencies;

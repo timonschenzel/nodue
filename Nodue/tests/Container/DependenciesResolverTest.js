@@ -9,9 +9,10 @@ module.exports = class DependenciesResolverTest extends TestCase
 
 		let dependencies = resolve(Foo);
 
-		this.assertEquals([
-			new Bar(new Baz), 123
-		], dependencies);
+		this.assertEquals({
+			bar: new Bar(new Baz),
+			number: 123,
+		}, dependencies);
 	}
 
 	/** @test */
@@ -23,9 +24,10 @@ module.exports = class DependenciesResolverTest extends TestCase
 
 		let dependencies = resolve(function(/*Foo*/ foo, number = 123) {});
 
-		this.assertEquals([
-			new Foo(new Bar(new Baz)), 123
-		], dependencies);
+		this.assertEquals({
+			foo: new Foo(new Bar(new Baz)),
+			number: 123,
+		}, dependencies);
 	}
 
 	/** @test */
@@ -37,9 +39,10 @@ module.exports = class DependenciesResolverTest extends TestCase
 
 		let dependencies = resolve((/*Foo*/ foo, number = 123) => {});
 
-		this.assertEquals([
-			new Foo(new Bar(new Baz)), 123
-		], dependencies);
+		this.assertEquals({
+			foo: new Foo(new Bar(new Baz)),
+			number: 123,
+		}, dependencies);
 	}
 }
 
