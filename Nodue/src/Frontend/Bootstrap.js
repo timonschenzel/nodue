@@ -11,6 +11,7 @@ module.exports = class Bootstrap
 			'loadPretty',
 			'loadVuex',
 			'loadVue',
+			'loadDeepMergeModule',
 			'createViewPresentationComponent',
 			'createStringPresentationComponent',
 			'createObjectPresentationComponent',
@@ -71,6 +72,11 @@ module.exports = class Bootstrap
 				}
 			}
 		});
+	}
+
+	loadDeepMergeModule()
+	{
+		window.merge = require('deepmerge');
 	}
 
 	createViewPresentationComponent()
@@ -228,6 +234,11 @@ module.exports = class Bootstrap
 						},
 						deep: true
 					};
+				}
+
+				if (component.data) {
+					response.data = merge(response.data, component.data);
+					delete component.data;
 				}
 
 				if (component.sharedDataItems) {

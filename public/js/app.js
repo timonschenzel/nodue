@@ -13945,6 +13945,11 @@ module.exports = function () {
 			});
 		}
 	}, {
+		key: 'loadDeepMergeModule',
+		value: function loadDeepMergeModule() {
+			window.merge = __webpack_require__(66);
+		}
+	}, {
 		key: 'createViewPresentationComponent',
 		value: function createViewPresentationComponent() {
 			Vue.component('view-presentation', { template: '<div><slot></slot></div>' });
@@ -14085,6 +14090,11 @@ module.exports = function () {
 						};
 					}
 
+					if (component.data) {
+						response.data = merge(response.data, component.data);
+						delete component.data;
+					}
+
 					if (component.sharedDataItems) {
 						component.sharedDataItems.forEach(function (sharedDataItem) {
 							component.watch[sharedDataItem] = {
@@ -14156,7 +14166,7 @@ module.exports = function () {
    * The bootstrap tasks for Nodue frontend.
    */
 		get: function get() {
-			return ['loadSocketIO', 'loadjQuery', 'loadPretty', 'loadVuex', 'loadVue', 'createViewPresentationComponent', 'createStringPresentationComponent', 'createObjectPresentationComponent', 'createGlobalComponents', 'createLayoutComponents', 'connectWithServer', 'mapAnchorElements', 'handlePopstate', 'createComponentFunction', 'processNewPageContent', 'processLayoutUpdates', 'processSharedDateUpdates'];
+			return ['loadSocketIO', 'loadjQuery', 'loadPretty', 'loadVuex', 'loadVue', 'loadDeepMergeModule', 'createViewPresentationComponent', 'createStringPresentationComponent', 'createObjectPresentationComponent', 'createGlobalComponents', 'createLayoutComponents', 'connectWithServer', 'mapAnchorElements', 'handlePopstate', 'createComponentFunction', 'processNewPageContent', 'processLayoutUpdates', 'processSharedDateUpdates'];
 		}
 	}]);
 
@@ -29569,6 +29579,103 @@ module.exports = __webpack_amd_options__;
 
 __webpack_require__(24);
 module.exports = __webpack_require__(25);
+
+
+/***/ }),
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
+    if (true) {
+        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if (typeof exports === 'object') {
+        module.exports = factory();
+    } else {
+        root.deepmerge = factory();
+    }
+}(this, function () {
+
+function isMergeableObject(val) {
+    var nonNullObject = val && typeof val === 'object'
+
+    return nonNullObject
+        && Object.prototype.toString.call(val) !== '[object RegExp]'
+        && Object.prototype.toString.call(val) !== '[object Date]'
+}
+
+function emptyTarget(val) {
+    return Array.isArray(val) ? [] : {}
+}
+
+function cloneIfNecessary(value, optionsArgument) {
+    var clone = optionsArgument && optionsArgument.clone === true
+    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+}
+
+function defaultArrayMerge(target, source, optionsArgument) {
+    var destination = target.slice()
+    source.forEach(function(e, i) {
+        if (typeof destination[i] === 'undefined') {
+            destination[i] = cloneIfNecessary(e, optionsArgument)
+        } else if (isMergeableObject(e)) {
+            destination[i] = deepmerge(target[i], e, optionsArgument)
+        } else if (target.indexOf(e) === -1) {
+            destination.push(cloneIfNecessary(e, optionsArgument))
+        }
+    })
+    return destination
+}
+
+function mergeObject(target, source, optionsArgument) {
+    var destination = {}
+    if (isMergeableObject(target)) {
+        Object.keys(target).forEach(function (key) {
+            destination[key] = cloneIfNecessary(target[key], optionsArgument)
+        })
+    }
+    Object.keys(source).forEach(function (key) {
+        if (!isMergeableObject(source[key]) || !target[key]) {
+            destination[key] = cloneIfNecessary(source[key], optionsArgument)
+        } else {
+            destination[key] = deepmerge(target[key], source[key], optionsArgument)
+        }
+    })
+    return destination
+}
+
+function deepmerge(target, source, optionsArgument) {
+    var array = Array.isArray(source);
+    var options = optionsArgument || { arrayMerge: defaultArrayMerge }
+    var arrayMerge = options.arrayMerge || defaultArrayMerge
+
+    if (array) {
+        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
+    } else {
+        return mergeObject(target, source, optionsArgument)
+    }
+}
+
+deepmerge.all = function deepmergeAll(array, optionsArgument) {
+    if (!Array.isArray(array) || array.length < 2) {
+        throw new Error('first argument should be an array with at least two elements')
+    }
+
+    // we are sure there are at least 2 values, so it is safe to have no initial value
+    return array.reduce(function(prev, next) {
+        return deepmerge(prev, next, optionsArgument)
+    })
+}
+
+return deepmerge
+
+}));
 
 
 /***/ })

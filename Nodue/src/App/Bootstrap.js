@@ -9,6 +9,7 @@ module.exports = class Bootstrap
 			'loadSugarModule',
 			'bootSupport',
 			'loadPretty',
+			'loadDeepMergeModule',
 			'loadPluralizeModule',
 			'loadEnvFile',
 			'loadNodueFiles',
@@ -60,6 +61,11 @@ module.exports = class Bootstrap
 	loadPretty()
 	{
 		global.pretty = require('js-object-pretty-print').pretty;
+	}
+
+	loadDeepMergeModule()
+	{
+		global.merge = require('deepmerge');
 	}
 
 	loadPluralizeModule()

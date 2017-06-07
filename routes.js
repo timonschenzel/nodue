@@ -1,6 +1,10 @@
 Route.get('/', 'PagesController@home');
 Route.get('/contact/{message}', 'PagesController@contact');
 Route.get('/hello', 'PagesController@hello');
+
+Route.get('product/create', 'ProductController@create')
+Route.post('/product', 'ProductController@store');
+
 Route.get('/product', 'ProductController@index');
 Route.get('/product/{product}', 'ProductController@show');
 

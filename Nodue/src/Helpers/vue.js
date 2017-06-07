@@ -1,5 +1,5 @@
 module.exports = {
-	view(pathExpression, data)
+	view(pathExpression, data = {})
 	{
 		let basePath = 'resources/views/';
 		let viewPathStructure = pathExpression.split('.').join('/');
@@ -19,7 +19,6 @@ module.exports = {
 		if (fs.existsSync(behaviorPath)) {
 			behavior = fs.readFileSync(behaviorPath, 'utf8');
 		}
-
 
 		return new VueComponent({
 			type: 'view',

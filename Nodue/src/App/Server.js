@@ -60,6 +60,13 @@ module.exports = class Server
 		  		socket.emit('pageRequest', response);
 		  	});
 
+		  	socket.on('postRequest', async (incommingRequest) => {
+		  		Request.track(incommingRequest);
+		  		let response = await app.handle(Request);
+
+		  		socket.emit('pageRequest', response);
+		  	});
+
 		  	socket.on('sharedDataUpdate', async (update) => {
 		  		update.fromServer = true;
 		  		Server.io.to('page.' + update.url).emit('sharedDataUpdate', update);

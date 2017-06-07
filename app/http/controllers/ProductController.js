@@ -19,4 +19,9 @@ module.exports = class ProductController extends Controller
 
 		return view('product.show', { product, title, slogan });
 	}
+
+	create()
+	{
+		return view('product.create');
+	}
 }

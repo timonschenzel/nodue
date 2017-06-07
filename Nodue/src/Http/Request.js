@@ -62,7 +62,6 @@ module.exports = class Request
 		let response = await build(controller[controllerFunctionName], parameters);
 
 		return this.processResponse(response, handler);
-
 	}
 
 	processResponse(response, expression)

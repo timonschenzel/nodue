@@ -34,7 +34,7 @@ module.exports = class VueComponentCompilerTasks
 	addSuffixToFileNameIfNeeded()
 	{
 		if (this.options.suffix) {
-			this.name = this.name + '-' + this.options.suffix;
+			this.name = this.name + this.options.suffix;
 		}
 	}
 
