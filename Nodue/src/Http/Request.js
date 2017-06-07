@@ -22,27 +22,29 @@ module.exports = class Request
 
 	async capture(routing)
 	{
-		let expression = routing.expression;
-		let parameters = routing.parameters;
-		let namedParameters = routing.namedParameters;
+		let handler = routing.handler();
+		let parameters = routing.parameters();
 
-		if (! expression) {
+		if (! handler) {
 			return '404';
 		}
 
-		if(typeof expression == 'function') {
-			return await build(expression, namedParameters);
+		if(typeof handler == 'function') {
+			return await build(handler, parameters);
 		}
 
-		if(typeof expression == 'string') {
-			return await this.handle(expression, namedParameters);
+		if(typeof handler == 'string') {
+			return await this.handle(routing);
 		}
 	}
 
-	async handle(expression, namedParameters = [])
+	async handle(routing)
 	{
-		let controllerName = this.findControllerName(expression);
-		let controllerFunctionName = this.findControllerFunctionName(expression);
+		let handler = routing.handler();
+		let parameters = routing.parameters();
+
+		let controllerName = this.findControllerName(handler);
+		let controllerFunctionName = this.findControllerFunctionName(handler);
 
 		// Add support for constructor injection
 		let controller = build(app.loadController(controllerName));
@@ -52,14 +54,14 @@ module.exports = class Request
 
 		collect(dependencies).forEach((dependency, dependencyName) => {
 			// Route model binding -> refactor, move into Router class
-			if (dependency != null && typeof dependency == 'object' && is_instanceof(dependency.constructor, NativeModel) && namedParameters[dependencyName]) {
-				namedParameters[dependencyName] = dependency.find(namedParameters[dependencyName]);
+			if (dependency != null && typeof dependency == 'object' && is_instanceof(dependency.constructor, NativeModel) && parameters[dependencyName]) {
+				parameters[dependencyName] = dependency.find(parameters[dependencyName]);
 			}
 		});
 
-		let response = await build(controller[controllerFunctionName], namedParameters);
+		let response = await build(controller[controllerFunctionName], parameters);
 
-		return this.processResponse(response, expression);
+		return this.processResponse(response, handler);
 
 	}
 

@@ -2,8 +2,17 @@ module.exports = class Router
 {
 	constructor()
 	{
+		this._uri = [];
+		this._handler = null;
 		this.getRoutes = [];
 		this.postRoutes = [];
+		this._parameters = [];
+		this._parameterNames = [];
+	}
+
+	uri()
+	{
+		return this._uri;
 	}
 
 	get(url, action)
@@ -32,19 +41,18 @@ module.exports = class Router
 
 	direct(url)
 	{
-		url = this.normalize(url);
+		this._parameters = [];
+		this._parameterNames = [];
 
-		let expression = this.getRoutes[url];
-		let route = expression;
+		this._url = this.normalize(url);
 
-		if (! route) {
-			return this.findMatch(url);
+		this._handler = this.getRoutes[this._url];
+
+		if (! this._handler) {
+			this.findMatch();
 		}
 
-		return {
-			expression: route,
-			parameters: [],
-		};
+		return this;
 	}
 
 	normalize(url)
@@ -56,15 +64,13 @@ module.exports = class Router
 		return url;
 	}
 
-	findMatch(url)
+	findMatch()
 	{
-		let urlParts = this.getParts(url);
-		let parameters = [];
-		let namedParameters = {};
+		let urlParts = this.getParts(this._url);
+		let parameterName = null;
 
 		for (let route in this.getRoutes) {
-			parameters = [];
-			let namedParameters = {};
+			parameterName = null;
 
 			let routeParts = this.getParts(route);
 
@@ -80,26 +86,35 @@ module.exports = class Router
 				}
 
 				if (routeParts[count].includes('{')) {
-					parameters.push(urlParts[urlPart]);
-					namedParameters[routeParts[count].replace('{', '').replace('}', '')] = urlParts[urlPart];
+					parameterName = routeParts[count].replace('{', '').replace('}', '');
+
+					this._parameters[parameterName] = urlParts[urlPart];
+					this._parameterNames.push(parameterName);
 				}
 
 				count++;
 			}
 
 			if (match) {
-				return {
-					expression: this.getRoutes[route],
-					parameters: parameters,
-					namedParameters: namedParameters,
-				};
+				this._handler = this.getRoutes[route];
+				return;
 			}
 		}
+	}
 
-		return {
-			expression: null,
-			parameters: null,
-		};
+	parameters()
+	{
+		return this._parameters;
+	}
+
+	parameterNames()
+	{
+		return this._parameterNames;
+	}
+
+	handler()
+	{
+		return this._handler;
 	}
 
 	getParts(url)
