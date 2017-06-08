@@ -39,10 +39,10 @@ module.exports = class Server
 			socket.join('page.' + requestedUrl);
 			Request.track({ url: requestedUrl });
 			let response = await app.handle(Request);
-			socket.emit('pageRequest', response);
+			socket.emit('getResponse', response);
 
 			// User request a page
-		  	socket.on('pageRequest', async (incommingRequest) => {
+		  	socket.on('getRequest', async (incommingRequest) => {
 		  		for (let room in socket.rooms) {
 		  			if (room.startsWith('page.')) {
 		  				socket.leave(room);
@@ -57,14 +57,14 @@ module.exports = class Server
 		  			response.name = response.name + '-' + new Date().getTime();
 		  		}
 
-		  		socket.emit('pageRequest', response);
+		  		socket.emit('getResponse', response);
 		  	});
 
 		  	socket.on('postRequest', async (incommingRequest) => {
 		  		Request.track(incommingRequest);
 		  		let response = await app.handle(Request);
 
-		  		socket.emit('pageRequest', response);
+		  		socket.emit('getResponse', response);
 		  	});
 
 		  	socket.on('sharedDataUpdate', async (update) => {
@@ -81,7 +81,7 @@ module.exports = class Server
 
 			app.isRunning = true;
 
-		  	console.info(`Server is running at localhost:${this.port}`);
+			log.success(`Server is running at localhost:${this.port}`);
 		});
 	}
 }

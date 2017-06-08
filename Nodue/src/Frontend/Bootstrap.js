@@ -171,7 +171,7 @@ module.exports = class Bootstrap
 
 			history.pushState({ url }, null, url);
 
-			socket.emit('pageRequest', {
+			socket.emit('getRequest', {
 				url,
 			});
 		});
@@ -184,7 +184,7 @@ module.exports = class Bootstrap
 			if (e.state != null && e.state.url != null) {
 				url = e.state.url;
 			}
-			socket.emit('pageRequest', {
+			socket.emit('getRequest', {
 				url
 			});
 		});
@@ -200,7 +200,7 @@ module.exports = class Bootstrap
 
 	processNewPageContent()
 	{
-		socket.on('pageRequest', (response) => {
+		socket.on('getResponse', (response) => {
 			if (typeof response === 'object') {
 				// Hot reload
 				if (response.hot) {
@@ -220,47 +220,9 @@ module.exports = class Bootstrap
 					response.data.shared.__dataItems = {};
 				}
 
-				component.watch = {};
-
-				if (response.data.shared) {
-					component.watch['shared'] = {
-						handler: function (update, oldVal) {
-							console.log('update!');
-							socket.emit('sharedDataUpdate', {
-								item: 'shared',
-								url: window.location.pathname,
-								payload: update,
-							});
-						},
-						deep: true
-					};
-				}
-
 				if (component.data) {
 					response.data = merge(response.data, component.data);
 					delete component.data;
-				}
-
-				if (component.sharedDataItems) {
-					component.sharedDataItems.forEach(sharedDataItem => {
-						component.watch[sharedDataItem] = {
-							handler: function (update, oldVal, internal = false) {
-								console.log(update);
-								if (! update.fromServer) {
-									socket.emit('sharedDataUpdate', {
-										item: sharedDataItem,
-										url: window.location.pathname,
-										payload: update,
-									});
-								} else if (typeof update == 'object' && update.payload) {
-									console.log('update payload!');
-									console.log(this);
-									this.watch[sharedDataItem].handler(update.payload, update.payload, true);
-								}
-							},
-							deep: true
-						};
-					});
 				}
 
 				component.template = response.template;
@@ -286,8 +248,6 @@ module.exports = class Bootstrap
 	processLayoutUpdates()
 	{
 		socket.on('templateUpdate', (response) => {
-			console.log('template update!');
-
 			this.createLayoutComponent(response.name, response.template);
 		});
 	}

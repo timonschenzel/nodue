@@ -17,7 +17,7 @@ module.exports = class HotReload
 
 	start()
 	{
-		console.log('[info] Start hot reload feature.');
+		log.info('Start hot reload feature.');
 
 		chokidar.watch(app.basePath, { ignored: /(^|[\/\\])\..|\/node_modules|\/database|\/storage/ }).on('all', async (event, path) => {
 			if (fs.lstatSync(path).isFile() && app.isRunning) {

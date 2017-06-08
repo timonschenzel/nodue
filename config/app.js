@@ -22,6 +22,7 @@ module.exports = {
 	 * Class instances.
 	 */
 	instances: {
+		log: 'App.Logger',
 		DB: function(app) {
 			return app.make('db');
 		},

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 62);
+/******/ 	return __webpack_require__(__webpack_require__.s = 63);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -285,11 +285,11 @@ function localstorage(){
  * Module dependencies.
  */
 
-var keys = __webpack_require__(38);
+var keys = __webpack_require__(39);
 var hasBinary = __webpack_require__(10);
 var sliceBuffer = __webpack_require__(27);
 var after = __webpack_require__(26);
-var utf8 = __webpack_require__(60);
+var utf8 = __webpack_require__(61);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
@@ -1286,7 +1286,7 @@ Transport.prototype.onClose = function () {
 
 /* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
-var hasCORS = __webpack_require__(39);
+var hasCORS = __webpack_require__(40);
 
 module.exports = function (opts) {
   var xdomain = opts.xdomain;
@@ -1333,10 +1333,10 @@ module.exports = function (opts) {
  * Module dependencies.
  */
 
-var debug = __webpack_require__(53)('socket.io-parser');
-var json = __webpack_require__(41);
+var debug = __webpack_require__(54)('socket.io-parser');
+var json = __webpack_require__(42);
 var Emitter = __webpack_require__(36);
-var binary = __webpack_require__(52);
+var binary = __webpack_require__(53);
 var isBuf = __webpack_require__(21);
 
 /**
@@ -12353,7 +12353,7 @@ process.umask = function() { return 0; };
  * Module dependencies.
  */
 
-var eio = __webpack_require__(46);
+var eio = __webpack_require__(47);
 var Socket = __webpack_require__(18);
 var Emitter = __webpack_require__(3);
 var parser = __webpack_require__(8);
@@ -12951,7 +12951,7 @@ function on (obj, ev, fn) {
 
 var parser = __webpack_require__(8);
 var Emitter = __webpack_require__(3);
-var toArray = __webpack_require__(56);
+var toArray = __webpack_require__(57);
 var on = __webpack_require__(17);
 var bind = __webpack_require__(9);
 var debug = __webpack_require__(1)('socket.io-client:socket');
@@ -13374,9 +13374,9 @@ Socket.prototype.compress = function (compress) {
  */
 
 var XMLHttpRequest = __webpack_require__(7);
-var XHR = __webpack_require__(50);
-var JSONP = __webpack_require__(49);
-var websocket = __webpack_require__(51);
+var XHR = __webpack_require__(51);
+var JSONP = __webpack_require__(50);
+var websocket = __webpack_require__(52);
 
 /**
  * Export transports.
@@ -13900,7 +13900,7 @@ module.exports = function () {
 	_createClass(Bootstrap, [{
 		key: 'loadSocketIO',
 		value: function loadSocketIO() {
-			window.io = __webpack_require__(44);
+			window.io = __webpack_require__(45);
 		}
 	}, {
 		key: 'loadjQuery',
@@ -13910,17 +13910,17 @@ module.exports = function () {
 	}, {
 		key: 'loadPretty',
 		value: function loadPretty() {
-			window.pretty = __webpack_require__(40).pretty;
+			window.pretty = __webpack_require__(41).pretty;
 		}
 	}, {
 		key: 'loadVuex',
 		value: function loadVuex() {
-			window.Vuex = __webpack_require__(58).default;
+			window.Vuex = __webpack_require__(59).default;
 		}
 	}, {
 		key: 'loadVue',
 		value: function loadVue() {
-			window.Vue = __webpack_require__(57);
+			window.Vue = __webpack_require__(58);
 
 			Vue.use(Vuex);
 
@@ -13947,7 +13947,7 @@ module.exports = function () {
 	}, {
 		key: 'loadDeepMergeModule',
 		value: function loadDeepMergeModule() {
-			window.merge = __webpack_require__(66);
+			window.merge = __webpack_require__(38);
 		}
 	}, {
 		key: 'createViewPresentationComponent',
@@ -14026,7 +14026,7 @@ module.exports = function () {
 
 				history.pushState({ url: url }, null, url);
 
-				socket.emit('pageRequest', {
+				socket.emit('getRequest', {
 					url: url
 				});
 			});
@@ -14039,7 +14039,7 @@ module.exports = function () {
 				if (e.state != null && e.state.url != null) {
 					url = e.state.url;
 				}
-				socket.emit('pageRequest', {
+				socket.emit('getRequest', {
 					url: url
 				});
 			});
@@ -14054,7 +14054,7 @@ module.exports = function () {
 	}, {
 		key: 'processNewPageContent',
 		value: function processNewPageContent() {
-			socket.on('pageRequest', function (response) {
+			socket.on('getResponse', function (response) {
 				if ((typeof response === 'undefined' ? 'undefined' : _typeof(response)) === 'object') {
 					// Hot reload
 					if (response.hot) {
@@ -14074,49 +14074,9 @@ module.exports = function () {
 						response.data.shared.__dataItems = {};
 					}
 
-					component.watch = {};
-
-					if (response.data.shared) {
-						component.watch['shared'] = {
-							handler: function handler(update, oldVal) {
-								console.log('update!');
-								socket.emit('sharedDataUpdate', {
-									item: 'shared',
-									url: window.location.pathname,
-									payload: update
-								});
-							},
-							deep: true
-						};
-					}
-
 					if (component.data) {
 						response.data = merge(response.data, component.data);
 						delete component.data;
-					}
-
-					if (component.sharedDataItems) {
-						component.sharedDataItems.forEach(function (sharedDataItem) {
-							component.watch[sharedDataItem] = {
-								handler: function handler(update, oldVal) {
-									var internal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-									console.log(update);
-									if (!update.fromServer) {
-										socket.emit('sharedDataUpdate', {
-											item: sharedDataItem,
-											url: window.location.pathname,
-											payload: update
-										});
-									} else if ((typeof update === 'undefined' ? 'undefined' : _typeof(update)) == 'object' && update.payload) {
-										console.log('update payload!');
-										console.log(this);
-										this.watch[sharedDataItem].handler(update.payload, update.payload, true);
-									}
-								},
-								deep: true
-							};
-						});
 					}
 
 					component.template = response.template;
@@ -14143,8 +14103,6 @@ module.exports = function () {
 			var _this = this;
 
 			socket.on('templateUpdate', function (response) {
-				console.log('template update!');
-
 				_this.createLayoutComponent(response.name, response.template);
 			});
 		}
@@ -14717,7 +14675,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(42);
+exports.humanize = __webpack_require__(43);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -14908,6 +14866,100 @@ function coerce(val) {
 
 /***/ }),
 /* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
+    if (true) {
+        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+				__WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if (typeof exports === 'object') {
+        module.exports = factory();
+    } else {
+        root.deepmerge = factory();
+    }
+}(this, function () {
+
+function isMergeableObject(val) {
+    var nonNullObject = val && typeof val === 'object'
+
+    return nonNullObject
+        && Object.prototype.toString.call(val) !== '[object RegExp]'
+        && Object.prototype.toString.call(val) !== '[object Date]'
+}
+
+function emptyTarget(val) {
+    return Array.isArray(val) ? [] : {}
+}
+
+function cloneIfNecessary(value, optionsArgument) {
+    var clone = optionsArgument && optionsArgument.clone === true
+    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
+}
+
+function defaultArrayMerge(target, source, optionsArgument) {
+    var destination = target.slice()
+    source.forEach(function(e, i) {
+        if (typeof destination[i] === 'undefined') {
+            destination[i] = cloneIfNecessary(e, optionsArgument)
+        } else if (isMergeableObject(e)) {
+            destination[i] = deepmerge(target[i], e, optionsArgument)
+        } else if (target.indexOf(e) === -1) {
+            destination.push(cloneIfNecessary(e, optionsArgument))
+        }
+    })
+    return destination
+}
+
+function mergeObject(target, source, optionsArgument) {
+    var destination = {}
+    if (isMergeableObject(target)) {
+        Object.keys(target).forEach(function (key) {
+            destination[key] = cloneIfNecessary(target[key], optionsArgument)
+        })
+    }
+    Object.keys(source).forEach(function (key) {
+        if (!isMergeableObject(source[key]) || !target[key]) {
+            destination[key] = cloneIfNecessary(source[key], optionsArgument)
+        } else {
+            destination[key] = deepmerge(target[key], source[key], optionsArgument)
+        }
+    })
+    return destination
+}
+
+function deepmerge(target, source, optionsArgument) {
+    var array = Array.isArray(source);
+    var options = optionsArgument || { arrayMerge: defaultArrayMerge }
+    var arrayMerge = options.arrayMerge || defaultArrayMerge
+
+    if (array) {
+        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
+    } else {
+        return mergeObject(target, source, optionsArgument)
+    }
+}
+
+deepmerge.all = function deepmergeAll(array, optionsArgument) {
+    if (!Array.isArray(array) || array.length < 2) {
+        throw new Error('first argument should be an array with at least two elements')
+    }
+
+    // we are sure there are at least 2 values, so it is safe to have no initial value
+    return array.reduce(function(prev, next) {
+        return deepmerge(prev, next, optionsArgument)
+    })
+}
+
+return deepmerge
+
+}));
+
+
+/***/ }),
+/* 39 */
 /***/ (function(module, exports) {
 
 
@@ -14932,7 +14984,7 @@ module.exports = Object.keys || function keys (obj){
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 
@@ -14955,7 +15007,7 @@ try {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15162,14 +15214,14 @@ module.exports.pretty = function(jsObject, indentLength, outputTo, fullFunction)
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 ;(function () {
   // Detect the `define` function exposed by asynchronous module loaders. The
   // strict `define` check is necessary for compatibility with `r.js`.
-  var isLoader = "function" === "function" && __webpack_require__(59);
+  var isLoader = "function" === "function" && __webpack_require__(60);
 
   // A set of types used to distinguish objects from primitives.
   var objectTypes = {
@@ -16072,7 +16124,7 @@ module.exports.pretty = function(jsObject, indentLength, outputTo, fullFunction)
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports) {
 
 /**
@@ -16227,7 +16279,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -16265,7 +16317,7 @@ module.exports = function parsejson(data) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -16273,7 +16325,7 @@ module.exports = function parsejson(data) {
  * Module dependencies.
  */
 
-var url = __webpack_require__(45);
+var url = __webpack_require__(46);
 var parser = __webpack_require__(8);
 var Manager = __webpack_require__(16);
 var debug = __webpack_require__(1)('socket.io-client');
@@ -16380,7 +16432,7 @@ exports.Socket = __webpack_require__(18);
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -16462,19 +16514,19 @@ function url (uri, loc) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-module.exports = __webpack_require__(47);
-
-
-/***/ }),
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 module.exports = __webpack_require__(48);
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+module.exports = __webpack_require__(49);
 
 /**
  * Exports parser
@@ -16486,7 +16538,7 @@ module.exports.parser = __webpack_require__(2);
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -16499,7 +16551,7 @@ var debug = __webpack_require__(1)('engine.io-client:socket');
 var index = __webpack_require__(11);
 var parser = __webpack_require__(2);
 var parseuri = __webpack_require__(14);
-var parsejson = __webpack_require__(43);
+var parsejson = __webpack_require__(44);
 var parseqs = __webpack_require__(5);
 
 /**
@@ -17231,7 +17283,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -17469,7 +17521,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -17900,7 +17952,7 @@ function unloadHandler () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -17917,7 +17969,7 @@ var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(61);
+    NodeWebSocket = __webpack_require__(62);
   } catch (e) { }
 }
 
@@ -18192,7 +18244,7 @@ WS.prototype.check = function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -18340,7 +18392,7 @@ exports.removeBlobs = function(data, callback) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -18350,7 +18402,7 @@ exports.removeBlobs = function(data, callback) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(54);
+exports = module.exports = __webpack_require__(55);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -18514,7 +18566,7 @@ function localstorage(){
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -18530,7 +18582,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(55);
+exports.humanize = __webpack_require__(56);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -18717,7 +18769,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports) {
 
 /**
@@ -18848,7 +18900,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports) {
 
 module.exports = toArray
@@ -18867,7 +18919,7 @@ function toArray(list, index) {
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28505,7 +28557,7 @@ module.exports = Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15), __webpack_require__(0)))
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29319,7 +29371,7 @@ var index_esm = {
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -29328,7 +29380,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/wtf8 v1.0.0 by @mathias */
@@ -29568,114 +29620,17 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(24);
 module.exports = __webpack_require__(25);
-
-
-/***/ }),
-/* 63 */,
-/* 64 */,
-/* 65 */,
-/* 66 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
-    if (true) {
-        !(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    } else if (typeof exports === 'object') {
-        module.exports = factory();
-    } else {
-        root.deepmerge = factory();
-    }
-}(this, function () {
-
-function isMergeableObject(val) {
-    var nonNullObject = val && typeof val === 'object'
-
-    return nonNullObject
-        && Object.prototype.toString.call(val) !== '[object RegExp]'
-        && Object.prototype.toString.call(val) !== '[object Date]'
-}
-
-function emptyTarget(val) {
-    return Array.isArray(val) ? [] : {}
-}
-
-function cloneIfNecessary(value, optionsArgument) {
-    var clone = optionsArgument && optionsArgument.clone === true
-    return (clone && isMergeableObject(value)) ? deepmerge(emptyTarget(value), value, optionsArgument) : value
-}
-
-function defaultArrayMerge(target, source, optionsArgument) {
-    var destination = target.slice()
-    source.forEach(function(e, i) {
-        if (typeof destination[i] === 'undefined') {
-            destination[i] = cloneIfNecessary(e, optionsArgument)
-        } else if (isMergeableObject(e)) {
-            destination[i] = deepmerge(target[i], e, optionsArgument)
-        } else if (target.indexOf(e) === -1) {
-            destination.push(cloneIfNecessary(e, optionsArgument))
-        }
-    })
-    return destination
-}
-
-function mergeObject(target, source, optionsArgument) {
-    var destination = {}
-    if (isMergeableObject(target)) {
-        Object.keys(target).forEach(function (key) {
-            destination[key] = cloneIfNecessary(target[key], optionsArgument)
-        })
-    }
-    Object.keys(source).forEach(function (key) {
-        if (!isMergeableObject(source[key]) || !target[key]) {
-            destination[key] = cloneIfNecessary(source[key], optionsArgument)
-        } else {
-            destination[key] = deepmerge(target[key], source[key], optionsArgument)
-        }
-    })
-    return destination
-}
-
-function deepmerge(target, source, optionsArgument) {
-    var array = Array.isArray(source);
-    var options = optionsArgument || { arrayMerge: defaultArrayMerge }
-    var arrayMerge = options.arrayMerge || defaultArrayMerge
-
-    if (array) {
-        return Array.isArray(target) ? arrayMerge(target, source, optionsArgument) : cloneIfNecessary(source, optionsArgument)
-    } else {
-        return mergeObject(target, source, optionsArgument)
-    }
-}
-
-deepmerge.all = function deepmergeAll(array, optionsArgument) {
-    if (!Array.isArray(array) || array.length < 2) {
-        throw new Error('first argument should be an array with at least two elements')
-    }
-
-    // we are sure there are at least 2 values, so it is safe to have no initial value
-    return array.reduce(function(prev, next) {
-        return deepmerge(prev, next, optionsArgument)
-    })
-}
-
-return deepmerge
-
-}));
 
 
 /***/ })

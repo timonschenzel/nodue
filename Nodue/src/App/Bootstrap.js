@@ -8,7 +8,9 @@ module.exports = class Bootstrap
 		return [
 			'loadSugarModule',
 			'bootSupport',
-			'loadPretty',
+			'loadFiguresModule',
+			'loadChalkModule',
+			'loadPrettyModule',
 			'loadDeepMergeModule',
 			'loadPluralizeModule',
 			'loadEnvFile',
@@ -58,7 +60,17 @@ module.exports = class Bootstrap
 		});
 	}
 
-	loadPretty()
+	loadFiguresModule()
+	{
+		global.figures = require('figures');
+	}
+
+	loadChalkModule()
+	{
+		global.chalk = require('chalk');
+	}
+
+	loadPrettyModule()
 	{
 		global.pretty = require('js-object-pretty-print').pretty;
 	}
