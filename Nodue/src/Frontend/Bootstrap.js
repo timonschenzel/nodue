@@ -21,7 +21,7 @@ module.exports = class Bootstrap
 			'mapAnchorElements',
 			'handlePopstate',
 			'createComponentFunction',
-			'processNewPageContent',
+			'processResponse',
 			'processLayoutUpdates',
 			'processSharedDateUpdates',
 		];
@@ -198,9 +198,9 @@ module.exports = class Bootstrap
 		};
 	}
 
-	processNewPageContent()
+	processResponse()
 	{
-		socket.on('getResponse', (response) => {
+		socket.on('response', (response) => {
 			if (typeof response === 'object') {
 				// Hot reload
 				if (response.hot) {

@@ -64,7 +64,7 @@ module.exports = class HotReload
  			response.hot = true;
  		}
 
-	 	Server.io.to('page.' + url).emit('pageRequest', response);
+	 	Server.io.to('page.' + url).emit('response', response);
 	}
 
 	inspectEndpoint(endpoint)

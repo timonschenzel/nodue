@@ -39,7 +39,7 @@ module.exports = class Server
 			socket.join('page.' + requestedUrl);
 			Request.track({ url: requestedUrl });
 			let response = await app.handle(Request);
-			socket.emit('getResponse', response);
+			socket.emit('response', response);
 
 			// User request a page
 		  	socket.on('getRequest', async (incommingRequest) => {
@@ -57,14 +57,14 @@ module.exports = class Server
 		  			response.name = response.name + '-' + new Date().getTime();
 		  		}
 
-		  		socket.emit('getResponse', response);
+		  		socket.emit('response', response);
 		  	});
 
 		  	socket.on('postRequest', async (incommingRequest) => {
 		  		Request.track(incommingRequest);
 		  		let response = await app.handle(Request);
 
-		  		socket.emit('getResponse', response);
+		  		socket.emit('response', response);
 		  	});
 
 		  	socket.on('sharedDataUpdate', async (update) => {

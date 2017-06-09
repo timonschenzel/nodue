@@ -14052,9 +14052,9 @@ module.exports = function () {
 			};
 		}
 	}, {
-		key: 'processNewPageContent',
-		value: function processNewPageContent() {
-			socket.on('getResponse', function (response) {
+		key: 'processResponse',
+		value: function processResponse() {
+			socket.on('response', function (response) {
 				if ((typeof response === 'undefined' ? 'undefined' : _typeof(response)) === 'object') {
 					// Hot reload
 					if (response.hot) {
@@ -14124,7 +14124,7 @@ module.exports = function () {
    * The bootstrap tasks for Nodue frontend.
    */
 		get: function get() {
-			return ['loadSocketIO', 'loadjQuery', 'loadPretty', 'loadVuex', 'loadVue', 'loadDeepMergeModule', 'createViewPresentationComponent', 'createStringPresentationComponent', 'createObjectPresentationComponent', 'createGlobalComponents', 'createLayoutComponents', 'connectWithServer', 'mapAnchorElements', 'handlePopstate', 'createComponentFunction', 'processNewPageContent', 'processLayoutUpdates', 'processSharedDateUpdates'];
+			return ['loadSocketIO', 'loadjQuery', 'loadPretty', 'loadVuex', 'loadVue', 'loadDeepMergeModule', 'createViewPresentationComponent', 'createStringPresentationComponent', 'createObjectPresentationComponent', 'createGlobalComponents', 'createLayoutComponents', 'connectWithServer', 'mapAnchorElements', 'handlePopstate', 'createComponentFunction', 'processResponse', 'processLayoutUpdates', 'processSharedDateUpdates'];
 		}
 	}]);
 
