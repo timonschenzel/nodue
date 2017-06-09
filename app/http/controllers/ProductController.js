@@ -24,4 +24,13 @@ module.exports = class ProductController extends Controller
 	{
 		return view('product.create');
 	}
+
+	store()
+	{
+		let stmt = DB.prepare('INSERT INTO products VALUES (:name)');
+		let request = Request.all();
+		stmt.run({name: request.name});
+
+		return this.index();
+	}
 }

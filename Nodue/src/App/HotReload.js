@@ -67,9 +67,9 @@ module.exports = class HotReload
 	 	Server.io.to('page.' + url).emit('response', response);
 	}
 
-	inspectEndpoint(endpoint)
+	inspectGetEndpoint(endpoint)
 	{
-		let routeExpression = Route.getRoutes[endpoint];
+		let routeExpression = Route.getRoute(endpoint);
 
 		if (typeof routeExpression === 'string') {
 			let controllerName = Request.findControllerName(routeExpression);

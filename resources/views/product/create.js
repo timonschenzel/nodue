@@ -8,6 +8,7 @@
 		{
 			socket.emit('postRequest', {
 				name: this.name,
+				_url: 'product',
 			});
 		}
 	}

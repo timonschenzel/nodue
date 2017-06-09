@@ -92,7 +92,7 @@ module.exports = class App
 
 	async handle(request)
 	{
-		let routing = Route.direct(request.url);
+		let routing = Route.direct(request);
 
 		let response = request.capture(routing);
 

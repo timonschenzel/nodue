@@ -15,56 +15,106 @@ module.exports = class Server
 
 	async start()
 	{
-		this.server.get('*', (incommingRequest, response) => {
-			let content = null;
-
-			Request.track(incommingRequest);
-			content = app.handle(Request);
-
+		this.server.get('*', async (request, response) => {
 			let baseContent = fs.readFileSync(app.basePath + 'resources/views/app.html', 'utf8');
 
 			response.send(baseContent);
 		});
 		
-		this.server.post('*', (incommingRequest, response) => {
-			Request.track(incommingRequest);
-			let content = app.handle(Request);
+		this.server.post('*', async (request, response) => {
+			let content = await this.handleRequest({
+				type: 'post',
+				url: request.url,
+				payload: request,
+			});
 
-			response.send(content);
+			if (content.error) {
+				response.status(500).send();
+			} else {
+				response.send(content);
+			}
+		});
+
+		this.server.put('*', async (request, response) => {
+			let content = await this.handleRequest({
+				type: 'put',
+				url: request.url,
+				payload: request,
+			});
+
+			response.send(content.data.data);
+		});
+
+		this.server.patch('*', async (request, response) => {
+			let content = await this.handleRequest({
+				type: 'patch',
+				url: request.url,
+				payload: request,
+			});
+
+			response.send(content.data.data);
+		});
+
+		this.server.delete('*', async (request, response) => {
+			let content = await this.handleRequest({
+				type: 'delete',
+				url: request.url,
+				payload: request,
+			});
+
+			response.send(content.data.data);
 		});
 
 		this.io.on('connection', async (socket) => {
 			// First connection from user
-			let requestedUrl = socket.handshake.query.url;
-			socket.join('page.' + requestedUrl);
-			Request.track({ url: requestedUrl });
-			let response = await app.handle(Request);
-			socket.emit('response', response);
+			await this.handleRequest({
+				type: 'get',
+				url: socket.handshake.query.url,
+				socket: socket,
+			});
 
-			// User request a page
-		  	socket.on('getRequest', async (incommingRequest) => {
-		  		for (let room in socket.rooms) {
-		  			if (room.startsWith('page.')) {
-		  				socket.leave(room);
-		  			}
-		  		}
-		  		socket.join('page.' + incommingRequest.url);
-
-		  		Request.track(incommingRequest);
-		  		let response = await app.handle(Request);
-
-		  		if (typeof response == 'object') {
-		  			response.name = response.name + '-' + new Date().getTime();
-		  		}
-
-		  		socket.emit('response', response);
+		  	socket.on('getRequest', async (request) => {
+		  		await this.handleRequest({
+		  			type: 'get',
+		  			url: request.url,
+		  			socket: socket,
+		  		});
 		  	});
 
-		  	socket.on('postRequest', async (incommingRequest) => {
-		  		Request.track(incommingRequest);
-		  		let response = await app.handle(Request);
+		  	socket.on('postRequest', async (request) => {
+		  		let url = request._url;
+		  		delete request._url;
 
-		  		socket.emit('response', response);
+		  		await this.handleRequest({
+		  			type: 'post',
+		  			url: url,
+		  			data: request,
+		  			socket: socket,
+		  		});
+		  	});
+
+		  	socket.on('putRequest', async (request) => {
+		  		await this.handleRequest({
+		  			type: 'put',
+		  			url: request.url,
+		  			socket: socket,
+		  		});
+		  	});
+
+		  	socket.on('patchRequest', async (request) => {
+		  		await this.handleRequest({
+		  			type: 'patch',
+		  			url: request.url,
+		  			socket: socket,
+		  		});
+		  	});
+
+		  	socket.on('deleteRequest', async (request) => {
+		  		await this.handleRequest({
+		  			type: 'delete',
+		  			url: request.url,
+		  			socket: socket,
+		  		});
 		  	});
 
 		  	socket.on('sharedDataUpdate', async (update) => {
@@ -83,5 +133,30 @@ module.exports = class Server
 
 			log.success(`Server is running at localhost:${this.port}`);
 		});
+	}
+
+	async handleRequest(request)
+	{
+		if (request.type == 'get' && request.socket) {
+			for (let room in request.socket.rooms) {
+				if (room.startsWith('page.')) {
+					request.socket.leave(room);
+				}
+			}
+			request.socket.join('page.' + request.url);
+		}
+
+		Request.track(request);
+		let response = await app.handle(Request);
+
+		if (! request.socket) {
+			return response;
+		}
+
+		if (typeof response == 'object') {
+			response.name = response.name + '-' + new Date().getTime();
+		}
+
+		request.socket.emit('response', response);
 	}
 }

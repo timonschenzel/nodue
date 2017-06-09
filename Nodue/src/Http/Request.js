@@ -4,6 +4,18 @@ module.exports = class Request
 	{
 		this.incommingRequest = [];
 		this.url = null;
+		this.type = null;
+		this._data = null;
+	}
+
+	data(data)
+	{
+		this._data = data;
+	}
+
+	all()
+	{
+		return this._data;
 	}
 
 	track(incommingRequest)
@@ -12,8 +24,14 @@ module.exports = class Request
 			incommingRequest.url = '/';
 		}
 
+		if (incommingRequest.type == null) {
+			incommingRequest.type = 'get';
+		}
+
 		this.incommingRequest = incommingRequest;
 		this.url = this.incommingRequest.url;
+		this.type = incommingRequest.type;
+		this._data = incommingRequest.data;
 
 		if (! this.url.startsWith('/')) {
 			this.url = '/' + this.url;
@@ -40,6 +58,7 @@ module.exports = class Request
 
 	async handle(routing)
 	{
+		let response = null;
 		let handler = routing.handler();
 		let parameters = routing.parameters();
 
@@ -59,7 +78,13 @@ module.exports = class Request
 			}
 		});
 
-		let response = await build(controller[controllerFunctionName], parameters);
+		try {
+			response = await build(controller[controllerFunctionName], parameters);
+		} catch(error) {
+			return {
+				error
+			};
+		}
 
 		return this.processResponse(response, handler);
 	}

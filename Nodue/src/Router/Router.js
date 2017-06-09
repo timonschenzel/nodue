@@ -3,8 +3,15 @@ module.exports = class Router
 	constructor()
 	{
 		this._uri = [];
+		this._type = null;
 		this._handler = null;
-		this.getRoutes = [];
+		this._routes = {
+			get: [],
+			post: [],
+			put: [],
+			patch: [],
+			delete: [],
+		};
 		this.postRoutes = [];
 		this._parameters = [];
 		this._parameterNames = [];
@@ -17,36 +24,68 @@ module.exports = class Router
 
 	get(url, action)
 	{
-		url = this.normalize(url);
-
-		this.getRoutes[url] = action;
+		this.addRoute('get', url, action);
 	}
 
 	post(url, action)
 	{
-		url = this.normalize(url);
-
-		this.postRoutes[url] = action;
+		this.addRoute('post', url, action);
 	}
 
-	getEndpoints()
+	put(url, action)
 	{
-		return this.getRoutes;
+		this.addRoute('put', url, action);
 	}
 
-	postEndpoints()
+	patch(url, action)
 	{
-		return this.postRoutes;
+		this.addRoute('patch', url, action);
 	}
 
-	direct(url)
+	delete(url, action)
+	{
+		this.addRoute('delete', url, action);
+	}
+
+	addRoute(type, url, action)
+	{
+		this._routes[type][this.normalize(url)] = action;
+	}
+
+	routes()
+	{
+		return this._routes;
+	}
+
+	getRoute(endpoint)
+	{
+		return this._routes['get'][endpoint];
+	}
+
+	getRoutes()
+	{
+		return this._routes['get'];
+	}
+
+	postRoute(endpoint)
+	{
+		return this._routes['post'][endpoint];
+	}
+
+	postRoutes()
+	{
+		return this._routes['post'];
+	}
+
+	direct(request)
 	{
 		this._parameters = [];
 		this._parameterNames = [];
 
-		this._url = this.normalize(url);
+		this._url = this.normalize(request.url);
+		this._type = request.type;
 
-		this._handler = this.getRoutes[this._url];
+		this._handler = this._routes[this._type][this._url];
 
 		if (! this._handler) {
 			this.findMatch();
@@ -69,7 +108,7 @@ module.exports = class Router
 		let urlParts = this.getParts(this._url);
 		let parameterName = null;
 
-		for (let route in this.getRoutes) {
+		for (let route in this._routes[this._type]) {
 			parameterName = null;
 
 			let routeParts = this.getParts(route);
@@ -96,7 +135,7 @@ module.exports = class Router
 			}
 
 			if (match) {
-				this._handler = this.getRoutes[route];
+				this._handler = this._routes[this._type][route];
 				return;
 			}
 		}
