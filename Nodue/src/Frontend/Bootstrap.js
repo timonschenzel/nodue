@@ -22,6 +22,7 @@ module.exports = class Bootstrap
 			'handlePopstate',
 			'createComponentFunction',
 			'processResponse',
+			'processExceptionResponse',
 			'processLayoutUpdates',
 			'processSharedDateUpdates',
 		];
@@ -242,6 +243,14 @@ module.exports = class Bootstrap
 			} else {
 				$('#app').html(response);
 			}
+		});
+	}
+
+	processExceptionResponse()
+	{
+		socket.on('exceptionResponse', (exceptionHtml) => {
+			$('head').html('');
+			$('body').html(exceptionHtml);
 		});
 	}
 

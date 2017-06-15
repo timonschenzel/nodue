@@ -1,3 +1,5 @@
+let Ouch = require('ouch');
+
 module.exports = class Server
 {
 	constructor()
@@ -153,10 +155,22 @@ module.exports = class Server
 			return response;
 		}
 
-		if (typeof response == 'object') {
-			response.name = response.name + '-' + new Date().getTime();
-		}
+		if (response.error) {
+			var ouchInstance = (new Ouch).pushHandler(
+				new Ouch.handlers.PrettyPageHandler('blue', null, 'sublime')
+			);
 
-		request.socket.emit('response', response);
+			var errorHtml = ouchInstance.handleException(response.error, null, null, function (output) {
+				console.log('Error handled properly');
+			});
+
+			request.socket.emit('exceptionResponse', errorHtml);
+		} else {
+			if (typeof response == 'object') {
+				response.name = response.name + '-' + new Date().getTime();
+			}
+
+			request.socket.emit('response', response);
+		}
 	}
 }
