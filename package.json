@@ -15,7 +15,8 @@
     "tests": "node --harmony-async-await node_modules/ava/cli.js jsunit/jsunit.js || true"
   },
   "devDependencies": {
-    "ava": "^0.19.1"
+    "ava": "^0.19.1",
+    "ouch": "^1.0.0"
   },
   "dependencies": {
     "auto-loader": "^0.2.0",
