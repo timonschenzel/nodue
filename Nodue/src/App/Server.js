@@ -13,6 +13,8 @@ module.exports = class Server
 		this.server.use(this.favicon(app.path('public/favicon.ico')));
 		this.http = require('http').Server(this.server);
 		this.io = require('socket.io')(this.http);
+
+		this.socket = null;
 	}
 
 	async start()
@@ -68,6 +70,8 @@ module.exports = class Server
 		});
 
 		this.io.on('connection', async (socket) => {
+			this.socket = socket;
+
 			// First connection from user
 			await this.handleRequest({
 				type: 'get',
@@ -161,13 +165,32 @@ module.exports = class Server
 			);
 
 			var errorHtml = ouchInstance.handleException(response.error, null, null, function (output) {
+				log.error(response.error);
 				console.log('Error handled properly');
 			});
 
 			request.socket.emit('exceptionResponse', errorHtml);
 		} else {
 			if (typeof response == 'object') {
+				// Redirect
+				if (response.data.data && response.data.data.redirect) {
+					log.info('Redirect: ' + response.data.data.redirect);
+					return this.handleRequest({
+			  			type: 'get',
+			  			url: response.data.data.redirect,
+			  			socket: request.socket,
+			  			redirect: {
+			  				from: request.url,
+			  				to: response.data.data.redirect,
+			  			}
+			  		});
+				}
+
 				response.name = response.name + '-' + new Date().getTime();
+			}
+
+			if (request.redirect) {
+				response.data.redirect = request.redirect;
 			}
 
 			request.socket.emit('response', response);

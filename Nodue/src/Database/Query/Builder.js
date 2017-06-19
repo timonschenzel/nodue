@@ -46,6 +46,11 @@ module.exports = class Builder
 	    ];
 	}
 
+	query(sql)
+	{
+		return this._connection.prepare(sql);
+	}
+
 	raw(sql)
 	{
 		return sql;

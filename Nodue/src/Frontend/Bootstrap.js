@@ -240,6 +240,11 @@ module.exports = class Bootstrap
 				createComponent(response.name, component);
 				vm.$data.activeComponent = response.name;
 				vm.$data.activePageUri = response.url;
+
+				if (response.data.redirect) {
+					let redirect = response.data.redirect.to;
+					history.pushState({ redirect }, null, redirect);
+				}
 			} else {
 				$('#app').html(response);
 			}

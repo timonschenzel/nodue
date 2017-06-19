@@ -22,15 +22,17 @@ module.exports = class ProductController extends Controller
 
 	create()
 	{
-		return view('product.create');
+		let title = 'Products';
+		let slogan = 'Create a new product';
+
+		return view('product.create', { title, slogan });
 	}
 
 	store()
 	{
-		let stmt = DB.prepare('INSERT INTO products VALUES (:name)');
 		let request = Request.all();
-		stmt.run({name: request.name});
+		let query = DB.query('INSERT INTO products (name) VALUES (:name)').run({name: request.name});
 
-		return this.index();
+		return redirect('/product');
 	}
 }
