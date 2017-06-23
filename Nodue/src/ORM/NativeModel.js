@@ -2,8 +2,7 @@ module.exports = class NativeModel
 {
 	constructor()
 	{
-		let sqlite3 = require('better-sqlite3');
-		this.db = new sqlite3(database_path('database.sqlite'));
+		this.builder = app.make('db');
 	}
 
 	get table()
@@ -18,11 +17,11 @@ module.exports = class NativeModel
 
 	find(id)
 	{
-		return this.db.prepare(`SELECT * FROM ${this.table} WHERE ${this.primaryKey} = ?`).get(id);
+		return this.builder.query(`SELECT * FROM ${this.table} WHERE ${this.primaryKey} = ?`).get(id);
 	}
 
 	all()
 	{
-		return this.db.prepare(`SELECT * FROM ${this.table}`).all();
+		return this.builder.query(`SELECT * FROM ${this.table}`).all();
 	}
 }

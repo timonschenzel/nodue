@@ -2,11 +2,11 @@ Route.get('/', 'PagesController@home');
 Route.get('/contact/{message}', 'PagesController@contact');
 Route.get('/hello', 'PagesController@hello');
 
-Route.get('product/create', 'ProductController@create')
-Route.post('/product', 'ProductController@store');
+Route.get('products/create', 'ProductsController@create')
+Route.post('/products', 'ProductsController@store');
 
-Route.get('/product', 'ProductController@index');
-Route.get('/product/{product}', 'ProductController@show');
+Route.get('/products', 'ProductsController@index');
+Route.get('/products/{product}', 'ProductsController@show');
 
 Route.get('/test/{message}', (/*Controller*/ controller, message) => {
 	controller.testing();

@@ -6,6 +6,8 @@
 		Seconds: {{ counter }}<br />
 		<button class="button is-primary" @click="replaceFirstProductName">Replace first product name with 'Test..'</button>
 		<hr>
+		<a href="/products/create">Create a new product</a>
+		<hr>
 		<ul>
 			<li v-for="(product, index) in shared.products">#{{ index }} &mdash; {{ product.name }}</li>
 		</ul>

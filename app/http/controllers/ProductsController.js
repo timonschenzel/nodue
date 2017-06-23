@@ -1,4 +1,4 @@
-module.exports = class ProductController extends Controller
+module.exports = class ProductsController extends Controller
 {
 	index()
 	{
@@ -33,6 +33,6 @@ module.exports = class ProductController extends Controller
 		let request = Request.all();
 		let query = DB.query('INSERT INTO products (name) VALUES (:name)').run({name: request.name});
 
-		return redirect('/product');
+		return redirect('/products');
 	}
 }
