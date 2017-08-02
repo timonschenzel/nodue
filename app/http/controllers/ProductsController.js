@@ -2,7 +2,8 @@ module.exports = class ProductsController extends Controller
 {
 	index()
 	{
-		let products = Product.all();
+		// let products = Product.all();
+		let products = DB.query('select * from products order by id desc').all();
 
 		let counter = null;
 
