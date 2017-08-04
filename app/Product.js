@@ -1,4 +1,4 @@
-module.exports = class Product extends NativeModel
+module.exports = class Product extends Model
 {
 	
 }

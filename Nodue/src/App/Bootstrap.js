@@ -122,7 +122,7 @@ module.exports = class Bootstrap
 		global.chokidar = require('chokidar');
 	}
 
-	initDatabaseConnection()
+	async initDatabaseConnection()
 	{
 		let dbLoader = require('../Database/Database').init();
 
@@ -180,7 +180,7 @@ module.exports = class Bootstrap
 				continue;
 			}
 
-			if (is_instanceof(AppFiles[model], NativeModel)) {
+			if (is_instanceof(AppFiles[model], Model)) {
 				let modelInstance = app.make(`${model}`);
 				global[model] = new Proxy(modelInstance, Nodue.ORM.Proxy);
 			}

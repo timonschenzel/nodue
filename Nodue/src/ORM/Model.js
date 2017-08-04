@@ -2,9 +2,9 @@ module.exports = class Model
 {
 	constructor()
 	{
-		this.bookshelf = Bookshelf.Model.extend(
-			this.settings()
-		);
+		// this.bookshelf = Bookshelf.Model.extend(
+		// 	this.settings()
+		// );
 	}
 
 	get table()
@@ -24,20 +24,24 @@ module.exports = class Model
 
 	async find(id)
 	{
-		return await this.bookshelf.where('id', id[0]).fetch().then(result => {
-		    return result;
-		}).catch(error => {
-		  	console.error(error.stack);
-		});
+		return await db(this.table).where(this.primaryKey, id);
+
+		// return await this.bookshelf.where('id', id[0]).fetch().then(result => {
+		//     return result;
+		// }).catch(error => {
+		//   	console.error(error.stack);
+		// });
 	}
 
 	async all()
 	{
-		return await this.bookshelf.fetchAll().then(result => {
-		    return result;
-		}).catch(error => {
-		  	console.error(error.stack);
-		});
+		return await db.select('*').from(this.table);
+
+		// return await this.bookshelf.fetchAll().then(result => {
+		//     return result;
+		// }).catch(error => {
+		//   	console.error(error.stack);
+		// });
 	}
 
 	settings()

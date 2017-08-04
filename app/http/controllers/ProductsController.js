@@ -1,9 +1,10 @@
 module.exports = class ProductsController extends Controller
 {
-	index()
+	async index()
 	{
-		// let products = Product.all();
-		let products = DB.query('select * from products order by id desc').all();
+		let products = await Product.all();
+
+		// let products = DB.query('select * from products order by id desc').all();
 
 		let counter = null;
 
@@ -13,7 +14,7 @@ module.exports = class ProductsController extends Controller
 		return view('product.index', { shared: { products }, counter, title, slogan });
 	}
 
-	show(/*Product*/ product)
+	async show(/*Product*/ product)
 	{
 		let title = 'Products';
 		let slogan = 'This is great!';

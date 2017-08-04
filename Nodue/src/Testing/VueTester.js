@@ -28,6 +28,7 @@ module.exports = class VueTester
 
 	async assertSee(expression)
 	{
+		console.log(await this.toHtml());
 		let rawExpression = expression;
 
 		if (typeof expression == 'string') {

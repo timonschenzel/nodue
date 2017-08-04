@@ -13,7 +13,7 @@ module.exports = class ViewProductsTest extends TestCase
 		// 	console.log(error);
 		// }
 
-		let response = await this.visit('/product/1');
+		let response = await this.visit('/products');
 		response.assertSee('Product name is Product 1');
 
 		// page.vm.toggleDivVisibility();
