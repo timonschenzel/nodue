@@ -13,8 +13,27 @@ module.exports = class ViewProductsTest extends TestCase
 		// 	console.log(error);
 		// }
 
+		await this.assertEquals(1, 1);
+		
 		let response = await this.visit('/products');
-		response.assertSee('Product name is Product 1');
+
+		await response.assertSee('Product name is Product 1');	
+
+
+		// let expression = 'Product name is Product 1';
+		// let rawExpression = expression;
+
+		// if (typeof expression == 'string') {
+		// 	expression = new RegExp(expression, 'gim');
+		// }
+
+
+		// await this.assertRegExp(expression, html, `Assert that "${rawExpression}" should exists on the page, but it was not found.`);
+
+		// response.assertSee('Product name is Product 1');
+
+		// setTimeout(() => {
+		// }, 1000);
 
 		// page.vm.toggleDivVisibility();
 		// page.assertHidden('Toggle me.');
