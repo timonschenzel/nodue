@@ -24,7 +24,7 @@ module.exports = class Server
 
 			response.send(baseContent);
 		});
-		
+
 		this.server.post('*', async (request, response) => {
 			let content = await this.handleRequest({
 				type: 'post',

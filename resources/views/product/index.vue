@@ -9,7 +9,7 @@
 		<a href="/products/create">Create a new product</a>
 		<hr>
 		<ul>
-			<li v-for="(product, index) in shared.products">#{{ index }} &mdash; {{ product.name }}</li>
+			<li v-for="(product, index) in shared.products">#{{ index }} &mdash; Product name is {{ product.name }}</li>
 		</ul>
 	</div>
 </app-layout>

@@ -67,7 +67,7 @@ module.exports = class Request
 
 		// Add support for constructor injection
 		let controller = build(app.loadController(controllerName));
-		
+
 		// Add support for route model binding
 		let dependencies = resolve(controller[controllerFunctionName]);
 		let dependency = null;
@@ -75,8 +75,7 @@ module.exports = class Request
 		for (var dependencyName in dependencies) {
 			dependency = dependencies[dependencyName];
 			if (dependency != null && typeof dependency == 'object' && is_instanceof(dependency.constructor, Model) && parameters[dependencyName]) {
-				parameters[dependencyName] = await dependency.find(parameters[dependencyName]);
-				// parameters[dependencyName] = {id: 1, name: 'Product 1'};
+				parameters[dependencyName] = dependency.find(parameters[dependencyName]);
 
 				if (parameters[dependencyName] && parameters[dependencyName][0]) {
 					parameters[dependencyName] = parameters[dependencyName][0];

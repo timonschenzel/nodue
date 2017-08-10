@@ -2,14 +2,12 @@ module.exports = class ProductsController extends Controller
 {
 	async index()
 	{
-		// let products = await Product.all();
+		let products = await Product.take(250);
 
-		let p1 = await Product.find(1);
-		let p2 = await Product.find(2);
+		// let p1 = Product.find(1);
+		// let p2 = Product.find(2);
 
-		let products = [p1, p2];
-
-		// let products = DB.query('select * from products order by id desc').all();
+		// let products = [p1, p2];
 
 		let counter = null;
 

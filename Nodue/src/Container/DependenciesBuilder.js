@@ -14,7 +14,7 @@ module.exports = class DependenciesBuilder
 	resolve(dependency, overrides = [])
 	{
 		let dependencies = DependenciesResolver.resolve(dependency, overrides);
-		
+
 		return dependency(...Object.values(dependencies));
 	}
 }

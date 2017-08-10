@@ -30,7 +30,7 @@ module.exports = class App
 		if (Object.keys(this._config).length > 0) {
 			tempConfig = this._config.raw;
 		}
-		
+
 		tempConfig[name] = config;
 
 		this._config = object(tempConfig);
@@ -94,7 +94,7 @@ module.exports = class App
 	{
 		let routing = Route.direct(request);
 
-		let response = request.capture(routing);
+		let response = await request.capture(routing);
 
 		return response;
 		// return this.make('Http.Response', response);

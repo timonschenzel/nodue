@@ -22,26 +22,20 @@ module.exports = class Model
 		return ['created_at', 'updated_at'];
 	}
 
-	async find(id)
+	find(id)
 	{
-		return await db(this.table).where(this.primaryKey, id);
-
-		// return await this.bookshelf.where('id', id[0]).fetch().then(result => {
-		//     return result;
-		// }).catch(error => {
-		//   	console.error(error.stack);
-		// });
+		let results = DB.query(`select * from ${this.table} where ${this.primaryKey} = ${id} limit 1`).all();
+		return results[0];
 	}
 
-	async all()
+	all()
 	{
-		return await db.select('*').from(this.table);
+		return DB.query(`select * from ${this.table}`).all();
+	}
 
-		// return await this.bookshelf.fetchAll().then(result => {
-		//     return result;
-		// }).catch(error => {
-		//   	console.error(error.stack);
-		// });
+	take(limit = 10)
+	{
+		return DB.query(`select * from ${this.table} limit ${limit}`).all();
 	}
 
 	settings()
