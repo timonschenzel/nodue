@@ -3,7 +3,7 @@
 	<template slot="slogan">My slogan</template> -->
 
 	<p>{{ text }}</p>
-	
+
 	<hr>
 
 	<test>Hello World</test>

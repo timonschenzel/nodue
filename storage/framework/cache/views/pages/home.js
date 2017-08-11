@@ -3,7 +3,7 @@ module.exports = `<homepage-layout>
 	<template slot="slogan">My slogan</template> -->
 
 	<p>{{ text }}</p>
-	
+
 	<hr>
 
 	<n-test>Hello World</n-test>

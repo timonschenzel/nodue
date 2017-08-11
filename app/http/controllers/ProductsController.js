@@ -2,7 +2,7 @@ module.exports = class ProductsController extends Controller
 {
 	async index()
 	{
-		let products = await Product.take(250);
+		let products = Product.take(100);
 
 		// let p1 = Product.find(1);
 		// let p2 = Product.find(2);

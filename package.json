@@ -1,12 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "webpack": "cross-env NODE_ENV=development webpack --progress --hide-modules",
-    "debug": "cross-env NODE_ENV=development webpack --watch --progress",
-    "dev": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules",
-    "webpack-silent": "cross-env NODE_ENV=development webpack --watch --hide-modules",
-    "hmr": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
-    "production": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "nodue": "node --harmony-async-await index.js",
     "nodue-dev": "nodemon --watch routes.js --watch app --watch config --watch Nodue/src --harmony-async-await index.js -- dev",
     "nodue:dev": "concurrently \"npm run nodue-dev hot\" \"npm run webpack-silent\"",
@@ -16,6 +17,8 @@
   },
   "devDependencies": {
     "ava": "^0.21.0",
+    "cheerio": "^1.0.0-rc.2",
+    "cross-env": "^5.0.5",
     "ouch": "^1.0.0"
   },
   "dependencies": {
@@ -34,7 +37,6 @@
     "jquery": "^3.1.1",
     "js-object-pretty-print": "^0.3.0",
     "knex": "^0.12.6",
-    "laravel-mix": "^0.8.1",
     "lodash": "^4.16.2",
     "mysql": "^2.13.0",
     "mysql2": "^1.2.0",
@@ -45,11 +47,11 @@
     "socket.io-client": "^1.7.2",
     "sqlite3": "^3.1.8",
     "sugar": "^2.0.4",
-    "vue": "^2.0.1",
-    "vue-server-renderer": "^2.1.7",
-    "vue-template-compiler": "^2.0.1",
+    "laravel-mix": "^1.4",
+    "vue": "^2.4.2",
+    "vue-server-renderer": "^2.4.2",
+    "vue-template-compiler": "^2.4.2",
     "vue-timeago": "^3.0.4",
-    "vuex": "^2.2.1",
-    "webpack": "^2.2.0"
+    "vuex": "^2.3.1"
   }
 }

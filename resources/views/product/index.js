@@ -13,7 +13,7 @@
 	methods: {
 		replaceFirstProductName()
 		{
-			this.shared.products[0].name = 'Test..';
+			this.shared.products[0].name = 'replaced..';
 		}
 	}
 }

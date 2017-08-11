@@ -2,7 +2,7 @@ module.exports = class VueTester
 {
 	constructor(testCaseInstance, vm)
 	{
-		this.vm = vm;
+		this.page = vm;
 		this.tester = testCaseInstance;
 	}
 
@@ -17,7 +17,7 @@ module.exports = class VueTester
 		let html = null;
 
 		await VueRenderer.renderToString(
- 			this.vm,
+ 			this.page,
  			async (error, result) => {
  				html = result;
  			}
@@ -68,5 +68,35 @@ module.exports = class VueTester
 	notSee(expression)
 	{
 		return this.assertNotSee(expression);
+	}
+
+	async assertVisible(text)
+	{
+		let cheerio = require('cheerio');
+		let html = await this.toHtml();
+		let $ = cheerio.load(html);
+
+		let isVisible = $('div').filter(function() {
+			return $(this).text().trim() === text;
+		}).attr('style') != 'display:none;';
+
+		this.tester.assertTrue(isVisible);
+
+		return this;
+	}
+
+	async assertNoVisible(text)
+	{
+		let cheerio = require('cheerio');
+		let html = await this.toHtml();
+		let $ = cheerio.load(html);
+
+		let isNotVisible = $('div').filter(function() {
+			return $(this).text().trim() === text;
+		}).attr('style') == 'display:none;';
+
+		this.tester.assertTrue(isNotVisible);
+
+		return this;
 	}
 }

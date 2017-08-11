@@ -19,5 +19,21 @@ module.exports = class ViewProductsTest extends TestCase
 		response.assertSee('Product name is Product 2');
 		response.assertSee('Product name is Product 3');
 		response.assertNotSee('Product name is Product 99999999');
+
+		response.assertNotSee('Product name is Test..');
+		response.page.replaceFirstProductName();
+		response.assertNotSee('Product name is Product 1');
+		response.assertSee('Product name is replaced..');
+	}
+
+	/** @test */
+	async test_see_hello_world_at_the_homepage()
+	{
+		let response = await this.visit('/');
+		response.assertSee('Hello World');
+
+		response.assertVisible('Toggle Me.');
+		response.page.toggleDivVisibility();
+		response.assertNoVisible('Toggle Me.');
 	}
 }

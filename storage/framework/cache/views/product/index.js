@@ -4,7 +4,7 @@ module.exports = `<app-layout>
 
 	<div>
 		Seconds: {{ counter }}<br />
-		<button class="button is-primary" @click="replaceFirstProductName">Replace first product name with 'Test..'</button>
+		<button class="button is-primary" @click="replaceFirstProductName">Replace first product name with 'replaced..'</button>
 		<hr>
 		<a href="/products/create">Create a new product</a>
 		<hr>
