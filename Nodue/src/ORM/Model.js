@@ -2,9 +2,9 @@ module.exports = class Model
 {
 	constructor()
 	{
-		// this.bookshelf = Bookshelf.Model.extend(
-		// 	this.settings()
-		// );
+		this.bookshelf = Bookshelf.Model.extend(
+			this.settings()
+		);
 	}
 
 	get table()
@@ -22,20 +22,26 @@ module.exports = class Model
 		return ['created_at', 'updated_at'];
 	}
 
-	find(id)
+	async find(id)
 	{
-		let results = DB.query(`select * from ${this.table} where ${this.primaryKey} = ${id} limit 1`).all();
-		return results[0];
+		return await db(this.table).where(this.primaryKey, id);
+
+		// let results = DB.query(`select * from ${this.table} where ${this.primaryKey} = ${id} limit 1`).all();
+		// return results[0];
 	}
 
-	all()
+	async all()
 	{
-		return DB.query(`select * from ${this.table}`).all();
+		return await db.select('*').from(this.table);
+
+		// return DB.query(`select * from ${this.table}`).all();
 	}
 
-	take(limit = 10)
+	async take(limit = 10)
 	{
-		return DB.query(`select * from ${this.table} limit ${limit}`).all();
+		return await db.select('*').from(this.table).limit(limit);
+
+		// return DB.query(`select * from ${this.table} limit ${limit}`).all();
 	}
 
 	settings()

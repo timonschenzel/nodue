@@ -3,6 +3,7 @@ module.exports = class VueTester
 	constructor(testCaseInstance, vm)
 	{
 		this.page = vm;
+		this.html = null;
 		this.tester = testCaseInstance;
 	}
 
@@ -26,7 +27,7 @@ module.exports = class VueTester
  		return html;
 	}
 
-	async assertSee(expression)
+	assertSee(expression)
 	{
 		let rawExpression = expression;
 
@@ -34,7 +35,7 @@ module.exports = class VueTester
 			expression = new RegExp(expression, 'gim');
 		}
 
-		this.tester.assertRegExp(expression, await this.toHtml(), `Assert that "${rawExpression}" should exists on the page, but it was not found.`);
+		this.tester.assertRegExp(expression, this.html, `Assert that "${rawExpression}" should exists on the page, but it was not found.`);
 
 		return this;
 	}

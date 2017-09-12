@@ -9,40 +9,51 @@ module.exports = class TestCase
 		Vue.config.silent = true;
 	}
 
-	async visit(url)
+	async visit(url, callback)
 	{
-		Request.track({ url });
-		let response = await app.handle(Request);
+		test('Test', async t => {
+			Request.track({ url });
+			let response = await app.handle(Request);
 
-		let globalComponents = require('../../../storage/framework/cache/global_components.js');
+			let globalComponents = require('../../../storage/framework/cache/global_components.js');
 
-		for (let componentName in globalComponents) {
-			Vue.component(componentName, globalComponents[componentName]);
-		}
+			for (let componentName in globalComponents) {
+				Vue.component(componentName, globalComponents[componentName]);
+			}
 
-		let templates = require('../../../storage/framework/cache/layout_templates.js');
+			let templates = require('../../../storage/framework/cache/layout_templates.js');
 
-		for (let templateName in templates) {
-			Vue.component(templateName, {
-				template: templates[templateName],
-				data() {
-					return {};
-				}
-			});
-		}
 
-		let component = {};
-		if (response.behavior) {
-			eval('component = ' + response.behavior);
-		}
+			for (let templateName in templates) {
+				Vue.component(templateName, {
+					template: templates[templateName],
+					data() {
+						return {};
+					}
+				});
+			}
 
-		component.template = response.template;
-		component.data = function()
-		{
-			return response.data;
-		}
+			let component = {};
+			if (response.behavior) {
+				eval('component = ' + response.behavior);
+			}
 
-		return VueTester.test(this, new Vue(component));
+			component.template = response.template;
+			component.data = function()
+			{
+				return response.data;
+			}
+
+			let vm = await VueTester.test(this, new Vue(component));
+			vm.html = await vm.toHtml();
+
+			// t.plan(1);
+
+			// dd('hit!!!!');
+
+
+			callback(t, vm);
+		});
 	}
 
 	assertEquals(expected, value, message)

@@ -12,11 +12,11 @@
     "nodue-dev": "nodemon --watch routes.js --watch app --watch config --watch Nodue/src --harmony-async-await index.js -- dev",
     "nodue:dev": "concurrently \"npm run nodue-dev hot\" \"npm run webpack-silent\"",
     "testskarma": "karma start karma.conf.js --log-level debug --single-run",
-    "test": "node --harmony-async-await node_modules/ava/cli.js jsunit/jsunit.js || true",
-    "tests": "node --harmony-async-await node_modules/ava/cli.js jsunit/jsunit.js || true"
+    "test": "node --harmony-async-await node_modules/ava/cli.js --serial jsunit/jsunit.js || true",
+    "tests": "node --harmony-async-await node_modules/ava/cli.js --serial jsunit/jsunit.js || true"
   },
   "devDependencies": {
-    "ava": "^0.21.0",
+    "ava": "^0.22.0",
     "cheerio": "^1.0.0-rc.2",
     "cross-env": "^5.0.5",
     "ouch": "^1.0.0"
@@ -37,6 +37,7 @@
     "jquery": "^3.1.1",
     "js-object-pretty-print": "^0.3.0",
     "knex": "^0.12.6",
+    "laravel-mix": "^1.4",
     "lodash": "^4.16.2",
     "mysql": "^2.13.0",
     "mysql2": "^1.2.0",
@@ -47,7 +48,6 @@
     "socket.io-client": "^1.7.2",
     "sqlite3": "^3.1.8",
     "sugar": "^2.0.4",
-    "laravel-mix": "^1.4",
     "vue": "^2.4.2",
     "vue-server-renderer": "^2.4.2",
     "vue-template-compiler": "^2.4.2",
