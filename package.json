@@ -8,12 +8,12 @@
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
-    "nodue": "node --harmony-async-await index.js",
-    "nodue-dev": "nodemon --watch routes.js --watch app --watch config --watch Nodue/src --harmony-async-await index.js -- dev",
+    "nodue": "node index.js",
+    "nodue-dev": "nodemon --watch routes.js --watch app --watch config --watch Nodue/src index.js -- dev",
     "nodue:dev": "concurrently \"npm run nodue-dev hot\" \"npm run webpack-silent\"",
     "testskarma": "karma start karma.conf.js --log-level debug --single-run",
-    "test": "node --harmony-async-await node_modules/ava/cli.js --serial jsunit/jsunit.js || true",
-    "tests": "node --harmony-async-await node_modules/ava/cli.js --serial jsunit/jsunit.js || true"
+    "test": "node node_modules/ava/cli.js --serial jsunit/jsunit.js || true",
+    "tests": "node node_modules/ava/cli.js --serial jsunit/jsunit.js || true"
   },
   "devDependencies": {
     "ava": "^0.22.0",
@@ -46,7 +46,7 @@
     "serve-favicon": "^2.4.2",
     "socket.io": "^1.7.2",
     "socket.io-client": "^1.7.2",
-    "sqlite3": "^3.1.8",
+    "sqlite3": "^3.1.10",
     "sugar": "^2.0.4",
     "vue": "^2.4.2",
     "vue-server-renderer": "^2.4.2",

@@ -22,6 +22,11 @@ module.exports = class Model
 		return ['created_at', 'updated_at'];
 	}
 
+	save()
+	{
+		return this.bookshelf.save();
+	}
+
 	async find(id)
 	{
 		return await db(this.table).where(this.primaryKey, id);

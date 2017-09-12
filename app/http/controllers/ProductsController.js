@@ -36,7 +36,10 @@ module.exports = class ProductsController extends Controller
 	store()
 	{
 		let request = Request.all();
-		let query = DB.query('INSERT INTO products (name) VALUES (:name)').run({name: request.name});
+		let product = Product;
+		product.name = request.name;
+		product.save();
+		// let query = DB.query('INSERT INTO products (name) VALUES (:name)').run({name: request.name});
 
 		return redirect('/products');
 	}

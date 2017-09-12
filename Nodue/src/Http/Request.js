@@ -86,6 +86,7 @@ module.exports = class Request
 		try {
 			response = await build(controller[controllerFunctionName], parameters);
 		} catch(error) {
+			dump(error);
 			return {
 				error
 			};
