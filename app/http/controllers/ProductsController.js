@@ -2,12 +2,7 @@ module.exports = class ProductsController extends Controller
 {
 	async index()
 	{
-		let products = await Product.take(100);
-
-		// let p1 = Product.find(1);
-		// let p2 = Product.find(2);
-
-		// let products = [p1, p2];
+		let products = await Product.orderBy('id', 'desc').where('id', 5).fetchAll();
 
 		let counter = null;
 
@@ -36,10 +31,10 @@ module.exports = class ProductsController extends Controller
 	store()
 	{
 		let request = Request.all();
-		let product = Product;
+
+		let product = Product.new();
 		product.name = request.name;
 		product.save();
-		// let query = DB.query('INSERT INTO products (name) VALUES (:name)').run({name: request.name});
 
 		return redirect('/products');
 	}
