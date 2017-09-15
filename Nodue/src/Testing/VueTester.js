@@ -20,6 +20,9 @@ module.exports = class VueTester
 		await VueRenderer.renderToString(
  			this.page,
  			async (error, result) => {
+ 				if (error) {
+ 					log.error(`Vue server renderer error:\n${error}`);
+ 				}
  				html = result;
  			}
  		);
@@ -86,7 +89,7 @@ module.exports = class VueTester
 		return this;
 	}
 
-	async assertNoVisible(text)
+	async assertNotVisible(text)
 	{
 		let cheerio = require('cheerio');
 		let html = await this.toHtml();

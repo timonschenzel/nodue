@@ -12,8 +12,8 @@
     "nodue-dev": "nodemon --watch routes.js --watch app --watch config --watch Nodue/src index.js -- dev",
     "nodue:dev": "concurrently \"npm run nodue-dev hot\" \"npm run webpack-silent\"",
     "testskarma": "karma start karma.conf.js --log-level debug --single-run",
-    "test": "node node_modules/ava/cli.js --serial jsunit/jsunit.js || true",
-    "tests": "node node_modules/ava/cli.js --serial jsunit/jsunit.js || true"
+    "test": "node node_modules/ava/cli.js jsunit/jsunit.js || true",
+    "tests": "node node_modules/ava/cli.js jsunit/jsunit.js || true"
   },
   "devDependencies": {
     "ava": "^0.22.0",
@@ -29,6 +29,7 @@
     "bulma": "^0.2.3",
     "chalk": "^1.1.3",
     "chokidar": "^1.6.1",
+    "collect.js": "^3.0.51",
     "concurrently": "^3.4.0",
     "deepmerge": "^1.3.2",
     "dotenv": "^4.0.0",

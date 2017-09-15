@@ -8,6 +8,7 @@ module.exports = class Bootstrap
 		return [
 			'loadSugarModule',
 			'bootSupport',
+			'loadCollectJs',
 			'loadFiguresModule',
 			'loadChalkModule',
 			'loadPrettyModule',
@@ -58,6 +59,11 @@ module.exports = class Bootstrap
 				app.fileLoader.load(`Nodue/src/Support/${path}.js`);
 			}
 		});
+	}
+
+	loadCollectJs()
+	{
+		global.collectjs = require('collect.js');
 	}
 
 	loadFiguresModule()

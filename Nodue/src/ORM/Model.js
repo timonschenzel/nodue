@@ -35,7 +35,18 @@ module.exports = class Model
 
 	async find(id)
 	{
-		return await this.bookshelf.where('id', id).fetch();
+		let row = await this.bookshelf.where('id', id).fetch();
+
+		return new Proxy(row, {
+			get(target, property, receiver)
+			{
+				if (target[property] === undefined) {
+					return target.get(property);
+				}
+
+				return target[property];
+			}
+		});
 	}
 
 	async all()
@@ -43,9 +54,16 @@ module.exports = class Model
 		return await this.bookshelf.fetchAll();
 	}
 
-	async take(limit = 10, offset = 0)
+	async take(limit = 0)
 	{
-		return await this.bookshelf.fetchPage({limit, offset});
+		return await this.limit(limit, offset);
+	}
+
+	async limit(limit = 0)
+	{
+		return await this.bookshelf.query(gb => {
+			gb.limit(limit);
+		});
 	}
 
 	setUp()
@@ -55,6 +73,7 @@ module.exports = class Model
 		);
 
 		this.bookshelf = new bookshelfInstance;
+		bookshelfInstance.nodueModel = this;
 	}
 
 	settings()

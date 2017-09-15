@@ -11,7 +11,7 @@ module.exports = class TestCase
 
 	async visit(url, callback)
 	{
-		test('Test', async t => {
+		test(async request => {
 			Request.track({ url });
 			let response = await app.handle(Request);
 
@@ -47,12 +47,65 @@ module.exports = class TestCase
 			let vm = await VueTester.test(this, new Vue(component));
 			vm.html = await vm.toHtml();
 
-			// t.plan(1);
+			request.vm = vm;
+			request.html = vm.html;
+			request.page = vm.page;
 
-			// dd('hit!!!!');
+			request.assertSee = (expression) => {
+				let rawExpression = expression;
 
+				if (typeof expression == 'string') {
+					expression = new RegExp(expression, 'gim');
+				}
 
-			callback(t, vm);
+				request.vm.toHtml().then(html => {
+					request.regex(html, expression, `Assert that "${rawExpression}" should exists on the page, but it was not found.`);
+				});
+
+			}
+
+			request.assertNotSee = (expression) =>
+			{
+				let rawExpression = expression;
+
+				if (typeof expression == 'string') {
+					expression = new RegExp(expression, 'gim');
+				}
+
+				request.vm.toHtml().then(html => {
+					request.notRegex(html, expression, `Assert that "${rawExpression}" should not exists on the page, but it was found.`);
+				});
+			}
+
+			request.assertVisible = (text) =>
+			{
+				let cheerio = require('cheerio');
+				request.vm.toHtml().then(html => {
+					let $ = cheerio.load(html);
+
+					let isVisible = $('div').filter(function() {
+						return $(this).text().trim() === text;
+					}).attr('style') != 'display:none;';
+
+					request.truthy(isVisible);
+				});
+			}
+
+			request.assertNotVisible = (text) =>
+			{
+				let cheerio = require('cheerio');
+				request.vm.toHtml().then(html => {
+					let $ = cheerio.load(html);
+
+					let isNotVisible = $('div').filter(function() {
+						return $(this).text().trim() === text;
+					}).attr('style') == 'display:none;';
+
+					request.truthy(isNotVisible);
+				});
+			}
+
+			callback(request);
 		});
 	}
 

@@ -2,12 +2,27 @@ module.exports = class ProductsController extends Controller
 {
 	async index()
 	{
-		let products = await Product.orderBy('id', 'desc').where('id', 5).fetchAll();
+		let products = await Product.orderBy('id', 'asc').query(query => {
+			query.limit(3);
+		}).fetchAll();
 
 		let counter = null;
 
 		let title = 'Products';
 		let slogan = 'This is great!';
+
+		products = products.map(product => {
+			return new Proxy(product, {
+				get(target, property, receiver)
+				{
+					if (target[property] === undefined) {
+						return target.get(property);
+					}
+
+					return target[property];
+				}
+			});
+		});
 
 		return view('product.index', { shared: { products }, counter, title, slogan });
 	}
