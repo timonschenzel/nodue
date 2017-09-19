@@ -2,6 +2,10 @@ module.exports = class TestCase
 {
 	constructor()
 	{
+		let t = require('ava/lib/test');
+		let test = new t({});
+		this.ava = test.createExecutionContext();
+
 		this.vm = null;
 		this.name = null;
 

@@ -3,7 +3,7 @@ module.exports = class TestRunner
 	constructor(processData)
 	{
 		this.configFile = 'jsunit.json';
-		
+
 		this.fs = require('fs');
 
 		this.pathModule = require('path');
@@ -74,11 +74,11 @@ module.exports = class TestRunner
 		    if (typeof annotations[name] == 'object') {
 		    	hasTestAnnotation = annotations[name].test === true;
 			}
-		    
+
 		    // Default filters:
 		    // 1. Skip constructor
 		    // 2. Only call methods with a 'test' prefix or a 'test' annotation
-		    
+
 		    /**
 		     * @todo fix for async methods
 		     */
@@ -92,13 +92,13 @@ module.exports = class TestRunner
 		    }
 
 		    testClass.name = path + ' -> ' + name;
-		    
+
 		    try {
-		    	await testClass[name]();
+                await testClass[name]();
 			} catch(error) {
-				console.error(chalk.red(`${figures.cross} jsUnit error`));
-				console.error(error);
-				process.exit();
+                console.error(chalk.red(`${figures.cross} jsUnit error`));
+                console.error(error);
+                process.exit();
 			}
 		}
 	}
@@ -115,27 +115,27 @@ module.exports = class TestRunner
     getTestFilesInLocation(object)
     {
     	let testFilePaths = {};
-    	
-    	for (let i in object) {
-    		if (!object.hasOwnProperty(i)) continue;
-    		
-    		if ((typeof object[i]) == 'object') {
-    			let flatObject = this.getTestFilesInLocation(object[i]);
-    			for (let x in flatObject) {
-    				if (!flatObject.hasOwnProperty(x)) continue;
-    				
-    				if (x.toLowerCase().endsWith('test')) {
-    					testFilePaths[i + '/' + x] = flatObject[x];
-    				}
-    			}
-    		} else {
-    			if (i.toLowerCase().endsWith('test')) {
-    				testFilePaths[i] = object[i];
-    			}
-    		}
-    	}
 
-    	return testFilePaths;
+        for (let i in object) {
+            if (!object.hasOwnProperty(i)) continue;
+
+            if ((typeof object[i]) == 'object') {
+                let flatObject = this.getTestFilesInLocation(object[i]);
+                for (let x in flatObject) {
+                    if (!flatObject.hasOwnProperty(x)) continue;
+
+                    if (x.toLowerCase().endsWith('test')) {
+                        testFilePaths[i + '/' + x] = flatObject[x];
+                    }
+                }
+            } else {
+                if (i.toLowerCase().endsWith('test')) {
+                    testFilePaths[i] = object[i];
+                }
+            }
+        }
+
+        return testFilePaths;
     }
 
 	getTestLocations()
