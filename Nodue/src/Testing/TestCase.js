@@ -56,6 +56,8 @@ module.exports = class TestCase
 			request.page = vm.page;
 
 			request.assertSee = (expression) => {
+				console.trace('jsUnit error');
+
 				let rawExpression = expression;
 
 				if (typeof expression == 'string') {
@@ -135,6 +137,8 @@ module.exports = class TestCase
 
 	assertTrue(value, message)
 	{
+		console.trace('jsUnit trace');
+
 		value = this.normalizeValue(value);
 
 		// .truthy(value, [message])

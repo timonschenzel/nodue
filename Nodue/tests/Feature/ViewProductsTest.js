@@ -6,6 +6,8 @@ module.exports = class ViewProductsTest extends TestCase
 		this.visit('/products/1', response => {
 			response.assertSee('Product name is Product 1');
 		});
+
+		this.assertTrue(false);
 	}
 
 	/** @test */
