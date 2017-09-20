@@ -8,6 +8,8 @@ module.exports = class ViewProductsTest extends TestCase
 		});
 
 		this.assertTrue(false);
+		this.assertFalse(true);
+		this.assertEquals('foo', 'bar');
 	}
 
 	/** @test */
