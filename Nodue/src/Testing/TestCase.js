@@ -56,7 +56,7 @@ module.exports = class TestCase
 			request.page = vm.page;
 
 			request.assertSee = (expression) => {
-				console.trace('jsUnit error');
+				// console.trace('jsUnit error');
 
 				let rawExpression = expression;
 
@@ -137,12 +137,78 @@ module.exports = class TestCase
 
 	assertTrue(value, message)
 	{
-		console.trace('jsUnit trace');
+		const codeExcerpt = require('code-excerpt');
+		const equalLength = require('equal-length');
+		const truncate = require('cli-truncate');
+		const formatLineNumber = (lineNumber, maxLineNumber) =>
+			' '.repeat(Math.max(0, String(maxLineNumber).length - String(lineNumber).length)) + lineNumber;
 
+		const maxWidth = 80;
+
+		let stack = traceback();
+
+		let fileName = stack.split("\n").filter(line => {
+			return line.includes(this.name.split(' -> ')[1]);
+		})[0].trim();
+
+		let regExp = /\(([^)]+)\)/;
+		let matches = regExp.exec(fileName);
+		fileName = matches[1];
+		let parts = fileName.split(':');
+		parts.pop();
+
+		fileName = parts.join(':');
+
+		let rootFolder = process.mainModule.paths[0].split('node_modules')[0].slice(0, -1);
+		let relativeFileName = fileName.replace(rootFolder, '');
+		let source = fileName.split(':');
+		let sourceInput = {};
+		sourceInput.file = source[0];
+		sourceInput.line = parseInt(source[1]);
+		sourceInput.isDependency = false;
+		sourceInput.isWithinProject = true;
+
+		let contents = fs.readFileSync(sourceInput.file, 'utf8');
+		const excerpt = codeExcerpt(contents, sourceInput.line, {around: 1});
+
+		if (!excerpt) {
+			return null;
+		}
+
+		const file = sourceInput.file;
+		const line = sourceInput.line;
+
+		const lines = excerpt.map(item => ({
+			line: item.line,
+			value: truncate(item.value, maxWidth - String(line).length - 5)
+		}));
+
+		const joinedLines = lines.map(line => line.value).join('\n');
+		const extendedLines = equalLength(joinedLines).split('\n');
+
+		let errorContent = lines
+			.map((item, index) => ({
+				line: item.line,
+				value: extendedLines[index]
+			}))
+			.map(item => {
+				const isErrorSource = item.line === line;
+
+				const lineNumber = formatLineNumber(item.line, line) + ':';
+				const coloredLineNumber = isErrorSource ? lineNumber : chalk.grey(lineNumber);
+				const result = ` ${coloredLineNumber} ${item.value}`;
+
+				return isErrorSource ? chalk.bgRed(result) : result;
+			})
+			.join('\n');
+
+		dump(errorContent);
+
+		// console.trace('jsUnit trace');
 		value = this.normalizeValue(value);
 
 		// .truthy(value, [message])
-		test(this.name, async t => {
+		test(this.name + '\n  ' + relativeFileName, async t => {
 			await t.truthy(value, message);
 		});
 	}

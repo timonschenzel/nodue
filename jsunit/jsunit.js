@@ -1,3 +1,5 @@
+Error.prepareStackTrace = null;
+global.traceback = require('traceback');
 let startDate = new Date();
 
 let annotations = require('./annotations');
