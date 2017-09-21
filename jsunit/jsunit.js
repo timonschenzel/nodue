@@ -53,4 +53,4 @@ jsUnit.boot();
  */
 jsUnit.test();
 
-console.info("Time: %d seconds", (new Date() - startDate) / 1000);
+console.log(chalk.dim(`  Time: ${(new Date() - startDate) / 1000} seconds`));

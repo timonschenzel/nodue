@@ -251,6 +251,7 @@ module.exports = class TestCase
 		const equalLength = require('equal-length');
 		const truncate = require('cli-truncate');
 		const colors = require('ava/lib/colors');
+		const indentString = require('indent-string');
 		const formatLineNumber = (lineNumber, maxLineNumber) =>
 			' '.repeat(Math.max(0, String(maxLineNumber).length - String(lineNumber).length)) + lineNumber;
 
@@ -270,7 +271,7 @@ module.exports = class TestCase
 
 		fileName = parts.join(':');
 
-		let rootFolder = process.mainModule.paths[0].split('node_modules')[0].slice(0, -1);
+		let rootFolder = process.mainModule.paths[0].split('node_modules')[0].slice(0, -1) + '/';
 		let relativeFileName = fileName.replace(rootFolder, '');
 		let source = fileName.split(':');
 		let lineNumber = source.pop();
@@ -281,7 +282,7 @@ module.exports = class TestCase
 		sourceInput.isWithinProject = true;
 
 		let contents = fs.readFileSync(sourceInput.file, 'utf8');
-		const excerpt = codeExcerpt(contents, sourceInput.line, {around: 1});
+		const excerpt = codeExcerpt(contents, sourceInput.line, {maxWidth: process.stdout.columns, around: 1});
 
 		if (!excerpt) {
 			return null;
@@ -307,13 +308,15 @@ module.exports = class TestCase
 				const isErrorSource = item.line === line;
 
 				const lineNumber = formatLineNumber(item.line, line) + ':';
-				const coloredLineNumber = isErrorSource ? lineNumber : chalk.grey(lineNumber);
-				const result = ` ${coloredLineNumber} ${item.value}`;
+				const coloredLineNumber = isErrorSource ? lineNumber : chalk.dim(lineNumber);
+				const result = `   ${coloredLineNumber} ${item.value}`;
 
 				return isErrorSource ? chalk.bgRed(result) : result;
 			})
 			.join('\n');
 
-		return this.name + '\n  ' + colors.errorSource(relativeFileName) + '\n\n  ' + errorContent;
+		return this.name + ' on ' + relativeFileName;
+
+		// return this.name + '\n  ' + chalk.dim(relativeFileName) + '\n\n' + errorContent;
 	}
 }
