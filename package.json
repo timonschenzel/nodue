@@ -12,15 +12,16 @@
     "nodue-dev": "nodemon --watch routes.js --watch app --watch config --watch Nodue/src index.js -- dev",
     "nodue:dev": "concurrently \"npm run nodue-dev hot\" \"npm run webpack-silent\"",
     "testskarma": "karma start karma.conf.js --log-level debug --single-run",
-    "test": "node node_modules/ava/cli.js jsunit/jsunit.js --tap | tap-dot || true",
-    "tests": "node node_modules/ava/cli.js jsunit/jsunit.js --tap | tap-dot || true"
+    "test": "node node_modules/ava/cli.js jsunit/jsunit.js --tap | tap-spec || true",
+    "tests": "node node_modules/ava/cli.js jsunit/jsunit.js --tap | tap-spec || true"
   },
   "devDependencies": {
     "ava": "^0.22.0",
     "cheerio": "^1.0.0-rc.2",
     "cross-env": "^5.0.5",
     "ouch": "^1.0.0",
-    "tap-dot": "^1.0.5"
+    "tap-dot": "^1.0.5",
+    "tap-spec": "^4.1.1"
   },
   "dependencies": {
     "auto-loader": "^0.2.0",

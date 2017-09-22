@@ -315,7 +315,7 @@ module.exports = class TestCase
 			})
 			.join('\n');
 
-		return this.name + ' on ' + relativeFileName;
+		return this.name + ' on ' + sourceInput.file + ':' + sourceInput.line;
 
 		// return this.name + '\n  ' + chalk.dim(relativeFileName) + '\n\n' + errorContent;
 	}
