@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var tapSpec = require('../');
+var tapSpec = require('../node_modules/tap-spec/');
 var tapSpec = tapSpec();
 
 process.stdin
