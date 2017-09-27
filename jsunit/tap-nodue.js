@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+var fs = require('fs');
 var through = require('through2');
 var parser = require('tap-out');
 var chalk = require('chalk');
@@ -10,6 +11,9 @@ var errors = [];
 var extra = [];
 var assertCount = 0;
 var lastComment;
+
+const formatSerializedError = require('ava/lib/reporters/format-serialized-error');
+const improperUsageMessages = require('ava/lib/reporters/improper-usage-messages');
 
 process.stdin.pipe(tap);
 
@@ -33,12 +37,13 @@ tap.on('assert', function (res) {
 
   assertCount +=1;
 
-  if (res.ok) {
-    (firstTestDone)
-      ? out.push(chalk[color]('.'))
-      : outPush(chalk[color]('.'));
-
+  if (! firstTestDone) {
     firstTestDone = true;
+    out.push('  ');
+  }
+
+  if (res.ok) {
+    out.push(chalk[color]('.'));
   }
   if (!res.ok) {
     out.push(chalk[color]('x'));
@@ -53,15 +58,20 @@ tap.on('extra', function (str) {
 tap.on('output', function (res) {
 
   if (res.fail && res.fail.length || assertCount === 0) {
-    outPush('\n\n\n');
-
+    outPush('\n');
+    let counter = 0;
     res.fail.forEach(function (failure) {
-        outPush(chalk.white('---') + '\n');
+        counter++;
 
-        // Use the unwrapped out.push here as the raw error is already indented
-        out.push(chalk.white(failure.error.raw) + '\n');
+        [name, file] = failure.name.split(' on ');
 
-        outPush(chalk.white('...') + '\n');
+        outPush('\n');
+        outPush(chalk.red('x') + ' ' + counter + ') ' + chalk.white(name) + '\n');
+        outPush(chalk.dim(file));
+        outPush('\n');
+        outPush(visualError(file));
+        outPush(visualDiff(failure));
+        outPush('\n');
     });
 
     errors = res.fail;
@@ -70,17 +80,6 @@ tap.on('output', function (res) {
     statsOutput();
 
     outPush(chalk.red(res.fail.length + ' failed'));
-
-    var past = (res.fail.length == 1) ? 'was' : 'were';
-    var plural = (res.fail.length == 1) ? 'failure' : 'failures';
-
-    outPush('\n\n');
-    outPush(chalk.red('Failed Tests: '));
-    outPush('There ' + past + ' ' + chalk.red(res.fail.length) + ' ' + plural + '\n\n');
-
-    res.fail.forEach(function (error) {
-      outPush('  ' + chalk.red('x') + ' ' + error.name + '\n');
-    });
 
     outPush('\n');
   }
@@ -93,7 +92,6 @@ tap.on('output', function (res) {
 
   function statsOutput () {
 
-    outPush('\n\n')
     outPush(res.tests.length + ' tests\n');
     outPush(chalk.green(res.pass.length + ' passed\n'));
   }
@@ -102,6 +100,92 @@ tap.on('output', function (res) {
 function outputExtra () {
 
   console.log(extra.join('\n'));
+}
+
+function visualError(fileName)
+{
+  const codeExcerpt = require('code-excerpt');
+  const equalLength = require('equal-length');
+  const truncate = require('cli-truncate');
+  const colors = require('ava/lib/colors');
+  const indentString = require('indent-string');
+  const formatLineNumber = (lineNumber, maxLineNumber) =>
+    ' '.repeat(Math.max(0, String(maxLineNumber).length - String(lineNumber).length)) + lineNumber;
+
+  const maxWidth = 80;
+
+  let parts = fileName.split(':');
+  let lineNumber = parseInt(parts.pop());
+
+  fileName = parts.join(':');
+
+  let sourceInput = {};
+  sourceInput.file = fileName;
+  sourceInput.line = lineNumber;
+  sourceInput.isDependency = false;
+  sourceInput.isWithinProject = true;
+
+  let contents = fs.readFileSync(sourceInput.file, 'utf8');
+  const excerpt = codeExcerpt(contents, sourceInput.line, {maxWidth: process.stdout.columns, around: 1});
+
+  if (!excerpt) {
+    return null;
+  }
+
+  const file = sourceInput.file;
+  const line = sourceInput.line;
+
+  const lines = excerpt.map(item => ({
+    line: item.line,
+    value: truncate(item.value, maxWidth - String(line).length - 5)
+  }));
+
+  const joinedLines = lines.map(line => line.value).join('\n');
+  const extendedLines = equalLength(joinedLines).split('\n');
+
+  let errorContent = lines
+    .map((item, index) => ({
+      line: item.line,
+      value: extendedLines[index]
+    }))
+    .map(item => {
+      const isErrorSource = item.line === line;
+
+      const lineNumber = formatLineNumber(item.line, line) + ':';
+      const coloredLineNumber = isErrorSource ? lineNumber : chalk.dim(lineNumber);
+      const result = `   ${coloredLineNumber} ${item.value}`;
+
+      return isErrorSource ? chalk.bgRed(result) : result;
+    })
+    .join('\n');
+
+  errorContent = errorContent.substring(2);
+  return errorContent;
+}
+
+function visualDiff(test)
+{
+  let status = '';
+
+  if (test.error.avaAssertionError) {
+    const result = formatSerializedError(test.error);
+    if (result.printMessage) {
+      status += '\n' + indentString(test.error.message, 2) + '\n';
+    }
+
+    if (result.formatted) {
+      status += '\n' + indentString(result.formatted, 2) + '\n';
+    }
+
+    const message = improperUsageMessages.forError(test.error);
+    if (message) {
+      status += '\n' + indentString(message, 2) + '\n';
+    }
+  } else if (test.error.message) {
+    status += '\n' + indentString(test.error.message, 2) + '\n';
+  }
+
+  return status;
 }
 
 out.pipe(process.stdout);
