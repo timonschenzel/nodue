@@ -57,6 +57,7 @@
         "socket.io-client": "^1.7.2",
         "sqlite3": "3.1.8",
         "sugar": "^2.0.4",
+        "tap-min": "^1.2.2",
         "traceback": "^0.3.1",
         "vue": "^2.4.4",
         "vue-server-renderer": "^2.4.4",

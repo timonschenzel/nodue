@@ -15,7 +15,7 @@ module.exports = class TestCase
 
 	async visit(url, callback)
 	{
-		test(async request => {
+		test(this.visualError(), async request => {
 			Request.track({ url });
 			let response = await app.handle(Request);
 
@@ -56,8 +56,6 @@ module.exports = class TestCase
 			request.page = vm.page;
 
 			request.assertSee = (expression) => {
-				// console.trace('jsUnit error');
-
 				let rawExpression = expression;
 
 				if (typeof expression == 'string') {
@@ -245,7 +243,7 @@ module.exports = class TestCase
 		return value;
 	}
 
-	visualError()
+	visualError(stack = null, name = null)
 	{
 		const codeExcerpt = require('code-excerpt');
 		const equalLength = require('equal-length');
@@ -257,11 +255,25 @@ module.exports = class TestCase
 
 		const maxWidth = 80;
 
-		let stack = traceback();
+		if (stack == null) {
+			stack = traceback();
+		}
+
+		if (name == null) {
+			name = this.name;
+		}
+
+		// console.log(stack);
+		// console.log(this.name);
+		// console.log(this.name.split(' -> ')[0]);
 
 		let fileName = stack.split("\n").filter(line => {
-			return line.includes(this.name.split(' -> ')[1]);
-		})[0].trim();
+			return line.includes(name.split(' -> ')[0]);
+		})[0];
+
+		if (fileName) {
+			fileName.trim();
+		}
 
 		let regExp = /\(([^)]+)\)/;
 		let matches = regExp.exec(fileName);
@@ -315,7 +327,7 @@ module.exports = class TestCase
 			})
 			.join('\n');
 
-		return this.name + ' on ' + sourceInput.file + ':' + sourceInput.line;
+		return name + ' on ' + sourceInput.file + ':' + sourceInput.line;
 
 		// return this.name + '\n  ' + chalk.dim(relativeFileName) + '\n\n' + errorContent;
 	}

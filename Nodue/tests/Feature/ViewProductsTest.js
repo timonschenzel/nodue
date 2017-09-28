@@ -4,7 +4,7 @@ module.exports = class ViewProductsTest extends TestCase
 	async test_a_user_is_able_to_view_a_specific_product()
 	{
 		this.visit('/products/1', response => {
-			response.assertSee('Product name is Product 1');
+			response.assertSee('Product name is Product 2');
 		});
 
 		this.assertTrue(false);
