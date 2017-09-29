@@ -1,12 +1,15 @@
+require('colors');
 var fs = require('fs');
-const PassThrough = require('readable-stream/passthrough')
-const duplexer = require('duplexer3')
-const hirestime = require('hirestime')
-const Parser = require('tap-parser')
-const ms = require('pretty-ms')
-const chalk = require('chalk')
-const util = require('util')
+const PassThrough = require('readable-stream/passthrough');
+const duplexer = require('duplexer3');
+const hirestime = require('hirestime');
+const Parser = require('tap-parser');
+const ms = require('pretty-ms');
+const chalk = require('chalk');
+const util = require('util');
+var jsdiff = require('diff');
 
+// const serializeError = require('ava/lib/serialize-error');
 const formatSerializedError = require('ava/lib/reporters/format-serialized-error');
 const improperUsageMessages = require('ava/lib/reporters/improper-usage-messages');
 
@@ -47,6 +50,7 @@ const reporter = () => {
   let counter = 0;
 
   input.on('assert', (assert) => {
+    console.log(assert);
     if (assert.ok) {
       testsOverview += chalk['green']('.');
       return
@@ -58,6 +62,7 @@ const reporter = () => {
 
     let name = '';
     let file = '';
+    let formattedDiff = '';
 
     [name, file] = assert.name.split(' on ');
 
@@ -66,7 +71,34 @@ const reporter = () => {
     visualErrors += chalk.dim(file);
     visualErrors += '\n';
     visualErrors += visualError(file);
-    visualErrors += visualDiff(assert);
+    if (assert.diag.message) {
+      visualErrors += '\n' + assert.diag.message + '\n';
+    }
+
+    for (message in assert.diag.values) {
+      visualErrors += '\n' + message + '\n';
+      // visualErrors += '\n' + assert.diag.values[message] + '\n';
+
+      let diffValue = assert.diag.values[message];
+
+      // let originValue = diffValue.split('\n').filter(line => ! line.includes('-')).join('\n');
+      let originValue = diffValue.replace('+ ', '  ');
+      let newValue = diffValue.replace('- ', '  ');
+      // let newValue = diffValue.split('\n').filter(line => ! line.includes('+')).join('\n');
+
+      jsdiff.diffChars(originValue, newValue).forEach(function(part) {
+        // green for additions, red for deletions
+        // grey for common parts
+        var color = part.added ? 'green' :
+          part.removed ? 'red' : 'blue';
+
+        formattedDiff += part.value[color];
+      });
+
+      visualErrors += '\n' + formattedDiff + '\n';
+    };
+
+    // visualErrors += visualDiff(assert);
     visualErrors += '\n';
   });
 

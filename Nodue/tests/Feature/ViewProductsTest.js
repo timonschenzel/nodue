@@ -10,6 +10,8 @@ module.exports = class ViewProductsTest extends TestCase
 		this.assertTrue(false);
 		this.assertFalse(true);
 		this.assertEquals([1, 2], [1, 3]);
+		this.assertEquals('foo', 'bar');
+		this.assertEquals('foo1a', 'foo2a');
 	}
 
 	/** @test */
