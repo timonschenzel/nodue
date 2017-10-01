@@ -9,6 +9,10 @@ const chalk = require('chalk');
 const util = require('util');
 var jsdiff = require('diff');
 
+const concordance = require('concordance');
+const concordanceOptions = require('ava/lib/concordance-options').default;
+const concordanceDiffOptions = require('ava/lib/concordance-options').diff;
+
 // const serializeError = require('ava/lib/serialize-error');
 const formatSerializedError = require('ava/lib/reporters/format-serialized-error');
 const improperUsageMessages = require('ava/lib/reporters/improper-usage-messages');
@@ -50,7 +54,7 @@ const reporter = () => {
   let counter = 0;
 
   input.on('assert', (assert) => {
-    console.log(assert);
+    // console.log(assert);
     if (assert.ok) {
       testsOverview += chalk['green']('.');
       return
@@ -79,23 +83,11 @@ const reporter = () => {
       visualErrors += '\n' + message + '\n';
       // visualErrors += '\n' + assert.diag.values[message] + '\n';
 
-      let diffValue = assert.diag.values[message];
+      let diffValue = JSON.parse(assert.diag.values[message]);
 
-      // let originValue = diffValue.split('\n').filter(line => ! line.includes('-')).join('\n');
-      let originValue = diffValue.replace('+ ', '  ');
-      let newValue = diffValue.replace('- ', '  ');
-      // let newValue = diffValue.split('\n').filter(line => ! line.includes('+')).join('\n');
+      let values = formatWithLabel('', diffValue);
 
-      jsdiff.diffChars(originValue, newValue).forEach(function(part) {
-        // green for additions, red for deletions
-        // grey for common parts
-        var color = part.added ? 'green' :
-          part.removed ? 'red' : 'blue';
-
-        formattedDiff += part.value[color];
-      });
-
-      visualErrors += '\n' + formattedDiff + '\n';
+      visualErrors += '\n' + values.formatted + '\n';
     };
 
     // visualErrors += visualDiff(assert);
@@ -105,6 +97,17 @@ const reporter = () => {
   const timer = hirestime() // todo: init when first test running
 
   return result
+}
+
+function formatDescriptorWithLabel(label, descriptor) {
+  return {
+    label,
+    formatted: concordance.formatDescriptor(descriptor, concordanceOptions)
+  };
+}
+
+function formatWithLabel(label, value) {
+  return formatDescriptorWithLabel(label, concordance.describe(value, concordanceOptions));
 }
 
 function visualError(fileName)

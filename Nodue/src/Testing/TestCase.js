@@ -263,12 +263,8 @@ module.exports = class TestCase
 			name = this.name;
 		}
 
-		// console.log(stack);
-		// console.log(this.name);
-		// console.log(this.name.split(' -> ')[0]);
-
 		let fileName = stack.split("\n").filter(line => {
-			return line.includes(name.split(' -> ')[0]);
+			return line.includes(name.split(' -> ')[1]);
 		})[0];
 
 		if (fileName) {

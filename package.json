@@ -40,6 +40,7 @@
         "collect.js": "^3.0.51",
         "concurrently": "^3.4.0",
         "deepmerge": "^1.5.2",
+        "diff": "^3.3.1",
         "dotenv": "^4.0.0",
         "express": "^4.15.5",
         "figures": "^2.0.0",
