@@ -24,7 +24,7 @@ const reporter = () => {
   const onResults = (data) => {
     const time = timer()
 
-    output.write(testsOverview);
+    output.write('  ' + testsOverview);
     output.write("\n");
     output.write(visualErrors);
 
@@ -41,10 +41,10 @@ const reporter = () => {
 
     if (data.fail) {
       output.write("\n");
-      output.write(chalk.red(data.fail + ' failed\n'));
-      output.write(chalk.green(data.pass + ' passed\n'));
+      output.write('  ' + chalk.red(data.fail + ' failed\n'));
+      output.write('  ' + chalk.green(data.pass + ' passed\n'));
     } else {
-      output.write(chalk.green(data.pass + ' passed\n'));
+      output.write('  ' + chalk.green(data.pass + ' passed\n'));
     }
   }
 
@@ -71,23 +71,30 @@ const reporter = () => {
     [name, file] = assert.name.split(' on ');
 
     visualErrors += '\n';
-    visualErrors += chalk.red('x') + ' ' + counter + ') ' + chalk.white(name) + '\n';
-    visualErrors += chalk.dim(file);
+    visualErrors += '  ' + chalk.red('x') + ' ' + counter + ') ' + chalk.white(name) + '\n';
+    visualErrors += '  ' + chalk.dim(file);
     visualErrors += '\n';
-    visualErrors += visualError(file);
+    visualErrors += '  ' + visualError(file);
     if (assert.diag.message) {
-      visualErrors += '\n' + assert.diag.message + '\n';
+      visualErrors += '\n  ' + assert.diag.message + '\n';
     }
 
     for (message in assert.diag.values) {
-      visualErrors += '\n' + message + '\n';
+      visualErrors += '\n\n  ' + message + '\n';
       // visualErrors += '\n' + assert.diag.values[message] + '\n';
 
-      let diffValue = JSON.parse(assert.diag.values[message]);
+      let diffValue = assert.diag.values[message];
+      let parsedValue = null;
+      try {
+        parsedValue = eval(diffValue);
+      } catch (error) {
+        parsedValue = diffValue;
+      }
+      // let diffValue = JSON.parse(diffValue);
 
-      let values = formatWithLabel('', diffValue);
+      let values = formatWithLabel('', parsedValue);
 
-      visualErrors += '\n' + values.formatted + '\n';
+      visualErrors += '\n  ' + values.formatted + '\n';
     };
 
     // visualErrors += visualDiff(assert);

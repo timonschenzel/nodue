@@ -56,6 +56,9 @@ module.exports = class TestCase
 			request.page = vm.page;
 
 			request.assertSee = (expression) => {
+
+				let stack = traceback();
+
 				let rawExpression = expression;
 
 				if (typeof expression == 'string') {
@@ -63,9 +66,8 @@ module.exports = class TestCase
 				}
 
 				request.vm.toHtml().then(html => {
-					request.regex(html, expression, `Assert that "${rawExpression}" should exists on the page, but it was not found.`);
+					request.regex(html, expression, `Assert that "${rawExpression}" should exists on the page, but it was not found. -- ${stack}`);
 				});
-
 			}
 
 			request.assertNotSee = (expression) =>
