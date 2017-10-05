@@ -54,6 +54,10 @@ const reporter = () => {
   let counter = 0;
 
   input.on('assert', (assert) => {
+    if (assert.diag.message) {
+      console.log(assert.diag.message);
+    }
+
     // console.log(assert);
     if (assert.ok) {
       testsOverview += chalk['green']('.');
