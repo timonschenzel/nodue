@@ -108,7 +108,11 @@ module.exports = class VueComponentCompilerTasks
 			let component = string(to_camel_case(tagName)).capitalize();
 
 			if (app.globalComponentExists(component + this.fileExtension) || app.globalComponentExists(component + '.vue') || app.globalComponentExists(component + '.js')) {
-				this.rawData = this.rawData.replace(fullTag,  fullTag.replace(tagName, `${app.config('components.prefix')}-${tagName}`));
+				let newTagName = `${app.config('components.prefix')}-${tagName}`;
+				// if (this.options.suffix) {
+				// 	newTagName += '-' + this.options.suffix;
+				// }
+				this.rawData = this.rawData.replace(fullTag,  fullTag.replace(tagName, newTagName));
 			}
 		}
 	}

@@ -7,6 +7,7 @@ module.exports = class App
 		this._basePath = false;
 		this._config = {};
 		this._hot = false;
+		this.hotReloadSuffix = false;
 		this.bootstrapper = this.getClass('./Bootstrap');
 		this.fileLoader = this.getClass('./FileLoader');
 		this.bindings = {};

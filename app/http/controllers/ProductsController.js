@@ -2,14 +2,16 @@ module.exports = class ProductsController extends Controller
 {
 	async index()
 	{
-		let products = await Product.orderBy('id', 'asc').query(query => {
+		let products = await Product.orderBy('id', 'desc').query(query => {
 			query.limit(3);
 		}).fetchAll();
+
+		// let products = await Product.all();
 
 		let counter = null;
 
 		let title = 'Products';
-		let slogan = 'This is great!';
+		let slogan = 'View all products.';
 
 		products = products.map(product => {
 			return new Proxy(product, {
@@ -24,7 +26,7 @@ module.exports = class ProductsController extends Controller
 			});
 		});
 
-		return view('product.index', { shared: { products }, counter, title, slogan });
+		return view('products.index', { shared: { products }, counter, title, slogan });
 	}
 
 	async show(/*Product*/ product)
@@ -32,7 +34,7 @@ module.exports = class ProductsController extends Controller
 		let title = 'Products';
 		let slogan = 'This is great!';
 
-		return view('product.show', { product, title, slogan });
+		return view('products.show', { product, title, slogan });
 	}
 
 	create()
@@ -40,7 +42,7 @@ module.exports = class ProductsController extends Controller
 		let title = 'Products';
 		let slogan = 'Create a new product';
 
-		return view('product.create', { title, slogan });
+		return view('products.create', { title, slogan });
 	}
 
 	store()

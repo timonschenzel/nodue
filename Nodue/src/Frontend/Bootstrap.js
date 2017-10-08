@@ -24,6 +24,7 @@ module.exports = class Bootstrap
 			'processResponse',
 			'processExceptionResponse',
 			'processLayoutUpdates',
+			'processComponentUpdates',
 			'processSharedDateUpdates',
 		];
 	}
@@ -264,6 +265,14 @@ module.exports = class Bootstrap
 	{
 		socket.on('templateUpdate', (response) => {
 			this.createLayoutComponent(response.name, response.template);
+		});
+	}
+
+	processComponentUpdates()
+	{
+		socket.on('componentUpdate', (response) => {
+			console.log(response);
+			createComponent(response.name, response.component);
 		});
 	}
 

@@ -11,7 +11,8 @@ let mix = require('laravel-mix').mix;
  |
  */
 
-mix.js('Nodue/src/Frontend/app.js', 'public/js')
+mix.setPublicPath('public')
+	.js('Nodue/src/Frontend/app.js', 'public/js')
 	.sass('resources/assets/sass/app.sass', 'public/css');
 
 // Full API
