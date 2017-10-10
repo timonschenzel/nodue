@@ -54,10 +54,6 @@ const reporter = () => {
   let counter = 0;
 
   input.on('assert', (assert) => {
-    if (assert.diag.message) {
-      console.log(assert.diag.message);
-    }
-
     // console.log(assert);
     if (assert.ok) {
       testsOverview += chalk['green']('.');
@@ -73,6 +69,22 @@ const reporter = () => {
     let formattedDiff = '';
 
     [name, file] = assert.name.split(' on ');
+
+    if (assert.diag.message && assert.diag.message.includes('--stack')) {
+      [message, stack] = assert.diag.message.split(' --stack ');
+      assert.diag.message = message;
+
+      file = stack.split("\n").filter(line => {
+        return line.includes(name.split(' -> ')[0]);
+      })[0];
+
+      let regExp = /\(([^)]+)\)/;
+      let matches = regExp.exec(file);
+      file = matches[1];
+      let parts = file.split(':');
+      parts.pop();
+      file = parts.join(':');
+    }
 
     visualErrors += '\n';
     visualErrors += '  ' + chalk.red('x') + ' ' + counter + ') ' + chalk.white(name) + '\n';
