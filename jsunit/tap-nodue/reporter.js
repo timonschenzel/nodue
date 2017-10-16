@@ -19,6 +19,7 @@ const improperUsageMessages = require('ava/lib/reporters/improper-usage-messages
 
 let testsOverview = '';
 let visualErrors = '';
+let noTestsFound = false;
 
 const reporter = () => {
   const onResults = (data) => {
@@ -39,6 +40,10 @@ const reporter = () => {
     //   output.end('\n' + chalk.green(data.pass) + '\n')
     // }
 
+    if (noTestsFound) {
+      return;
+    }
+
     if (data.fail) {
       output.write("\n");
       output.write('  ' + chalk.red(data.fail + ' failed\n'));
@@ -55,6 +60,13 @@ const reporter = () => {
 
   input.on('assert', (assert) => {
     // console.log(assert);
+
+    if (assert.name.includes('No tests found')) {
+      testsOverview += chalk['yellow']('No tests found.');
+      noTestsFound = true;
+      return
+    }
+
     if (assert.ok) {
       testsOverview += chalk['green']('.');
       return
@@ -70,7 +82,7 @@ const reporter = () => {
 
     [name, file] = assert.name.split(' on ');
 
-    if (assert.diag.message && assert.diag.message.includes('--stack')) {
+    if (assert.diag && assert.diag.message && assert.diag.message.includes('--stack')) {
       [message, stack] = assert.diag.message.split(' --stack ');
       assert.diag.message = message;
 
@@ -86,35 +98,37 @@ const reporter = () => {
       file = parts.join(':');
     }
 
-    visualErrors += '\n';
-    visualErrors += '  ' + chalk.red('x') + ' ' + counter + ') ' + chalk.white(name) + '\n';
-    visualErrors += '  ' + chalk.dim(file);
-    visualErrors += '\n';
-    visualErrors += '  ' + visualError(file);
-    if (assert.diag.message) {
-      visualErrors += '\n  ' + assert.diag.message + '\n';
-    }
-
-    for (message in assert.diag.values) {
-      visualErrors += '\n\n  ' + message + '\n';
-      // visualErrors += '\n' + assert.diag.values[message] + '\n';
-
-      let diffValue = assert.diag.values[message];
-      let parsedValue = null;
-      try {
-        parsedValue = eval(diffValue);
-      } catch (error) {
-        parsedValue = diffValue;
+    if (file) {
+      visualErrors += '\n';
+      visualErrors += '  ' + chalk.red('x') + ' ' + counter + ') ' + chalk.white(name) + '\n';
+      visualErrors += '  ' + chalk.dim(file);
+      visualErrors += '\n';
+      visualErrors += '  ' + visualError(file);
+      if (assert.diag.message) {
+        visualErrors += '\n  ' + assert.diag.message + '\n';
       }
-      // let diffValue = JSON.parse(diffValue);
 
-      let values = formatWithLabel('', parsedValue);
+      for (message in assert.diag.values) {
+        visualErrors += '\n\n  ' + message + '\n';
+        // visualErrors += '\n' + assert.diag.values[message] + '\n';
 
-      visualErrors += '\n  ' + values.formatted + '\n';
-    };
+        let diffValue = assert.diag.values[message];
+        let parsedValue = null;
+        try {
+          parsedValue = eval(diffValue);
+        } catch (error) {
+          parsedValue = diffValue;
+        }
+        // let diffValue = JSON.parse(diffValue);
 
-    // visualErrors += visualDiff(assert);
-    visualErrors += '\n';
+        let values = formatWithLabel('', parsedValue);
+
+        visualErrors += '\n  ' + values.formatted + '\n';
+      };
+
+      // visualErrors += visualDiff(assert);
+      visualErrors += '\n';
+    }
   });
 
   const timer = hirestime() // todo: init when first test running

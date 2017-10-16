@@ -11,9 +11,8 @@ module.exports = {
 			delete require.cache[require.resolve(viewCachePath)];
 			AssetsCompiler.compileViewFile(fullViewPath, app.hotReloadSuffix);
 		}
-		
+
 		let template = require(viewCachePath);
-		console.log(template);
 
 		let behavior = false;
 		let behaviorPath = basePath + pathExpression.split('.').join('/') + '.js';

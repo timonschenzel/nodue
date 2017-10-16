@@ -1,16 +1,16 @@
 module.exports = class ViewProductsTest extends TestCase
 {
 	/** @test */
-	async test_a_user_is_able_to_view_a_specific_product()
+	async a_user_is_able_to_view_a_specific_product()
 	{
-		this.visit('/products/1', response => {
-			// response.assertSee('Product name is Product 1');
-			response.assertSee('Product name is Product 3');
-		});
+		// this.visit('/products/1', response => {
+		// 	response.assertSee('Product name is Product 1');
+		// 	response.assertSee('Product name is Product 3');
+		// });
 
 		// this.assertTrue(false);
 		// this.assertFalse(true);
-		// this.assertEquals([1, 2], [1, 3]);
+		this.assertEquals([1, 2], [1, 3]);
 		// this.assertEquals('foo', 'bar');
 		// this.assertEquals('foo1a', 'foo2a');
 	}
