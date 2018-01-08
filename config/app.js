@@ -43,7 +43,7 @@ module.exports = {
 		Controller: 'Http.Controller',
 		Model: 'ORM.Model',
 		NativeModel: 'ORM.NativeModel',
-		TestCase: 'Testing.TestCase',
+		NodueTestCase: 'Testing.TestCase',
 		VueComponent: 'App.VueComponent',
 		VueTester: 'Testing.VueTester',
 		VueCompiler: 'AssetsCompiler.VueCompiler',

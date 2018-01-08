@@ -56,7 +56,7 @@ module.exports = class Builder
 		return sql;
 	}
 
-	table(table)
+	static table(table)
 	{
 		let builder = new this(this._connection);
 

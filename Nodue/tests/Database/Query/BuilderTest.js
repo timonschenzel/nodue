@@ -163,8 +163,8 @@ module.exports = class BuilderTest extends TestCase
 	// Ordering, Grouping, Limit and Offset
 
 	// Inserts
-	
+
 	// Updates
-	
+
 	// Deletes
 }
