@@ -1,7 +1,9 @@
-module.exports = class TestCase
+module.exports = class NodueTestCase extends VueComponentTestCase
 {
 	constructor()
 	{
+		super();
+
 		let t = require('ava/lib/test');
 		let test = new t({});
 		this.ava = test.createExecutionContext();
@@ -11,6 +13,45 @@ module.exports = class TestCase
 
 		Vue.config.debug = false;
 		Vue.config.silent = true;
+	}
+
+	async newVisit(url)
+	{
+		let globalComponents = require('../../../storage/framework/cache/global_components.js');
+
+		for (let componentName in globalComponents) {
+			Vue.component(componentName, globalComponents[componentName]);
+		}
+
+		let templates = require('../../../storage/framework/cache/layout_templates.js');
+
+
+		for (let templateName in templates) {
+			Vue.component(templateName, {
+				template: templates[templateName],
+				data() {
+					return {};
+				}
+			});
+		}
+
+		Request.track({ url });
+		let response = await app.handle(Request);
+
+		let component = {};
+		if (response.behavior) {
+			eval('component = ' + response.behavior);
+		}
+
+		component.template = response.template;
+		component.data = function()
+		{
+			return response.data;
+		}
+
+		Vue.component('test-component', component);
+
+		return await this.render('<test-component></test-component>', response.options.data);
 	}
 
 	async visit(url, callback)

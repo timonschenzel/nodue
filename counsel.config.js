@@ -8,6 +8,6 @@ module.exports = {
         referenceName: "Vue"
     },
     files: [
-        "Nodue/tests"
+        "Nodue/tests/Feature"
     ],
 }

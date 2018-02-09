@@ -1,9 +1,0 @@
-{
-	"bootstrap": "bootstrap/autoload",
-	"files": [
-		"Nodue/tests"
-	],
-	"js": {
-		"DB_DATABASE": "test_db"
-	}
-}
