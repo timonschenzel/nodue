@@ -5,7 +5,7 @@ module.exports = class ViewProductsTest extends NodueTestCase
 	{
 		let response = await this.newVisit('/products/1');
 
-		console.log(response);
+		console.log(response.toHtml());
 
 		// response.assertSee('Product 1');
 

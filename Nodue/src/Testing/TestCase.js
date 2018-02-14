@@ -43,7 +43,8 @@ module.exports = class NodueTestCase extends VueComponentTestCase
 			eval('component = ' + response.behavior);
 		}
 
-		component.template = response.template;
+		component.template = '<div>' + response.template + '</div>';
+
 		component.data = function()
 		{
 			return response.data;
