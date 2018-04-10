@@ -3,7 +3,7 @@ module.exports = class ProductsController extends Controller
 	async index()
 	{
 		let products = await Product.orderBy('id', 'desc').query(query => {
-			query.limit(3);
+			query.limit(5);
 		}).fetchAll();
 
 		// let products = await Product.all();
