@@ -1,4 +1,19 @@
 module.exports = {
+	name: env('APP_NAME', 'Nodue'),
+
+	env: env('APP_ENV', 'production'),
+
+	debug: env('APP_DEBUG', false),
+
+	url: env('APP_URL', 'http://localhost'),
+
+	/**
+	 * Server port.
+	 *
+	 * @type {Number}
+	 */
+	port: env('APP_PORT', 80),
+
 	/**
 	 * Specify the autoloading locations.
 	 */
@@ -43,20 +58,12 @@ module.exports = {
 		Controller: 'Http.Controller',
 		Model: 'ORM.Model',
 		NativeModel: 'ORM.NativeModel',
-		NodueTestCase: 'Testing.TestCase',
 		VueComponent: 'App.VueComponent',
 		VueTester: 'Testing.VueTester',
 		VueCompiler: 'AssetsCompiler.VueCompiler',
 		VueComponentCompiler: 'AssetsCompiler.VueComponentCompiler',
 		VueComponentCompilerTasks: 'AssetsCompiler.VueComponentCompilerTasks',
 	},
-
-	/**
-	 * Server port.
-	 *
-	 * @type {Number}
-	 */
-	port: env('PORT', 80),
 
 	cacheFolder: './storage/framework/cache',
 
