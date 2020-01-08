@@ -21,6 +21,14 @@ module.exports = class Server
 	{
 		this.server.get('*', async (request, response) => {
 			let baseContent = fs.readFileSync(app.basePath + 'resources/views/app.html', 'utf8');
+			
+			Request.track({
+				type: 'get',
+				url: request.url,
+			});
+			let pageContent = await app.handle(Request);
+			
+			console.log(pageContent);
 
 			response.send(baseContent);
 		});
@@ -124,8 +132,8 @@ module.exports = class Server
 		  	});
 
 		  	socket.on('sharedDataUpdate', async (update) => {
-		  		update.fromServer = true;
-		  		Server.io.to('page.' + update.url).emit('sharedDataUpdate', update);
+				update.fromServer = true;
+		  		socket.to('page.' + update.url).emit('sharedDataUpdate', update);
 		  	});
 		});
 

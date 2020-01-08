@@ -54,6 +54,9 @@ module.exports = class Bootstrap
 		window.Vue = require('vue');
 
 		Vue.use(Vuex);
+		
+		Vue.component('tic-tac-toe', require('../../../packages/tic-tac-toe/src/TicTacToe.vue'));
+		Vue.component('cell', require('../../../packages/tic-tac-toe/src/Cell.vue'));
 
 		window.store = new Vuex.Store({
 			state: {
@@ -228,14 +231,57 @@ module.exports = class Bootstrap
 					response.data.shared.__dataItems = {};
 				}
 
+				component.watch = {};	
+
+				// if (response.data.shared) {	
+				// 	component.watch['shared'] = {	
+				// 		handler: function (update, oldVal) {	
+				// 			console.log('update!');	
+				// 			socket.emit('sharedDataUpdate', {	
+				// 				item: 'shared',	
+				// 				url: window.location.pathname,	
+				// 				payload: update,	
+				// 			});	
+				// 		},	
+				// 		deep: true	
+				// 	};	
+				// }
+				
 				if (component.data) {
 					response.data = merge(response.data, component.data);
 					delete component.data;
 				}
 
+				// if (component.sharedDataItems) {
+				// 	component.sharedDataItems.forEach(sharedDataItem => {
+				// 		component.watch[sharedDataItem] = {
+				// 			handler: function (update, oldVal, internal = false) {
+				// 				console.log('UPDATE');
+				// 				console.log(update);
+				// 				if (! update.fromServer) {
+				// 					console.log('UPDATE parent');
+				// 					socket.emit('sharedDataUpdate', {
+				// 						item: sharedDataItem,
+				// 						url: window.location.pathname,
+				// 						payload: update,
+				// 					});
+				// 				} else if (typeof update.update == 'object' && update.update.payload && update.update.item) {
+				// 					console.log('UPDATE child');
+				// 					console.log('update payload!');
+				// 					console.log(this);
+				// 					component.watch[sharedDataItem] = {};
+				// 					// this.watch[sharedDataItem].handler(update.payload, update.payload, true);
+				// 					this.$data[update.update.item] = update.update.payload;
+				// 				}
+				// 			},
+				// 			deep: true
+				// 		};
+				// 	});	
+				// }
+				
 				component.template = response.template;
 				response.data.store = store;
-				component.data = function()
+				component.data = () =>
 				{
 					return response.data;
 				}
@@ -282,7 +328,10 @@ module.exports = class Bootstrap
 			console.log('shared date update!');
 			let item = update.item;
 			if (vm.$children[0] && vm.$children[0].$data[item] != update.payload) {
-				vm.$children[0].$data[item] = update;
+				vm.$children[0].$data[item] = {
+					fromServer: true,
+					update
+				};
 			}
 		});
 	}

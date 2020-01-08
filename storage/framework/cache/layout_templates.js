@@ -22,6 +22,8 @@ module.exports = {'app-layout': `<div>
 
 		<footer-layout></footer-layout>
 	</div>
+</div>`,'clean-layout': `<div class="container">
+	<slot></slot>
 </div>`,'footer-layout': `<footer class="footer">
 	<div class="container">
 		<div class="content has-text-centered">

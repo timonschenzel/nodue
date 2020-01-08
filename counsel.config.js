@@ -1,13 +1,13 @@
 module.exports = {
-    reporter: './reporters/DotReporter',
+    reporter: './Components/Reporters/DotReporter',
     bootstrap: 'bootstrap/autoload',
     vue: {
         require: () => {
             return require('vue');
         },
-        referenceName: "Vue"
+        referenceName: "vm"
     },
-    files: [
+    locations: [
         "Nodue/tests/Feature"
     ],
     autoloadClasses: {

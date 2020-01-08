@@ -26,6 +26,12 @@
 		{
 			this.items.push(this.newItem);
 			this.newItem = '';
+			
+			// socket.emit('sharedDataUpdate', {
+			// 	url: '/',
+			// 	item: 'items',
+			// 	payload: this.items,
+			// });
 		}
 	}
 }
